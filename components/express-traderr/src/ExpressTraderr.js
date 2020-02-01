@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
+import '../../caad-textbox/caad-textbox.js'
+
 export class ExpressTraderr extends LitElement {
   static get styles() {
     return css`
@@ -34,11 +36,13 @@ export class ExpressTraderr extends LitElement {
 
   constructor() {
     super();
-    this.page = 'main';
   }
 
   render() {
     return html`
+      <div>
+        <caad-textbox></caad-textbox>
+      </div>
       <p class="app-footer">
         💀 Made with love by 
         <a target="_blank" rel="noopener noreferrer" href="https://github.com/carloadamos">carlo~</a>.
