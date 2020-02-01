@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-
-import '../../caad-textbox/caad-textbox.js'
+import './ui-elements/card-controls.js';
 
 export class ExpressTraderr extends LitElement {
   static get styles() {
@@ -9,7 +8,6 @@ export class ExpressTraderr extends LitElement {
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: flex-start;
         font-size: calc(10px + 2vmin);
         color: #1a2b42;
@@ -23,7 +21,7 @@ export class ExpressTraderr extends LitElement {
 
       .app-footer {
         position: fixed;
-        bottom: 0; 
+        bottom: 0;
         font-size: calc(12px + 0.5vmin);
         align-items: center;
       }
@@ -34,18 +32,15 @@ export class ExpressTraderr extends LitElement {
     `;
   }
 
-  constructor() {
-    super();
-  }
-
   render() {
     return html`
       <div>
-        <caad-textbox></caad-textbox>
+        <caad-controls></caad-controls>
       </div>
       <p class="app-footer">
-        💀 Made with love by 
-        <a target="_blank" rel="noopener noreferrer" href="https://github.com/carloadamos">carlo~</a>.
+        💀 Made with love by
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/carloadamos">carlo~</a
+        >.
       </p>
     `;
   }

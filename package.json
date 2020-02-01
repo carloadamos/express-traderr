@@ -59,6 +59,11 @@
   "license": "MIT",
   "dependencies": {
     "@polymer/paper-checkbox": "^3.1.0",
+    "@vaadin/vaadin": "^14.1.16",
+    "@vaadin/vaadin-date-picker": "^1.0.0",
+    "@vaadin/vaadin-text-field": "^1.0.0",
+    "@vaadin/vaadin-checkbox": "^1.0.0",
+    "@vaadin/vaadin-button": "^1.0.0",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0"
   }
