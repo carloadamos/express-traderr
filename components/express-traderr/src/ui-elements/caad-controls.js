@@ -81,7 +81,7 @@ export class CaadControls extends LitElement {
   static get styles() {
     return css`
       :host {
-        padding: 12px;
+        padding: 12px 0 12px 0;
       }
 
       .stock {
@@ -99,7 +99,7 @@ export class CaadControls extends LitElement {
       <vaadin-text-field
         value="${this._stockCode}"
         .disabled=${this._isAllStockChecked}
-        placeholder="ABCDE"
+        placeholder="XXX"
         label="Stock"
         @change="${this._updateStockCode}"
       >
@@ -124,8 +124,8 @@ export class CaadControls extends LitElement {
       <vaadin-checkbox @change="${this._disableToDate}" ?checked=${this._disableToDatePicker}>
       </vaadin-checkbox>
 
-      <vaadin-button theme="primary" @click="${this._buttonClicked}">Save</vaadin-button>
-      <vaadin-button theme="error primary" @click="${this._resetForm}">Remove</vaadin-button>
+      <vaadin-button theme="secondary" @click="${this._buttonClicked}">Save</vaadin-button>
+      <vaadin-button theme="error secondary" @click="${this._resetForm}">Remove</vaadin-button>
     `;
   }
 
