@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-import './ui-elements/card-controls.js';
+import './ui-elements/caad-controls.js';
+import './ui-elements/caad-list.js';
 
 export class ExpressTraderr extends LitElement {
   static get styles() {
@@ -36,6 +37,7 @@ export class ExpressTraderr extends LitElement {
     return html`
       <div>
         <caad-controls></caad-controls>
+        <caad-list></caad-list>
       </div>
       <p class="app-footer">
         💀 Made with love by
