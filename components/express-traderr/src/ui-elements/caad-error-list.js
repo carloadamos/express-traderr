@@ -38,7 +38,8 @@ export class CaadErrorList extends LitElement {
       }
 
       h1 {
-        padding: 12px 0 12px 0;
+        font-size: 24px;
+        padding: 24px 0 12px 0;
         margin: 0;
       }
     `;
@@ -53,6 +54,7 @@ export class CaadErrorList extends LitElement {
         <vaadin-button theme="secondary success" @click="${this._getSelected}"
           >Accept</vaadin-button
         >
+        <vaadin-button theme="secondary error">Reject</vaadin-button>
       </div>
     `;
   }
