@@ -8,6 +8,13 @@ export class CaadErrorList extends LitElement {
   static get properties() {
     return {
       /**
+       * Selected stocks.
+       * @type {Array}
+       */
+      _selectedStocks: {
+        type: Array,
+      },
+      /**
        * Stock list.
        * @type {Array}
        */
@@ -20,6 +27,7 @@ export class CaadErrorList extends LitElement {
   constructor() {
     super();
 
+    this._selectedStocks = [];
     this.stockList = [];
   }
 
@@ -37,13 +45,23 @@ export class CaadErrorList extends LitElement {
   }
 
   render() {
+    console.log(this._selectedStocks);
     return html`
       <h1>Error List</h1>
       ${this._initializeGridData()} ${this._initializeGrid()}
       <div>
-        <vaadin-button theme="secondary success">Accept</vaadin-button>
+        <vaadin-button theme="secondary success" @click="${this._getSelected}"
+          >Accept</vaadin-button
+        >
       </div>
     `;
+  }
+
+  /**
+   * Get selected items from grid.
+   */
+  _getSelected() {
+    this._selectedStocks = this.shadowRoot.querySelector('vaadin-grid').selectedItems;
   }
 
   /**
