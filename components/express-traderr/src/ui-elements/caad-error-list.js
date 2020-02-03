@@ -45,7 +45,6 @@ export class CaadErrorList extends LitElement {
   }
 
   render() {
-    console.log(this._selectedStocks);
     return html`
       <h1>Error List</h1>
       ${this._initializeGridData()} ${this._initializeGrid()}
