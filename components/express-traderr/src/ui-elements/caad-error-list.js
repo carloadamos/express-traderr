@@ -2,8 +2,9 @@ import { LitElement, html, css } from 'lit-element';
 import '@vaadin/vaadin-grid';
 import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
+import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 
-export class CaadList extends LitElement {
+export class CaadErrorList extends LitElement {
   static get properties() {
     return {
       /**
@@ -24,18 +25,20 @@ export class CaadList extends LitElement {
 
   static get styles() {
     return css`
-      vaadin-grid {
-        margin-top: 24px;
-      }
-
       vaadin-button {
         margin-top: 12px;
+      }
+
+      h1 {
+        padding: 12px 0 12px 0;
+        margin: 0;
       }
     `;
   }
 
   render() {
     return html`
+      <h1>Error List</h1>
       ${this._initializeGridData()} ${this._initializeGrid()}
       <div>
         <vaadin-button theme="secondary success">Accept</vaadin-button>
@@ -74,9 +77,9 @@ export class CaadList extends LitElement {
     return html`
       <vaadin-grid items="${JSON.stringify(this.stockList)}">
         <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-        <vaadin-grid-column path="date" header="Date"></vaadin-grid-column>
-        <vaadin-grid-column path="code" header="Code"></vaadin-grid-column>
-        <vaadin-grid-column path="name" header="Name"></vaadin-grid-column>
+        <vaadin-grid-filter-column path="date" header="Date"></vaadin-grid-filter-column>
+        <vaadin-grid-filter-column path="code" header="Code"></vaadin-grid-filter-column>
+        <vaadin-grid-filter-column path="name" header="Name"></vaadin-grid-filter-column>
         <vaadin-grid-column path="price" header="Price"></vaadin-grid-column>
         <vaadin-grid-column path="percentage" header="Percentage"></vaadin-grid-column>
         <vaadin-grid-column path="volume" header="Volume"></vaadin-grid-column>
@@ -85,4 +88,4 @@ export class CaadList extends LitElement {
   }
 }
 
-customElements.define('caad-list', CaadList);
+customElements.define('caad-error-list', CaadErrorList);
