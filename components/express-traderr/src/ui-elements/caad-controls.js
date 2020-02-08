@@ -103,7 +103,7 @@ export class CaadControls extends LitElement {
 
   render() {
     return html`
-      <h1>Stock's data</h1>
+      <h1>Stock data</h1>
       <vaadin-text-field
         value="${this._stockCode}"
         .disabled=${this._isAllStockChecked}
