@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
-    "@open-wc/building-rollup": "^0.15.1",
+    "@open-wc/building-rollup": "^0.20.3",
     "@open-wc/demoing-storybook": "^1.0.1",
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/prettier-config": "^0.1.10",

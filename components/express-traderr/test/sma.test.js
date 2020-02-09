@@ -1,24 +1,29 @@
 import { expect } from '@open-wc/testing';
-import MovingAverage from '../src/logic/sma.js';
-import stocks from './ma-test-data.js';
+import SimpleMovingAverage from '../src/logic/sma.js';
+import stocks from './simple-test-data.js';
 
 describe('moving-average', async () => {
   it('should be able to acquire moving average 20 property', async () => {
-    const stocksWithMA = MovingAverage.compute(stocks, 20);
+    const stocksWithMA = SimpleMovingAverage.compute(stocks, 12);
 
-    expect(stocksWithMA[0]).to.have.property('MA20');
+    expect(stocksWithMA[11]).to.have.property('MA12');
   });
 
-  it('should be able to correctly compute for moving average', async () => {
-    const stocksWithMA = MovingAverage.compute(stocks, 20);
+  it('should be not be able to have property MA12 when below period', async () => {
+    const stocksWithMA = SimpleMovingAverage.compute(stocks, 12);
 
-    // < 20
-    expect(stocksWithMA[0].MA20).to.be.equal(1 / 20);
+    expect(stocksWithMA[0]).not.to.have.property('MA12');
+  });
 
-    // === 20
+  it('should be able to compute for moving average when days is equal to computed average', async () => {
+    const stocksWithMA = SimpleMovingAverage.compute(stocks, 20);
+
     expect(stocksWithMA[19].MA20).to.be.equal(210 / 20);
+  });
 
-    // > 20
+  it('should be able to compute moving average for days greater than the computed average', async () => {
+    const stocksWithMA = SimpleMovingAverage.compute(stocks, 20);
+
     expect(stocksWithMA[20].MA20).to.be.equal(230 / 20);
   });
 });

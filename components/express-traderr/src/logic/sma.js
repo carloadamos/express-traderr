@@ -8,7 +8,7 @@ function _getTotalPriceInDays(currentIndex, stocks, average) {
   let totalPrice = 0;
 
   for (let i = 0; i < average; i += 1) {
-    if (currentIndex - i === -1) break;
+    if (currentIndex < average - 1) break;
 
     totalPrice += stocks[currentIndex - i].closingPrice;
   }
@@ -16,7 +16,7 @@ function _getTotalPriceInDays(currentIndex, stocks, average) {
   return totalPrice;
 }
 
-class MovingAverage {
+class SimpleMovingAverage {
   /**
    * Compute for the moving average.
    * @param {Array} stocks Stock list
@@ -29,11 +29,12 @@ class MovingAverage {
     const property = 'MA'.concat(average);
 
     return stocks.map(stock => {
-      let totalPriceInDays = 0;
+      if (i >= average - 1) {
+        let totalPriceInDays = 0;
 
-      totalPriceInDays = _getTotalPriceInDays(i, stocks, average);
-
-      stock = { ...stock, [property]: Math.round((totalPriceInDays / average) * 100) / 100 };
+        totalPriceInDays = _getTotalPriceInDays(i, stocks, average);
+        stock = { ...stock, [property]: Math.round((totalPriceInDays / average) * 100) / 100 };
+      }
       i += 1;
 
       return stock;
@@ -41,4 +42,4 @@ class MovingAverage {
   }
 }
 
-export default MovingAverage;
+export default SimpleMovingAverage;
