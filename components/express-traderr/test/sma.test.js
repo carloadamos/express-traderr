@@ -4,15 +4,15 @@ import stocks from './simple-test-data.js';
 
 describe('moving-average', async () => {
   it('should be able to acquire moving average 20 property', async () => {
-    const stocksWithMA = SimpleMovingAverage.compute(stocks, 20);
+    const stocksWithMA = SimpleMovingAverage.compute(stocks, 12);
 
-    expect(stocksWithMA[0]).to.have.property('MA20');
+    expect(stocksWithMA[11]).to.have.property('MA12');
   });
 
-  it('should be able to return 0 when average is greater than days computed', async () => {
-    const stocksWithMA = SimpleMovingAverage.compute(stocks, 20);
+  it('should be not be able to have property MA12 when below period', async () => {
+    const stocksWithMA = SimpleMovingAverage.compute(stocks, 12);
 
-    expect(stocksWithMA[0].MA20).to.be.equal(0);
+    expect(stocksWithMA[0]).not.to.have.property('MA12');
   });
 
   it('should be able to compute for moving average when days is equal to computed average', async () => {

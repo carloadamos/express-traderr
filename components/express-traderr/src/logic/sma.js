@@ -29,11 +29,12 @@ class SimpleMovingAverage {
     const property = 'MA'.concat(average);
 
     return stocks.map(stock => {
-      let totalPriceInDays = 0;
+      if (i >= average - 1) {
+        let totalPriceInDays = 0;
 
-      totalPriceInDays = _getTotalPriceInDays(i, stocks, average);
-
-      stock = { ...stock, [property]: Math.round((totalPriceInDays / average) * 100) / 100 };
+        totalPriceInDays = _getTotalPriceInDays(i, stocks, average);
+        stock = { ...stock, [property]: Math.round((totalPriceInDays / average) * 100) / 100 };
+      }
       i += 1;
 
       return stock;
