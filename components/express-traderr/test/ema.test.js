@@ -1,6 +1,6 @@
 import { expect } from '@open-wc/testing';
 import ExponentialMovingAverage from '../src/logic/ema.js';
-import stocks from './ema-test-data.js';
+import stocks from './test-data/ema-test-data.js';
 
 describe('moving-average', async () => {
   it('should be able to compute for the correct multiplier or smoothing', async () => {
