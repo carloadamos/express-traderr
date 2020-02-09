@@ -20,25 +20,24 @@ class MovingAverage {
   /**
    * Compute for the moving average.
    * @param {Array} stocks Stock list
-   * @param {Number} average Divisor
+   * @param {number} average Divisor
+   * @returns {Array} New stock list with MA.
    */
+  /* eslint-disable no-param-reassign */
   static compute(stocks, average) {
     let i = 0;
+    const property = 'MA'.concat(average);
 
-    stocks.forEach(() => {
+    return stocks.map(stock => {
       let totalPriceInDays = 0;
 
       totalPriceInDays = _getTotalPriceInDays(i, stocks, average);
-      console.log(
-        `${stocks[i].code} ${stocks[i].closingPrice} MA ${average}: ${Math.round(
-          (totalPriceInDays / average) * 100,
-        ) / 100}`,
-      );
 
+      stock = { ...stock, [property]: Math.round((totalPriceInDays / average) * 100) / 100 };
       i += 1;
-    });
 
-    // return Math.round((totalPrice / average) * 100) / 100;
+      return stock;
+    });
   }
 }
 
