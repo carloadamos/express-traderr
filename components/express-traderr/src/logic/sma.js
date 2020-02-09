@@ -8,7 +8,7 @@ function _getTotalPriceInDays(currentIndex, stocks, average) {
   let totalPrice = 0;
 
   for (let i = 0; i < average; i += 1) {
-    if (currentIndex - i === -1) break;
+    if (currentIndex < average - 1) break;
 
     totalPrice += stocks[currentIndex - i].closingPrice;
   }
@@ -16,7 +16,7 @@ function _getTotalPriceInDays(currentIndex, stocks, average) {
   return totalPrice;
 }
 
-class MovingAverage {
+class SimpleMovingAverage {
   /**
    * Compute for the moving average.
    * @param {Array} stocks Stock list
@@ -41,4 +41,4 @@ class MovingAverage {
   }
 }
 
-export default MovingAverage;
+export default SimpleMovingAverage;
