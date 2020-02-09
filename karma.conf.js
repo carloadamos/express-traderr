@@ -16,6 +16,7 @@ module.exports = config => {
 
       esm: {
         nodeResolve: true,
+        coverageExclude: ['**/*.html'],
       },
       // you can overwrite/extend the config further
     }),
