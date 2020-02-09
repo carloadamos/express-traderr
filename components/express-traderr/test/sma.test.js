@@ -1,6 +1,6 @@
 import { expect } from '@open-wc/testing';
-import MovingAverage from '../src/logic/moving-average.js';
-import stocks from './stocks.js';
+import MovingAverage from '../src/logic/sma.js';
+import stocks from './ma-test-data.js';
 
 describe('moving-average', async () => {
   it('should be able to acquire moving average 20 property', async () => {
