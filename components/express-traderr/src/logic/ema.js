@@ -21,7 +21,7 @@ class ExponentialMovingAverage {
     // length is the actual size. if 21 item, length is 21
     return this.stocks.map(() => {
       if (i >= this.period - 1) {
-        const prevEMA = this.previousEMA(i) === 0 || this.previousSMA(i);
+        const prevEMA = this.previousEMA(i) || this.previousSMA(i);
         const closingPrice = this.getClosingPrice(i);
         const currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
 
