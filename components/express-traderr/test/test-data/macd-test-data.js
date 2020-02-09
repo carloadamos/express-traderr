@@ -24,7 +24,7 @@ const stocks = [
   { code: 'WEB', closingPrice: 23, MA12: 17.5, EMA12: 16.5 },
   { code: 'WEB', closingPrice: 24, MA12: 18.5, EMA12: 17.5 },
   { code: 'WEB', closingPrice: 25, MA12: 19.5, EMA12: 18.5 },
-  { code: 'WEB', closingPrice: 26, MA12: 20.5, MA26: 13.5, EMA12: 19.5, EMA26: NaN },
+  { code: 'WEB', closingPrice: 26, MA12: 20.5, MA26: 13.5, EMA12: 19.5, EMA26: 12.5 },
   { code: 'WEB', closingPrice: 27, MA12: 21.5, MA26: 14.5, EMA12: 20.5, EMA26: 13.5 },
   { code: 'WEB', closingPrice: 28, MA12: 22.5, MA26: 15.5, EMA12: 21.5, EMA26: 14.5 },
   { code: 'WEB', closingPrice: 29, MA12: 23.5, MA26: 16.5, EMA12: 22.5, EMA26: 15.5 },
