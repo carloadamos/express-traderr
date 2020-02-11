@@ -3,9 +3,23 @@ import MovingAverageConvergenceDivergence from '../src/logic/macd.js';
 import stocks from './test-data/macd-test-data.js';
 
 describe('moving-average', () => {
-  it('should be able to acquire moving average 20 property', () => {
+  it('should be able to acquire moving SMA property', () => {
     const macd = new MovingAverageConvergenceDivergence();
-    const updatedStocks = macd.compute(stocks, 12);
+    const updatedStocks = macd.compute(stocks);
+
+    expect(updatedStocks[9]).to.have.property('SMA9');
+  });
+
+  it('should be able to acquire moving EMA property', () => {
+    const macd = new MovingAverageConvergenceDivergence();
+    const updatedStocks = macd.compute(stocks);
+
+    expect(updatedStocks[12]).to.have.property('EMA12');
+  });
+
+  it('should be able to acquire moving MACD property', () => {
+    const macd = new MovingAverageConvergenceDivergence();
+    const updatedStocks = macd.compute(stocks);
 
     expect(updatedStocks[26]).to.have.property('MACD');
   });

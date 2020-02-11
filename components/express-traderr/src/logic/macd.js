@@ -25,9 +25,8 @@ class MovingAverageConvergenceDivergence {
     });
 
     const stockListWithMACD = this._addMACDSMAtoStockList(stockList);
-    console.log(stockListWithMACD);
 
-    return stockList;
+    return stockListWithMACD;
   }
 
   _addMACDSMAtoStockList(originalStocks) {
