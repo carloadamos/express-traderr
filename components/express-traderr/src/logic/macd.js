@@ -1,3 +1,5 @@
+import SimpleMovingAverage from './sma.js';
+
 class MovingAverageConvergenceDivergence {
   constructor() {
     this.stocks = [];
@@ -12,15 +14,19 @@ class MovingAverageConvergenceDivergence {
   /* eslint-disable no-param-reassign */
   compute(stocks) {
     const property = 'MACD';
+    this.stocks = stocks;
 
-    const stockList = stocks.map(stock => {
+    const stockList = this.stocks.map(stock => {
+      const ema12 = stock.EMA12;
+      const ema26 = stock.EMA26;
+      let macd = 0;
+
       if (stocks.indexOf(stock) >= 26) {
-        const ema12 = stock.EMA12;
-        const ema26 = stock.EMA26;
-        const macd = ema12 - ema26;
-
-        stock = { ...stock, [property]: macd };
+        macd = ema12 - ema26;
       }
+
+      stock = { ...stock, [property]: macd };
+
       return stock;
     });
 
@@ -29,35 +35,13 @@ class MovingAverageConvergenceDivergence {
     return stockListWithMACD;
   }
 
-  _addMACDSMAtoStockList(originalStocks) {
-    const period = 9;
-    const property = 'SMA'.concat(period);
-
-    return originalStocks.map(stock => {
-      if (originalStocks.indexOf(stock) >= period - 1) {
-        const totalMACDInDays = this._getTotalMACDInDays(
-          originalStocks.indexOf(stock),
-          originalStocks,
-          period,
-        );
-
-        stock = { ...stock, [property]: Math.round((totalMACDInDays / period) * 100) / 100 };
-      }
-      return stock;
-    });
-  }
-
   /* eslint-disable class-methods-use-this */
-  _getTotalMACDInDays(currentIndex, stocks, period) {
-    let totalPrice = 0;
+  _addMACDSMAtoStockList(originalStocks) {
+    const sma = new SimpleMovingAverage();
+    const period = 9;
+    const property = 'MACD';
 
-    for (let i = 0; i < period; i += 1) {
-      if (currentIndex < period - 1) break;
-
-      totalPrice += stocks[currentIndex - i].closingPrice;
-    }
-
-    return totalPrice;
+    return sma.compute(originalStocks, period, property, 'MACD_SMA9');
   }
 }
 

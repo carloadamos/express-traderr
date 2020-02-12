@@ -2,7 +2,7 @@ import { expect } from '@open-wc/testing';
 import ExponentialMovingAverage from '../src/logic/ema.js';
 import stocks from './test-data/ema-test-data.js';
 
-describe('moving-average', () => {
+describe('ema', () => {
   it('should be able to compute for the correct multiplier or smoothing', () => {
     const ema = new ExponentialMovingAverage();
     ema.period = 10;
@@ -33,10 +33,25 @@ describe('moving-average', () => {
     expect(ema.computeCurrentEMA(1.73, 1.6739)).to.be.equal(1.6825);
   });
 
+  it('should be able to compute for current EMA', () => {
+    const ema = new ExponentialMovingAverage();
+    ema.period = 26;
+    ema.computeMultiplier();
+
+    expect(ema.computeCurrentEMA(1.73, 1.6739)).to.be.equal(1.6781);
+  });
+
   it('should be able to create a new property EMA', () => {
     const ema = new ExponentialMovingAverage();
     const newStockList = ema.compute(stocks, 12);
 
     expect(newStockList[13]).to.have.property('EMA12');
+  });
+
+  it('should be able to create a new property EMA', () => {
+    const ema = new ExponentialMovingAverage();
+    const newStockList = ema.compute(stocks, 26);
+
+    expect(newStockList[26]).to.have.property('EMA26');
   });
 });

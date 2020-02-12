@@ -1,22 +1,32 @@
 class SimpleMovingAverage {
+  constructor() {
+    this.basis = '';
+    this.period = 0;
+    this.stocks = [];
+  }
+
   /**
    * Compute for the moving average.
    * @param {Array} stocks Stock list
-   * @param {number} average Divisor
-   * @returns {Array} New stock list with MA.
+   * @param {number} period Period of days.
+   * @param {string} basis Basis of computation.
+   * @returns {Array} Stock list with SMA.
    */
   /* eslint-disable no-param-reassign */
-  compute(stocks, average) {
+  compute(stocks, period, basis, newProp) {
+    this.basis = basis;
+    this.stocks = stocks;
+    this.period = period;
     let i = 0;
-    const property = 'MA'.concat(average);
 
-    return stocks.map(stock => {
-      if (i >= average - 1) {
-        let totalPriceInDays = 0;
+    return this.stocks.map(stock => {
+      let totalPriceInDays = 0;
 
-        totalPriceInDays = this._getTotalPriceInDays(i, stocks, average);
-        stock = { ...stock, [property]: Math.round((totalPriceInDays / average) * 100) / 100 };
+      if (i >= this.period - 1) {
+        totalPriceInDays = this._getTotalPriceInSpanOfDays(i);
       }
+
+      stock = { ...stock, [newProp]: Math.round((totalPriceInDays / this.period) * 100) / 100 };
       i += 1;
 
       return stock;
@@ -26,17 +36,13 @@ class SimpleMovingAverage {
   /**
    * Get total price from current stock to desired days back.
    * @param {number} currentIndex Current index of the stock in list.
-   * @param {Object} stocks Stock object
-   * @param {number} average Divisor
    */
   /* eslint-disable class-methods-use-this */
-  _getTotalPriceInDays(currentIndex, stocks, average) {
+  _getTotalPriceInSpanOfDays(currentIndex) {
     let totalPrice = 0;
 
-    for (let i = 0; i < average; i += 1) {
-      if (currentIndex < average - 1) break;
-
-      totalPrice += stocks[currentIndex - i].closingPrice;
+    for (let i = 0; i < this.period; i += 1) {
+      totalPrice += this.stocks[currentIndex - i][this.basis];
     }
 
     return totalPrice;

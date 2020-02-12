@@ -2,12 +2,12 @@ import { expect } from '@open-wc/testing';
 import MovingAverageConvergenceDivergence from '../src/logic/macd.js';
 import stocks from './test-data/macd-test-data.js';
 
-describe('moving-average', () => {
+describe('macd', () => {
   it('should be able to acquire moving SMA property', () => {
     const macd = new MovingAverageConvergenceDivergence();
     const updatedStocks = macd.compute(stocks);
 
-    expect(updatedStocks[9]).to.have.property('SMA9');
+    expect(updatedStocks[9]).to.have.property('MACD_SMA9');
   });
 
   it('should be able to acquire moving EMA property', () => {
