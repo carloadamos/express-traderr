@@ -25,7 +25,7 @@
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/prettier-config": "^0.1.10",
     "@open-wc/testing": "^2.0.0",
-    "@open-wc/testing-karma": "^3.0.0",
+    "@open-wc/testing-karma": "^3.2.42",
     "@open-wc/testing-karma-bs": "^1.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
