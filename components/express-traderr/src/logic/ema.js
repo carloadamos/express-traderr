@@ -9,9 +9,10 @@ const smaProperty = 'SMA';
  * @param {number} period Period of days.
  */
 class ExponentialMovingAverage {
-  constructor(stocks, period) {
+  constructor(stocks, period, propertyToCompute) {
     this.hasInitialEma = false;
     this.period = period;
+    this.propertyToCompute = propertyToCompute;
     this.smoothing = 0;
     this.stocks = stocks;
 
@@ -77,7 +78,7 @@ class ExponentialMovingAverage {
    * EMA and should not happen in the middle or end of the list.
    */
   generateSMA() {
-    const sma = new SimpleMovingAverage(this.stocks, this.period, 'closingPrice', 'SMA');
+    const sma = new SimpleMovingAverage(this.stocks, this.period, this.propertyToCompute, 'SMA');
     this.stocks = sma.compute();
   }
 

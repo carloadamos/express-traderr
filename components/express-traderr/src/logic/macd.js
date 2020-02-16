@@ -1,9 +1,11 @@
 import SimpleMovingAverage from './sma.js';
 import ExponentialMovingAverage from './ema.js';
 
+const emaProperty = 'EMA';
+
 class MovingAverageConvergenceDivergence {
-  constructor() {
-    this.stocks = [];
+  constructor(stocks) {
+    this.stocks = stocks;
   }
 
   /**
@@ -13,17 +15,27 @@ class MovingAverageConvergenceDivergence {
    * @param {Array} stocks Stock list.
    */
   /* eslint-disable no-param-reassign */
-  compute(stocks) {
+  compute() {
     const property = 'MACD';
-    this.stocks = stocks;
+
+    if (!this.hasEMA(12)) {
+      const ema = new ExponentialMovingAverage(this.stocks, 12, 'closingPrice');
+      this.stocks = ema.compute();
+    }
+
+    if (!this.hasEMA(26)) {
+      const ema = new ExponentialMovingAverage(this.stocks, 26, 'closingPrice');
+      this.stocks = ema.compute();
+    }
 
     const stockList = this.stocks.map(stock => {
-      const ema12 = this._getEMA12(stock);
-      const ema26 = stock.EMA26;
+      const ema12 = stock[emaProperty.concat(12)];
+      const ema26 = stock[emaProperty.concat(26)];
+
       let macd = 0;
 
-      if (stocks.indexOf(stock) >= 26) {
-        macd = ema12 - ema26;
+      if (this.stocks.indexOf(stock) >= 26) {
+        macd = parseFloat((ema12 - ema26).toFixed(4));
       }
 
       stock = { ...stock, [property]: macd };
@@ -31,25 +43,29 @@ class MovingAverageConvergenceDivergence {
       return stock;
     });
 
-    const stockListWithMACD = this._addMACDSMAtoStockList(stockList);
+    // This will have MACD_SMA9 that will be used in computing signal line.
+    const stockListWithMACD = this.addMACDSMAtoStockList(stockList);
 
     return stockListWithMACD;
   }
 
   /* eslint-disable class-methods-use-this */
-  _addMACDSMAtoStockList(originalStocks) {
-    const sma = new SimpleMovingAverage();
+  addMACDSMAtoStockList(originalStocks) {
     const period = 9;
     const property = 'MACD';
+    const sma = new SimpleMovingAverage(originalStocks, period, property, 'MACD_SMA');
 
-    return sma.compute(originalStocks, period, property, 'MACD_SMA9');
+    return sma.compute();
   }
 
-  _getEMA12(stock) {
-    if (stock.ema12) return stock.ema12;
+  // computeEMA()
 
-    const ema = ExponentialMovingAverage();
-    return ema.compute([stock], 12).ema12;
+  /**
+   *
+   * @param {number} period Period of days.
+   */
+  hasEMA(period) {
+    return this.stocks[0][emaProperty.concat(period)];
   }
 }
 
