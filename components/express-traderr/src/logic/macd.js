@@ -1,4 +1,5 @@
 import SimpleMovingAverage from './sma.js';
+import ExponentialMovingAverage from './ema.js';
 
 class MovingAverageConvergenceDivergence {
   constructor() {
@@ -17,7 +18,7 @@ class MovingAverageConvergenceDivergence {
     this.stocks = stocks;
 
     const stockList = this.stocks.map(stock => {
-      const ema12 = stock.EMA12;
+      const ema12 = this._getEMA12(stock);
       const ema26 = stock.EMA26;
       let macd = 0;
 
@@ -42,6 +43,13 @@ class MovingAverageConvergenceDivergence {
     const property = 'MACD';
 
     return sma.compute(originalStocks, period, property, 'MACD_SMA9');
+  }
+
+  _getEMA12(stock) {
+    if (stock.ema12) return stock.ema12;
+
+    const ema = ExponentialMovingAverage();
+    return ema.compute([stock], 12).ema12;
   }
 }
 
