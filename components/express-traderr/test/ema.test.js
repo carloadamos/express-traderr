@@ -67,7 +67,7 @@ describe('ema', () => {
     expect(newStockList[28]).to.have.property('EMA26');
   });
 
-  it('should be able to correctly compute EMA', () => {
+  it('should be able to correctly compute EMA for 12', () => {
     const period = 12;
     const ema = new ExponentialMovingAverage(stocks, period, 'closingPrice', 'EMA');
     const newStockList = ema.compute();
@@ -75,7 +75,7 @@ describe('ema', () => {
     expect(newStockList[12].EMA12).to.be.equal(7.4997);
   });
 
-  it('should be able to correctly compute EMA', () => {
+  it('should be able to correctly compute EMA for 13', () => {
     const period = 12;
     const ema = new ExponentialMovingAverage(stocks, period, 'closingPrice', 'EMA');
     const newStockList = ema.compute();

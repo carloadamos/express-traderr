@@ -38,14 +38,25 @@ class ExponentialMovingAverage {
 
     return this.stocks.map(stock => {
       const currentIndex = this.stocks.indexOf(stock);
+      const { closingPrice } = stock;
+      let ema = 0;
+      let prevEMA = 0;
+
+      if (currentIndex === this.period - 1) {
+        ema = this.stocks[currentIndex - 1][this.newProperty.concat(this.period)];
+        prevEMA = ema || this.previousSMA(stock);
+
+        currentEMA = prevEMA;
+      }
 
       if (currentIndex >= this.period) {
-        const ema = this.stocks[currentIndex - 1][this.newProperty.concat(this.period)];
-        const prevEMA = ema || this.previousSMA(stock);
-        const { closingPrice } = stock;
+        ema = this.stocks[currentIndex - 1][this.newProperty.concat(this.period)];
+        prevEMA = ema || this.previousSMA(stock);
 
         currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
       }
+
+      console.log(`closing: ${closingPrice} prevEMA: ${prevEMA} currentEMA: ${currentEMA}`);
 
       stock = { ...stock, [this.newProperty.concat(this.period)]: currentEMA };
       this.stocks[currentIndex] = stock;
@@ -99,7 +110,7 @@ class ExponentialMovingAverage {
    */
   previousSMA(stock) {
     const currentIndex = this.stocks.indexOf(stock);
-    const currentEma = this.stocks[currentIndex - 1][smaProperty.concat(this.period)];
+    const currentEma = this.stocks[currentIndex][smaProperty.concat(this.period)];
 
     stock = { ...stock, [emaProperty.concat(this.period)]: currentEma };
     this.stocks[currentIndex - 1] = stock;

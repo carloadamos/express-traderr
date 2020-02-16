@@ -24,12 +24,11 @@ class SimpleMovingAverage {
    */
   /* eslint-disable no-param-reassign */
   compute() {
-    let i = 0;
-
     return this.stocks.map(stock => {
       let totalPriceInSpanOfDays = 0;
+      const currentIndex = this.stocks.indexOf(stock);
 
-      if (i >= this.period - 1) {
+      if (currentIndex >= this.period - 1) {
         totalPriceInSpanOfDays = this._getTotalPriceInSpanOfDays(stock);
         totalPriceInSpanOfDays = Math.round((totalPriceInSpanOfDays / this.period) * 100) / 100;
       }
@@ -38,7 +37,6 @@ class SimpleMovingAverage {
         ...stock,
         [this.newProperty.concat(this.period)]: totalPriceInSpanOfDays,
       };
-      i += 1;
 
       return stock;
     });

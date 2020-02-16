@@ -36,7 +36,7 @@ class MovingAverageConvergenceDivergence {
 
       let macd = 0;
 
-      if (this.stocks.indexOf(stock) >= 26) {
+      if (this.stocks.indexOf(stock) >= 25) {
         macd = parseFloat((ema12 - ema26).toFixed(4));
       }
 
