@@ -7,6 +7,7 @@ describe('macd', () => {
     const macd = new MovingAverageConvergenceDivergence(stocks);
     const updatedStocks = macd.compute();
 
+    console.log(updatedStocks[26]);
     expect(updatedStocks[9]).to.have.property('MACD_SMA9');
   });
 
@@ -22,5 +23,12 @@ describe('macd', () => {
     const updatedStocks = macd.compute();
 
     expect(updatedStocks[26]).to.have.property('MACD');
+  });
+
+  it('should be able to acquire moving MACD property', () => {
+    const macd = new MovingAverageConvergenceDivergence(stocks);
+    const updatedStocks = macd.compute();
+
+    expect(updatedStocks[26]).to.have.property('SIGNAL9');
   });
 });

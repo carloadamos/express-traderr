@@ -9,8 +9,8 @@ const smaProperty = 'SMA';
  * @param {number} period Period of days.
  */
 class ExponentialMovingAverage {
-  constructor(stocks, period, propertyToCompute) {
-    this.hasInitialEma = false;
+  constructor(stocks, period, propertyToCompute, newProp) {
+    this.newProperty = newProp;
     this.period = period;
     this.propertyToCompute = propertyToCompute;
     this.smoothing = 0;
@@ -29,9 +29,9 @@ class ExponentialMovingAverage {
    */
   /* eslint-disable no-param-reassign */
   compute() {
-    const property = 'EMA'.concat(this.period);
     let currentEMA = 0;
 
+    /* istanbul ignore else */
     if (!this.hasPreviousSMA()) {
       this.generateSMA();
     }
@@ -40,15 +40,14 @@ class ExponentialMovingAverage {
       const currentIndex = this.stocks.indexOf(stock);
 
       if (currentIndex >= this.period) {
-        const ema = this.stocks[currentIndex - 1][property];
+        const ema = this.stocks[currentIndex - 1][this.newProperty.concat(this.period)];
         const prevEMA = ema || this.previousSMA(stock);
         const { closingPrice } = stock;
 
         currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
-        this.hasInitialEma = true;
       }
 
-      stock = { ...stock, [property]: currentEMA };
+      stock = { ...stock, [this.newProperty.concat(this.period)]: currentEMA };
       this.stocks[currentIndex] = stock;
 
       return stock;
@@ -99,17 +98,13 @@ class ExponentialMovingAverage {
    * @param {Object} stock Current stock.
    */
   previousSMA(stock) {
-    if (!this.hasInitialEma) {
-      const currentIndex = this.stocks.indexOf(stock);
-      const currentEma = this.stocks[currentIndex - 1][smaProperty.concat(this.period)];
+    const currentIndex = this.stocks.indexOf(stock);
+    const currentEma = this.stocks[currentIndex - 1][smaProperty.concat(this.period)];
 
-      stock = { ...stock, [emaProperty.concat(this.period)]: currentEma };
-      this.stocks[currentIndex - 1] = stock;
+    stock = { ...stock, [emaProperty.concat(this.period)]: currentEma };
+    this.stocks[currentIndex - 1] = stock;
 
-      return currentEma;
-    }
-
-    return 0;
+    return currentEma;
   }
 
   /**
