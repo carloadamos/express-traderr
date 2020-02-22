@@ -56,8 +56,7 @@ class ExponentialMovingAverage {
         currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
       }
 
-      console.log(`closing: ${closingPrice} prevEMA: ${prevEMA} currentEMA: ${currentEMA}`);
-
+      console.log('currentIndex', currentIndex, currentEMA);
       stock = { ...stock, [this.newProperty.concat(this.period)]: currentEMA };
       this.stocks[currentIndex] = stock;
 
@@ -71,6 +70,8 @@ class ExponentialMovingAverage {
    * @param {number} prevEMA Previous EMA
    */
   computeCurrentEMA(closingPrice, prevEMA) {
+    if (prevEMA === 0) return 0;
+
     return parseFloat(((closingPrice - prevEMA) * this.smoothing + prevEMA).toFixed(4));
   }
 
@@ -110,9 +111,12 @@ class ExponentialMovingAverage {
    */
   previousSMA(stock) {
     const currentIndex = this.stocks.indexOf(stock);
-    const currentEma = this.stocks[currentIndex][smaProperty.concat(this.period)];
+    const currentEma = this.stocks[currentIndex - 1][smaProperty.concat(this.period)];
 
-    stock = { ...stock, [emaProperty.concat(this.period)]: currentEma };
+    this.stocks[currentIndex - 1] = {
+      ...this.stocks[currentIndex - 1],
+      [emaProperty.concat(this.period)]: currentEma,
+    };
     this.stocks[currentIndex - 1] = stock;
 
     return currentEma;
