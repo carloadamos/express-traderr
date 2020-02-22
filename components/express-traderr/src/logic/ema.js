@@ -56,7 +56,6 @@ class ExponentialMovingAverage {
         currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
       }
 
-      console.log('currentIndex', currentIndex, currentEMA);
       stock = { ...stock, [this.newProperty.concat(this.period)]: currentEMA };
       this.stocks[currentIndex] = stock;
 
