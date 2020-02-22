@@ -2,7 +2,7 @@ TRADING PLAN:
 
 1. MACD
   PREREQ:
-    * SMA
+    * SMA (macd)
     * EMA
 
 2. EMA

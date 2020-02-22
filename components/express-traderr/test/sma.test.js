@@ -54,9 +54,9 @@ describe('simple-moving-average', () => {
   });
 
   it('should be able to throw error when stock has no baseproperty', () => {
-    const sma = new SimpleMovingAverage(stocks, 20, 'notExisting', 'SMA');
+    const sma = new SimpleMovingAverage(stocks, 20, 'nonExisting', 'SMA');
     expect(() => {
       sma.compute();
-    }).to.throw('Property do not exist!');
+    }).to.throw('nonExisting20 property do not exist!');
   });
 });

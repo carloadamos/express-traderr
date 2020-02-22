@@ -28,9 +28,6 @@
 //     const macd = new MovingAverageConvergenceDivergence(stocks);
 //     const updatedStocks = macd.compute();
 
-//     updatedStocks.forEach(stock => {
-//       console.log(stock);
-//     });
 //     expect(updatedStocks[26]).to.have.property('SIGNAL9');
 //   });
 // });
