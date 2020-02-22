@@ -11,7 +11,7 @@ TRADING PLAN:
 
 3. SMA
   PREREQ:
-    * PRICE
+    * CLOSE PRICE
 
 INSTALL: node, npm, polymer, python
 

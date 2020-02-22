@@ -2,40 +2,40 @@
  * Compute for the moving average.
  * @param {Array} stocks Stock list
  * @param {number} period Period of days.
- * @param {string} propertyToCompute Basis of computation.
+ * @param {string} baseProperty Basis of computation.
  * @param {string} newProp New property to write to the list.
  * Will be appended with the period. e.g 'SMA' + 20 = 'SMA20'
  * @returns {Array} Stock list with SMA.
  */
-class SimpleMovingAverage {
-  constructor(stocks, period, basis, newProp) {
-    this.newProperty = newProp;
+export default class SimpleMovingAverage {
+  constructor(stockList, period, baseProperty, newProperty) {
+    this.baseProperty = baseProperty;
+    this.newProperty = newProperty;
     this.period = period;
-    this.propertyToCompute = basis;
-    this.stocks = stocks;
+    this.stockList = stockList;
   }
 
   /**
-   * Compute for the moving average.
+   * Compute simple moving average and write new property.
    * @param {Array} stocks Stock list
-   * @param {number} period Period of days.
-   * @param {string} propertyToCompute Basis of computation.
    * @returns {Array} Stock list with SMA.
    */
   /* eslint-disable no-param-reassign */
   compute() {
-    return this.stocks.map(stock => {
-      let totalPriceInSpanOfDays = 0;
-      const currentIndex = this.stocks.indexOf(stock);
+    const { newProperty, period, stockList } = this;
 
-      if (currentIndex >= this.period - 1) {
-        totalPriceInSpanOfDays = this._getTotalPriceInSpanOfDays(stock);
-        totalPriceInSpanOfDays = Math.round((totalPriceInSpanOfDays / this.period) * 100) / 100;
+    return stockList.map(stock => {
+      let total = 0;
+      const currentIndex = stockList.indexOf(stock);
+
+      if (currentIndex >= period - 1) {
+        total = this._getTotal(stock);
+        total = Math.round((total / period) * 100) / 100;
       }
 
       stock = {
         ...stock,
-        [this.newProperty.concat(this.period)]: totalPriceInSpanOfDays,
+        [newProperty.concat(period)]: total,
       };
 
       return stock;
@@ -43,21 +43,23 @@ class SimpleMovingAverage {
   }
 
   /**
-   * Get total price from current stock to desired days back
-   * based on period.
+   * Get total of `baseProperty` from current stock to desired `period` back.
    * @param {number} stock Current stock in list.
    */
   /* eslint-disable class-methods-use-this */
-  _getTotalPriceInSpanOfDays(stock) {
-    let totalPrice = 0;
-    const currentIndex = this.stocks.indexOf(stock);
+  _getTotal(stock) {
+    const { stockList, period, baseProperty } = this;
+    let total = 0;
+    const currentIndex = stockList.indexOf(stock);
 
-    for (let i = 0; i < this.period; i += 1) {
-      totalPrice += this.stocks[currentIndex - i][this.propertyToCompute];
+    if (!Object.prototype.hasOwnProperty.call(stock, [this.baseProperty]))
+      throw new Error('Property do not exist!');
+
+    /* Increase number of decrement to current index to compute total */
+    for (let i = 0; i < period; i += 1) {
+      total += stockList[currentIndex - i][baseProperty];
     }
 
-    return totalPrice;
+    return total;
   }
 }
-
-export default SimpleMovingAverage;
