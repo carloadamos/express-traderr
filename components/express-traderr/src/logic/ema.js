@@ -8,10 +8,11 @@ import SimpleMovingAverage from './sma.js';
  * @param {string} newProperty New property to add.
  */
 export default class ExponentialMovingAverage {
-  constructor(stockList, period, baseProperty, newProperty) {
+  constructor(stockList, period, baseProperty, newProperty, smaBasis) {
     this.baseProperty = baseProperty;
     this.newProperty = newProperty;
     this.period = period;
+    this.smaBasis = smaBasis;
     this.smoothing = this._computeMultiplier();
     this.stockList = stockList;
     this._generateSMA();
@@ -34,14 +35,15 @@ export default class ExponentialMovingAverage {
       let previousEMA = 0;
       const currentIndex = stockList.indexOf(stock);
 
-      if (currentIndex === this.period) {
+      if (currentIndex === this.period - 1) {
         currentEMA = stockList[period - 1][baseProperty.concat(period)];
       }
+
       /* Skip one element since we assigned the value already */
-      if (currentIndex > this.period) {
+      if (currentIndex > this.period - 1) {
         previousEMA = stockList[currentIndex - 1][newProperty.concat(period)];
 
-        currentEMA = this.computeCurrentEMA('close', previousEMA);
+        currentEMA = this.computeCurrentEMA(stock[this.smaBasis], previousEMA);
       }
 
       stock = { ...stock, [newProperty.concat(period)]: currentEMA };
@@ -58,8 +60,6 @@ export default class ExponentialMovingAverage {
    * @param {number} previousEMA Previous EMA
    */
   computeCurrentEMA(closingPrice, previousEMA) {
-    if (previousEMA === 0) return 0;
-
     const currentEMA = (closingPrice - previousEMA) * this.smoothing + previousEMA;
     return parseFloat(currentEMA.toFixed(4));
   }
@@ -78,15 +78,11 @@ export default class ExponentialMovingAverage {
    * EMA and should not happen in the middle or end of the list.
    */
   _generateSMA() {
-    const baseProperty = 'close';
-    if (
-      Object.prototype.hasOwnProperty.call(this.stockList[0], [
-        this.baseProperty.concat(this.period),
-      ])
-    )
-      throw new Error(`Property ${this.baseProperty} do not exist!`);
+    const { stockList, period, smaBasis } = this;
+    if (!Object.prototype.hasOwnProperty.call(stockList[0], [smaBasis]))
+      throw new Error(`Property ${smaBasis} do not exist!`);
 
-    const sma = new SimpleMovingAverage(this.stockList, this.period, baseProperty, 'SMA');
+    const sma = new SimpleMovingAverage(stockList, period, smaBasis, 'SMA');
     // Overwrite the `stockList` with the SMA property
     this.stockList = sma.compute();
   }
