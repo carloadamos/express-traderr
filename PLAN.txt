@@ -1,0 +1,22 @@
+TRADING PLAN:
+
+1. MACD
+  PREREQ:
+    * SMA
+    * EMA
+
+2. EMA
+  PREREQ:
+    * SMA
+
+3. SMA
+  PREREQ:
+    * PRICE
+
+INSTALL: node, npm, polymer, python
+
+B315_E4038
+4MQ6115426T
+Clotho
+Coeus
+Moirai --

@@ -1,35 +1,66 @@
+import SimpleMovingAverage from './sma.js';
+
+const emaProperty = 'EMA';
+const smaProperty = 'SMA';
+
 /** * For now, I will only support 12 and 26 EMA.
  * 10, 20, 50, 100 MA
+ * @param {Array} stocks Stock list.
+ * @param {number} period Period of days.
  */
 class ExponentialMovingAverage {
-  constructor() {
-    this.multiplier = 0;
-    this.period = 0;
-    this.stocks = [];
+  constructor(stocks, period, propertyToCompute, newProp) {
+    this.newProperty = newProp;
+    this.period = period;
+    this.propertyToCompute = propertyToCompute;
+    this.smoothing = 0;
+    this.stocks = stocks;
+
+    this.computeMultiplier();
   }
 
   /**
    * Compute for the EMA.
-   * @param {Array} stocks Stock list.
+   * Computation for EMA:
+   ** `previousEMA` = SMA (only used at the start)
+   ** `smoothing` = 2 (period + 1)
+   ** `previousEMA` = (`closingPrice` - `previousEMA`) * `smoothing` + `previousEMA`
+   ** `currentEMA` = (`closingPrice` - `previousEMA`) * `smoothing` + `previousEMA`
    */
   /* eslint-disable no-param-reassign */
-  compute(stocks, period) {
-    this.stocks = stocks;
-    this.period = period;
-    let i = 0;
-    const property = 'EMA'.concat(this.period);
-    // length is the actual size. if 21 item, length is 21
-    return this.stocks.map(() => {
-      if (i >= this.period - 1) {
-        const prevEMA = this.previousEMA(i) || this.previousSMA(i);
-        const closingPrice = this.getClosingPrice(i);
-        const currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
+  compute() {
+    let currentEMA = 0;
 
-        stocks[i] = { ...stocks[i], [property]: currentEMA };
+    /* istanbul ignore else */
+    if (!this.hasPreviousSMA()) {
+      this.generateSMA();
+    }
+
+    return this.stocks.map(stock => {
+      const currentIndex = this.stocks.indexOf(stock);
+      const { closingPrice } = stock;
+      let ema = 0;
+      let prevEMA = 0;
+
+      if (currentIndex === this.period - 1) {
+        ema = this.stocks[currentIndex - 1][this.newProperty.concat(this.period)];
+        prevEMA = ema || this.previousSMA(stock);
+
+        currentEMA = prevEMA;
       }
-      i += 1;
 
-      return stocks[i - 1];
+      if (currentIndex >= this.period) {
+        ema = this.stocks[currentIndex - 1][this.newProperty.concat(this.period)];
+        prevEMA = ema || this.previousSMA(stock);
+
+        currentEMA = this.computeCurrentEMA(closingPrice, prevEMA);
+      }
+
+      console.log('currentIndex', currentIndex, currentEMA);
+      stock = { ...stock, [this.newProperty.concat(this.period)]: currentEMA };
+      this.stocks[currentIndex] = stock;
+
+      return stock;
     });
   }
 
@@ -39,15 +70,9 @@ class ExponentialMovingAverage {
    * @param {number} prevEMA Previous EMA
    */
   computeCurrentEMA(closingPrice, prevEMA) {
-    return parseFloat(((closingPrice - prevEMA) * this.multiplier + prevEMA).toFixed(4));
-  }
+    if (prevEMA === 0) return 0;
 
-  /**
-   * Returns the current closing price.
-   * @param {number} currentIndex Current index of stock.
-   */
-  getClosingPrice(currentIndex) {
-    return this.stocks[currentIndex].closingPrice;
+    return parseFloat(((closingPrice - prevEMA) * this.smoothing + prevEMA).toFixed(4));
   }
 
   /**
@@ -55,21 +80,46 @@ class ExponentialMovingAverage {
    */
   computeMultiplier() {
     const multiplier = 2 / (this.period + 1);
-    this.multiplier = parseFloat(multiplier.toFixed(4));
+    this.smoothing = parseFloat(multiplier.toFixed(4));
+  }
+
+  /**
+   * Call the SMA to generate amounts.
+   * This should happen at the start of computing
+   * EMA and should not happen in the middle or end of the list.
+   */
+  generateSMA() {
+    const sma = new SimpleMovingAverage(this.stocks, this.period, this.propertyToCompute, 'SMA');
+    this.stocks = sma.compute();
+  }
+
+  /**
+   * Check if list has SMA values.
+   * @returns {boolean}
+   */
+  hasPreviousSMA() {
+    const smaAmount = this.stocks[0][smaProperty.concat(this.period)];
+
+    return !!smaAmount;
   }
 
   /**
    * Previous EMA.
    * Only supports 12 and 26 EMA.
    * Future enhancement will make this flexible.
-   * @param {number} currentIndex Current stock index
+   * @param {Object} stock Current stock.
    */
-  previousEMA(currentIndex) {
-    if (currentIndex - 1 === -1) return 0;
+  previousSMA(stock) {
+    const currentIndex = this.stocks.indexOf(stock);
+    const currentEma = this.stocks[currentIndex - 1][smaProperty.concat(this.period)];
 
-    return this.period === 12
-      ? this.stocks[currentIndex - 1].EMA12
-      : this.stocks[currentIndex - 1].EMA26;
+    this.stocks[currentIndex - 1] = {
+      ...this.stocks[currentIndex - 1],
+      [emaProperty.concat(this.period)]: currentEma,
+    };
+    this.stocks[currentIndex - 1] = stock;
+
+    return currentEma;
   }
 
   /**
@@ -79,14 +129,6 @@ class ExponentialMovingAverage {
   previousPrice(currentIndex) {
     if (currentIndex - 1 === -1) return 0;
     return this.stocks[currentIndex - 1].closingPrice;
-  }
-
-  previousSMA(currentIndex) {
-    if (currentIndex - 1 === -1) return 0;
-
-    return this.period === 12
-      ? this.stocks[currentIndex - 1].MA12
-      : this.stocks[currentIndex - 1].MA26;
   }
 }
 
