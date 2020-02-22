@@ -4,7 +4,6 @@
  * @param {number} period Period of days.
  * @param {string} baseProperty Basis of computation.
  * @param {string} newProp New property to write to the list.
- * Will be appended with the period. e.g 'SMA' + 20 = 'SMA20'
  * @returns {Array} Stock list with SMA.
  */
 export default class SimpleMovingAverage {

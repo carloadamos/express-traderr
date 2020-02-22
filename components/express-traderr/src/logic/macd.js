@@ -3,9 +3,13 @@ import ExponentialMovingAverage from './ema.js';
 
 const emaProperty = 'EMA';
 
-class MovingAverageConvergenceDivergence {
-  constructor(stocks) {
-    this.stocks = stocks;
+export default class MovingAverageConvergenceDivergence {
+  constructor(stockList, fastLength, slowLength, source, signalLength) {
+    this.fastLength = fastLength;
+    this.signalLength = signalLength;
+    this.slowLength = slowLength;
+    this.source = source;
+    this.stockList = stockList;
   }
 
   /**
@@ -16,47 +20,19 @@ class MovingAverageConvergenceDivergence {
    */
   /* eslint-disable no-param-reassign */
   compute() {
-    const property = 'MACD';
+    this.stockList = this._computeMACD();
 
-    /* istanbul ignore else */
-    if (!this.hasEMA(12)) {
-      const ema = new ExponentialMovingAverage(this.stocks, 12, 'closingPrice', 'EMA');
-      this.stocks = ema.compute();
-    }
+    this.stockList = this._computeMACDSMA();
 
-    /* istanbul ignore else */
-    if (!this.hasEMA(26)) {
-      const ema = new ExponentialMovingAverage(this.stocks, 26, 'closingPrice', 'EMA');
-      this.stocks = ema.compute();
-    }
+    this.stockList = this._computeSignalLine();
 
-    const stockList = this.stocks.map(stock => {
-      const ema12 = stock[emaProperty.concat(12)];
-      const ema26 = stock[emaProperty.concat(26)];
-
-      let macd = 0;
-
-      if (this.stocks.indexOf(stock) >= 25) {
-        macd = parseFloat((ema12 - ema26).toFixed(4));
-      }
-
-      stock = { ...stock, [property]: macd };
-
-      return stock;
-    });
-
-    // This will have MACD_SMA9 that will be used in computing signal line.
-    const stockListWithMACD = this.computeMACDSMA(stockList);
-    const finalStockList = this.computeSignalLine(stockListWithMACD);
-
-    return finalStockList;
+    return this.stockList;
   }
 
   /* eslint-disable class-methods-use-this */
-  computeMACDSMA(originalStocks) {
-    const period = 9;
-    const property = 'MACD';
-    const sma = new SimpleMovingAverage(originalStocks, period, property, 'MACD_SMA');
+  _computeMACDSMA() {
+    const { signalLength } = this;
+    const sma = new SimpleMovingAverage(this.stockList, signalLength, 'MACD', 'MACD_SMA');
 
     return sma.compute();
   }
@@ -64,10 +40,17 @@ class MovingAverageConvergenceDivergence {
   /**
    * Compute for signal line.
    * Signal line = EMA9 of MACD.
-   * @param {Array} stockList Stock list with MACD_SMA9.
-   */
-  computeSignalLine(stockList) {
-    const ema = new ExponentialMovingAverage(stockList, 9, 'MACD_SMA9', 'SIGNAL');
+   * @param {Array} stockList Stock list with MACD_SMA9. */
+  _computeSignalLine() {
+    const { signalLength } = this;
+    const ema = new ExponentialMovingAverage(
+      this.stockList,
+      signalLength,
+      'MACD_SMA',
+      'SIGNAL',
+      'MACD',
+    );
+
     return ema.compute();
   }
 
@@ -78,6 +61,37 @@ class MovingAverageConvergenceDivergence {
   hasEMA(period) {
     return this.stocks[0][emaProperty.concat(period)];
   }
-}
 
-export default MovingAverageConvergenceDivergence;
+  _computeMACD() {
+    const { slowLength, fastLength } = this;
+    this._generateEMA(slowLength);
+    this._generateEMA(fastLength);
+
+    return this.stockList.map(stock => {
+      const slowEMA = stock[emaProperty.concat(slowLength)];
+      const fastEMA = stock[emaProperty.concat(fastLength)];
+
+      let macd = 0;
+
+      if (this.stockList.indexOf(stock) >= fastLength - 1) {
+        macd = parseFloat((slowEMA - fastEMA).toFixed(4));
+      }
+
+      stock = { ...stock, MACD: macd };
+
+      return stock;
+    });
+  }
+
+  _generateEMA(period) {
+    let { stockList } = this;
+    if (!Object.prototype.hasOwnProperty.call(stockList[0], 'SMA'.concat(period))) {
+      const sma = new SimpleMovingAverage(stockList, period, 'close', 'SMA');
+      stockList = sma.compute();
+    }
+
+    const ema = new ExponentialMovingAverage(stockList, period, 'SMA', 'EMA', 'close');
+    stockList = ema.compute();
+    this.stockList = stockList;
+  }
+}
