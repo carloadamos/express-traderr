@@ -53,7 +53,7 @@ export default class SimpleMovingAverage {
     const currentIndex = stockList.indexOf(stock);
 
     if (!Object.prototype.hasOwnProperty.call(stock, [this.baseProperty]))
-      throw new Error('Property do not exist!');
+      throw new Error(`${baseProperty.concat(period)} property do not exist!`);
 
     /* Increase number of decrement to current index to compute total */
     for (let i = 0; i < period; i += 1) {
