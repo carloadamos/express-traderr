@@ -60,15 +60,23 @@ describe('ema', () => {
     const ema = new ExponentialMovingAverage(stocks, period, 'SMA', 'EMA', 'close');
     const newStockList = ema.compute();
 
-    expect(newStockList[12].EMA12).to.be.equal(7.4997);
+    expect(newStockList[12].EMA12).to.be.equal(2.4878);
   });
 
-  it('should be able to correctly compute EMA for 13', () => {
+  it('should be able to correctly compute EMA for last item', () => {
     const period = 12;
     const ema = new ExponentialMovingAverage(stocks, period, 'SMA', 'EMA', 'close');
     const newStockList = ema.compute();
 
-    expect(newStockList[13].EMA12).to.be.equal(8.4994);
+    expect(newStockList[stocks.length - 1].EMA12).to.be.equal(2.1674);
+  });
+
+  it('should be able to correctly compute EMA for 25', () => {
+    const period = 12;
+    const ema = new ExponentialMovingAverage(stocks, period, 'SMA', 'EMA', 'close');
+    const newStockList = ema.compute();
+
+    expect(newStockList[24].EMA12).to.be.equal(2.2211);
   });
 
   it('should be able to throw error property does not exist', () => {

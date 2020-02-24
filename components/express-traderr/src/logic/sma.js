@@ -4,7 +4,6 @@
  * @param {number} period Period of days.
  * @param {string} baseProperty Basis of computation.
  * @param {string} newProp New property to write to the list.
- * Will be appended with the period. e.g 'SMA' + 20 = 'SMA20'
  * @returns {Array} Stock list with SMA.
  */
 export default class SimpleMovingAverage {
@@ -30,7 +29,7 @@ export default class SimpleMovingAverage {
 
       if (currentIndex >= period - 1) {
         total = this._getTotal(stock);
-        total = Math.round((total / period) * 100) / 100;
+        total = parseFloat((((total / period) * 100) / 100).toFixed(4));
       }
 
       stock = {

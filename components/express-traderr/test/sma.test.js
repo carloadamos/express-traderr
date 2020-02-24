@@ -24,14 +24,14 @@ describe('simple-moving-average', () => {
     expect(stocksWithSMA[stocks.length - 1]).to.have.property('SMA12');
   });
 
-  it('should be be able to have property SMA12 but with 0 amount', () => {
+  it('should be able to have property SMA12 but with 0 amount', () => {
     const sma = new SimpleMovingAverage(stocks, 12, 'close', 'SMA');
     const stocksWithMA = sma.compute();
 
     expect(stocksWithMA[0].SMA12).to.be.equal(0);
   });
 
-  it('should be be able to have property SMA12 not equal to 0', () => {
+  it('should be able to have property SMA12 not equal to 0', () => {
     const sma = new SimpleMovingAverage(stocks, 12, 'close', 'SMA');
     const newStocks = sma.compute();
 
@@ -43,14 +43,14 @@ describe('simple-moving-average', () => {
     const sma = new SimpleMovingAverage(stocks, 20, 'close', 'SMA');
     const stocksWithMA = sma.compute();
 
-    expect(stocksWithMA[19].SMA20).to.be.equal(210 / 20);
+    expect(stocksWithMA[19].SMA20).to.be.equal(2.4235);
   });
 
   it('should be able to compute moving average for days greater than the computed average', () => {
     const sma = new SimpleMovingAverage(stocks, 20, 'close', 'SMA');
     const stockList = sma.compute();
 
-    expect(stockList[stocks.length - 1].SMA20).to.be.equal(19.5);
+    expect(stockList[stocks.length - 1].SMA20).to.be.equal(2.219);
   });
 
   it('should be able to throw error when stock has no baseproperty', () => {
