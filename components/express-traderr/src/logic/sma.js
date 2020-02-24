@@ -29,7 +29,7 @@ export default class SimpleMovingAverage {
 
       if (currentIndex >= period - 1) {
         total = this._getTotal(stock);
-        total = Math.round((total / period) * 100) / 100;
+        total = parseFloat((((total / period) * 100) / 100).toFixed(4));
       }
 
       stock = {

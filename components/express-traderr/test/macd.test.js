@@ -30,4 +30,11 @@ describe('macd', () => {
 
     expect(updatedStocks[26]).to.have.property('SIGNAL9');
   });
+
+  it('should be able to compute for SIGNAL property', () => {
+    const macd = new MovingAverageConvergenceDivergence(stocks, 26, 12, 'close', 9);
+    const updatedStocks = macd.compute();
+
+    expect(updatedStocks[26].SIGNAL9).to.be.equal(-0.0559);
+  });
 });

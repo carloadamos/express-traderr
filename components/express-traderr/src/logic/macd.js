@@ -54,14 +54,6 @@ export default class MovingAverageConvergenceDivergence {
     return ema.compute();
   }
 
-  /**
-   *
-   * @param {number} period Period of days.
-   */
-  hasEMA(period) {
-    return this.stocks[0][emaProperty.concat(period)];
-  }
-
   _computeMACD() {
     const { slowLength, fastLength } = this;
     this._generateEMA(slowLength);
@@ -85,6 +77,7 @@ export default class MovingAverageConvergenceDivergence {
 
   _generateEMA(period) {
     let { stockList } = this;
+    /* istanbul ignore else */
     if (!Object.prototype.hasOwnProperty.call(stockList[0], 'SMA'.concat(period))) {
       const sma = new SimpleMovingAverage(stockList, period, 'close', 'SMA');
       stockList = sma.compute();
