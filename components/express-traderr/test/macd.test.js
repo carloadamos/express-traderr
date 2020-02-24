@@ -10,12 +10,12 @@ describe('macd', () => {
     expect(updatedStocks[9]).to.have.property('MACD_SMA9');
   });
 
-  // it('should be able to acquire moving EMA property', () => {
-  //   const macd = new MovingAverageConvergenceDivergence(stocks);
-  //   const updatedStocks = macd.compute();
+  it('should be able to acquire moving EMA property', () => {
+    const macd = new MovingAverageConvergenceDivergence(stocks);
+    const updatedStocks = macd.compute();
 
-  //   expect(updatedStocks[12]).to.have.property('EMA12');
-  // });
+    expect(updatedStocks[12]).to.have.property('EMA12');
+  });
 
   // it('should be able to acquire moving MACD property', () => {
   //   const macd = new MovingAverageConvergenceDivergence(stocks);
