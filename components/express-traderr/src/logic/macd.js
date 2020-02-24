@@ -87,4 +87,26 @@ export default class MovingAverageConvergenceDivergence {
     stockList = ema.compute();
     this.stockList = stockList;
   }
+
+  static crossover(previousStock, currentStock, period) {
+    const macd = 'MACD';
+    const signal = 'SIGNAL'.concat(period);
+    const properties = [macd, signal];
+    const stocks = [previousStock, currentStock];
+
+    /**
+     * Make sure that we have the essential properties.
+     */
+    stocks.forEach(stock => {
+      properties.forEach(props => {
+        if (!Object.prototype.hasOwnProperty.call(stock, props))
+          throw new Error(`MACD CROSSOVER: ${props} does not exist!`);
+      });
+    });
+
+    const preCondition = previousStock[macd] < previousStock[signal];
+    const currentCondition = currentStock[macd] > currentStock[signal];
+
+    return preCondition && currentCondition;
+  }
 }
