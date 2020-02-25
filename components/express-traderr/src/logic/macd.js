@@ -88,7 +88,7 @@ export default class MovingAverageConvergenceDivergence {
     this.stockList = stockList;
   }
 
-  static crossover(previousStock, currentStock, period) {
+  static crossOver(previousStock, currentStock, period) {
     const macd = 'MACD';
     const signal = 'SIGNAL'.concat(period);
     const properties = [macd, signal];
@@ -106,6 +106,28 @@ export default class MovingAverageConvergenceDivergence {
 
     const preCondition = previousStock[macd] < previousStock[signal];
     const currentCondition = currentStock[macd] > currentStock[signal];
+
+    return preCondition && currentCondition;
+  }
+
+  static crossUnder(previousStock, currentStock, period) {
+    const macd = 'MACD';
+    const signal = 'SIGNAL'.concat(period);
+    const properties = [macd, signal];
+    const stocks = [previousStock, currentStock];
+
+    /**
+     * Make sure that we have the essential properties.
+     */
+    stocks.forEach(stock => {
+      properties.forEach(props => {
+        if (!Object.prototype.hasOwnProperty.call(stock, props))
+          throw new Error(`MACD CROSSUNDER: ${props} does not exist!`);
+      });
+    });
+
+    const preCondition = previousStock[signal] < previousStock[macd];
+    const currentCondition = currentStock[signal] > currentStock[macd];
 
     return preCondition && currentCondition;
   }
