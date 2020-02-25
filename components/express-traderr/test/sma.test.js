@@ -59,4 +59,17 @@ describe('simple-moving-average', () => {
       sma.compute();
     }).to.throw('nonExisting20 property do not exist!');
   });
+
+  it('should be able to acquire trend property', () => {
+    const sma5 = new SimpleMovingAverage(stocks, 5, 'close', 'SMA');
+    const sma5Stocks = sma5.compute();
+
+    const sma10 = new SimpleMovingAverage(sma5Stocks, 10, 'close', 'SMA');
+    const sma50Stocks = sma10.compute();
+    SimpleMovingAverage.identifyTrend(sma50Stocks, 5, 10).forEach(stock => {
+      console.log(stock);
+    });
+
+    expect(SimpleMovingAverage.identifyTrend(sma50Stocks, 5, 10)[20]).to.have.property('trend');
+  });
 });
