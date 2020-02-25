@@ -61,4 +61,27 @@ export default class SimpleMovingAverage {
 
     return total;
   }
+
+  /**
+   * Identify if the trend is uptrend or downtrend.
+   * @param {Array} stockList Stock list.
+   * @param {number} slowTrend Slow trend.
+   * @param {number} fastTrend Fast trend.
+   * @returns {Array}
+   */
+  static identifyTrend(stockList, slowTrend, fastTrend) {
+    return stockList.map(stock => {
+      let trend = '';
+
+      if (stock['SMA'.concat(fastTrend)] > stock['SMA'.concat(slowTrend)]) {
+        trend = 'uptrend';
+      } else if (stock['SMA'.concat(fastTrend)] < stock['SMA'.concat(slowTrend)]) {
+        trend = 'downtrend';
+      } else {
+        trend = 'notrend';
+      }
+
+      return { ...stock, trend };
+    });
+  }
 }
