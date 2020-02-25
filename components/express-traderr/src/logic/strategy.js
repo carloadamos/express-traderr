@@ -6,14 +6,14 @@ export default class Strategy {
   /**
    * Buy a position
    */
-  buy(stock, strategy) {
+  static buy(stock, strategy) {
     console.log(`Bought stock ${stock.code} at ${stock.close}. Strategy: ${strategy}`);
   }
 
   /**
    * Sell a position
    */
-  sell(stock, strategy) {
+  static sell(stock, strategy) {
     console.log(`Sold stock ${stock.code} at ${stock.close}. Strategy ${strategy}`);
   }
 }
