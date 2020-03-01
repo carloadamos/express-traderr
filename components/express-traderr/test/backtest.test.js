@@ -1,6 +1,6 @@
 import { expect } from '@open-wc/testing';
 import BackTest from '../src/logic/backtest.js';
-import stocks from './test-data/test-data.js';
+import backTestStockList from './test-data/backtest.testdata.js';
 
 const strategy = 'long';
 
@@ -15,17 +15,23 @@ describe('backtest', () => {
           source: 'close',
           signalLength: 9,
         },
+        {
+          code: 'price-above-sma',
+          periods: [10],
+          source: 'close',
+          newProperty: 'SMA',
+        },
       ],
       sell: [
         {
-          code: 'downtrend',
-          periods: [10, 20],
+          code: 'price-below-sma',
+          periods: [20],
           source: 'close',
           newProperty: 'SMA',
         },
       ],
     };
-    const backTest = new BackTest(stocks, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -50,7 +56,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(stocks, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -65,6 +71,12 @@ describe('backtest', () => {
           source: 'close',
           newProperty: 'SMA',
         },
+        {
+          code: 'uptrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+        },
       ],
       sell: [
         {
@@ -75,7 +87,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(stocks, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -91,6 +103,12 @@ describe('backtest', () => {
           newProperty: 'ema',
           smaSource: 'close',
         },
+        {
+          code: 'uptrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+        },
       ],
       sell: [
         {
@@ -101,7 +119,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backtest = new BackTest(stocks, strategy, signals);
+    const backtest = new BackTest(backTestStockList, strategy, signals);
     backtest.start();
 
     expect(1).to.be.equal(1);
@@ -133,7 +151,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backtest = new BackTest(stocks, strategy, signals);
+    const backtest = new BackTest(backTestStockList, strategy, signals);
     backtest.start();
 
     expect(1).to.be.equal(1);
@@ -145,6 +163,12 @@ describe('backtest', () => {
         {
           code: 'unimplemented',
         },
+        {
+          code: 'uptrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+        },
       ],
       sell: [
         {
@@ -155,7 +179,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backtest = new BackTest(stocks, strategy, signals);
+    const backtest = new BackTest(backTestStockList, strategy, signals);
     backtest.start();
 
     expect(1).to.be.equal(1);
@@ -180,7 +204,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(stocks, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals);
     backTest.start();
 
     expect(1).to.be.equal(1);

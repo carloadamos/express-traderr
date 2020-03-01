@@ -39,10 +39,6 @@ export default class BackTest {
     const signals = [...this.signals.buy, ...this.signals.sell];
 
     signals.forEach(signal => {
-      console.log(signal);
-    });
-
-    signals.forEach(signal => {
       switch (signal.code) {
         case SIGNALS.UPTREND:
         case SIGNALS.DOWNTREND:
@@ -202,6 +198,12 @@ export default class BackTest {
         });
 
         if (sellSignal.length !== 0 && sellScore === sellPerfectScore) {
+          console.log(
+            'P/L: ',
+            parseFloat(stock.close - this.position[this.position.length - 1].stock.close).toFixed(
+              4,
+            ),
+          );
           this.position = [...this.position, Strategy.sell(stock, 'long')];
         }
       }
