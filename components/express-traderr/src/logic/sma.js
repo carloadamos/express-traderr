@@ -67,7 +67,7 @@ export default class SimpleMovingAverage {
   }
 
   /**
-   * Identify if stock's closing price is above SMA.
+   * Identify if stock's property is above SMA.
    * @param {Object} stock Stock.
    * @param {number} period Period for SMA.
    * @returns {boolean}
@@ -77,12 +77,31 @@ export default class SimpleMovingAverage {
   }
 
   /**
+   * Identify if stock's property is below SMA.
+   * @param {Object} stock Stock.
+   * @param {number} period Period for SMA.
+   * @returns {boolean}
+   */
+  static priceBelow(stock, period, source) {
+    return stock[source] < stock['SMA'.concat(period)];
+  }
+
+  /**
    * Identify if trend is uptrend.
    * @param {Object} stock Stock.
    * @returns {boolean}
    */
   static upTrend(stock) {
     return stock.trend === 'uptrend';
+  }
+
+  /**
+   * Identify if trend is downtrend.
+   * @param {Object} stock Stock.
+   * @returns {boolean}
+   */
+  static downTrend(stock) {
+    return stock.trend === 'downtrend';
   }
 
   /**

@@ -55,13 +55,23 @@ export default class ExponentialMovingAverage {
   }
 
   /**
-   * Identify if stock's closing price is above SMA.
+   * Identify if stock's property is above EMA.
    * @param {Object} stock Stock.
    * @param {number} period Period for SMA.
    * @returns {boolean}
    */
   static priceAbove(stock, period, source) {
     return stock[source] > stock['EMA'.concat(period)];
+  }
+
+  /**
+   * Identify if stock's property is above EMA.
+   * @param {Object} stock Stock.
+   * @param {number} period Period for SMA.
+   * @returns {boolean}
+   */
+  static priceBelow(stock, period, source) {
+    return stock[source] < stock['EMA'.concat(period)];
   }
 
   /**

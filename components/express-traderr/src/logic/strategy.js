@@ -8,6 +8,10 @@ export default class Strategy {
    */
   static buy(stock, strategy) {
     console.info(`Bought stock ${stock.code} at ${stock.close}. Strategy: ${strategy}`);
+    return {
+      action: 'buy',
+      stock,
+    };
   }
 
   /**
@@ -15,5 +19,9 @@ export default class Strategy {
    */
   static sell(stock, strategy) {
     console.info(`Sold stock ${stock.code} at ${stock.close}. Strategy ${strategy}`);
+    return {
+      action: 'sell',
+      stock,
+    };
   }
 }
