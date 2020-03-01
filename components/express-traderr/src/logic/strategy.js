@@ -4,16 +4,16 @@
 /* eslint-disable class-methods-use-this */
 export default class Strategy {
   /**
-   * Buy a position
+   * Buy a position.
    */
   static buy(stock, strategy) {
-    console.log(`Bought stock ${stock.code} at ${stock.close}. Strategy: ${strategy}`);
+    console.info(`Bought stock ${stock.code} at ${stock.close}. Strategy: ${strategy}`);
   }
 
   /**
-   * Sell a position
+   * Sell a position.
    */
   static sell(stock, strategy) {
-    console.log(`Sold stock ${stock.code} at ${stock.close}. Strategy ${strategy}`);
+    console.info(`Sold stock ${stock.code} at ${stock.close}. Strategy ${strategy}`);
   }
 }

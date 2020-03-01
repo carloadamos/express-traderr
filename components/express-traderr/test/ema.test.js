@@ -13,14 +13,14 @@ describe('ema', () => {
     const period = 12;
     const ema = new ExponentialMovingAverage(stocks, period, 'SMA', 'EMA', 'close');
 
-    expect(ema.computeCurrentEMA(1.73, 1.6739)).to.be.equal(1.6825);
+    expect(ema._computeCurrentEMA(1.73, 1.6739)).to.be.equal(1.6825);
   });
 
   it('should be able to compute for current EMA. Period 26', () => {
     const period = 26;
     const ema = new ExponentialMovingAverage(stocks, period, 'SMA', 'EMA', 'close');
 
-    expect(ema.computeCurrentEMA(1.73, 1.6739)).to.be.equal(1.6781);
+    expect(ema._computeCurrentEMA(1.73, 1.6739)).to.be.equal(1.6781);
   });
 
   it('should be able to create a new property EMA', () => {
