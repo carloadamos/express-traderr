@@ -1,4 +1,0 @@
-diff a/components/express-traderr/src/logic/sma.js b/components/express-traderr/src/logic/sma.js	(rejected hunks)
-@@ -84 +84 @@ export default class SimpleMovingAverage {
--      return { ...stock, trend: trend };
-+      return { ...stock, trend };

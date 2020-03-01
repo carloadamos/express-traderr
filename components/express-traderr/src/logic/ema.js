@@ -6,13 +6,14 @@ import SimpleMovingAverage from './sma.js';
  * @param {number} period Period of days.
  * @param {string} baseProperty Property to compute.
  * @param {string} newProperty New property to add.
+ * @param {string} smaSource Source of SMA.
  */
 export default class ExponentialMovingAverage {
-  constructor(stockList, period, baseProperty, newProperty, smaBasis) {
-    this.baseProperty = baseProperty;
+  constructor(stockList, length, source, newProperty, smaSource) {
+    this.source = source;
     this.newProperty = newProperty;
-    this.period = period;
-    this.smaBasis = smaBasis;
+    this.length = length;
+    this.smaSource = smaSource;
     this.smoothing = this._computeMultiplier();
     this.stockList = stockList;
     this._generateSMA();
@@ -28,30 +29,49 @@ export default class ExponentialMovingAverage {
    */
   /* eslint-disable no-param-reassign */
   compute() {
-    const { stockList, period, baseProperty, newProperty } = this;
+    const { stockList, length: period, source: baseProperty, newProperty } = this;
     let currentEMA = 0;
 
     return stockList.map(stock => {
       let previousEMA = 0;
       const currentIndex = stockList.indexOf(stock);
 
-      if (currentIndex === this.period - 1) {
+      if (currentIndex === this.length - 1) {
         currentEMA = stockList[period - 1][baseProperty.concat(period)];
       }
 
       /* Skip one element since we assigned the value already */
-      if (currentIndex > this.period - 1) {
+      if (currentIndex > this.length - 1) {
         previousEMA = stockList[currentIndex - 1][newProperty.concat(period)];
 
-        currentEMA = this.computeCurrentEMA(stock[this.smaBasis], previousEMA);
+        currentEMA = this._computeCurrentEMA(stock[this.smaSource], previousEMA);
       }
 
       stock = { ...stock, [newProperty.concat(period)]: currentEMA };
-      /* Overwrite stock */
-      stockList[currentIndex] = stock;
+      stockList[currentIndex] = stock; /* Overwrite stock */
 
       return stock;
     });
+  }
+
+  /**
+   * Identify if stock's property is above EMA.
+   * @param {Object} stock Stock.
+   * @param {number} period Period for SMA.
+   * @returns {boolean}
+   */
+  static priceAbove(stock, period, source) {
+    return stock[source] > stock['EMA'.concat(period)];
+  }
+
+  /**
+   * Identify if stock's property is above EMA.
+   * @param {Object} stock Stock.
+   * @param {number} period Period for SMA.
+   * @returns {boolean}
+   */
+  static priceBelow(stock, period, source) {
+    return stock[source] < stock['EMA'.concat(period)];
   }
 
   /**
@@ -59,16 +79,19 @@ export default class ExponentialMovingAverage {
    * @param {number} closingPrice Current closing price.
    * @param {number} previousEMA Previous EMA
    */
-  computeCurrentEMA(closingPrice, previousEMA) {
+  _computeCurrentEMA(closingPrice, previousEMA) {
     const currentEMA = (closingPrice - previousEMA) * this.smoothing + previousEMA;
+
     return parseFloat(currentEMA.toFixed(4));
   }
 
   /**
-   * Also known as smoothing.
+   * Compute for multiplier.
+   * Also known as `smoothing`
    */
   _computeMultiplier() {
-    const multiplier = 2 / (this.period + 1);
+    const multiplier = 2 / (this.length + 1);
+
     return parseFloat(multiplier.toFixed(4));
   }
 
@@ -78,12 +101,13 @@ export default class ExponentialMovingAverage {
    * EMA and should not happen in the middle or end of the list.
    */
   _generateSMA() {
-    const { stockList, period, smaBasis } = this;
+    const { stockList, length: period, smaSource: smaBasis } = this;
     if (!Object.prototype.hasOwnProperty.call(stockList[0], [smaBasis]))
       throw new Error(`Property ${smaBasis} do not exist!`);
 
     const sma = new SimpleMovingAverage(stockList, period, smaBasis, 'SMA');
     // Overwrite the `stockList` with the SMA property
+    // Newly created list will have SMA>
     this.stockList = sma.compute();
   }
 }
