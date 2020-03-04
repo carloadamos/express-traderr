@@ -1,3 +1,4 @@
+import moment from 'moment/src/moment';
 import SimpleMovingAverage from './sma.js';
 import ExponentialMovingAverage from './ema.js';
 import MovingAverageConvergenceDivergence from './macd.js';
@@ -100,6 +101,9 @@ export default class BackTest {
    * signal: macd-crossover, uptrend
    */
   start() {
+    let unIdentifiedBuySignalEncountered = false;
+    let unIdentifiedSellSignalEncountered = false;
+
     this.stockList.forEach(stock => {
       const buySignal = this.signals.buy ? this.signals.buy : [];
       const sellSignal = this.signals.sell ? this.signals.sell : [];
@@ -110,42 +114,63 @@ export default class BackTest {
 
       if (this.lastAction() === 'Nothing' || this.lastAction() === 'sell') {
         buySignal.forEach(signal => {
-          switch (signal.code) {
-            case SIGNALS.MACD_CROSSOVER: {
-              const currentIndex = this.stockList.indexOf(stock);
+          const currentIndex = this.stockList.indexOf(stock);
 
-              if (currentIndex !== 0) {
-                const previousStock = this.stockList[currentIndex - 1];
-                const currentStock = stock;
+          if (!unIdentifiedBuySignalEncountered) {
+            switch (signal.code) {
+              case SIGNALS.MACD_CROSSOVER: {
+                if (currentIndex !== 0) {
+                  const previousStock = this.stockList[currentIndex - 1];
+                  const currentStock = stock;
 
-                buyScore = MovingAverageConvergenceDivergence.crossOver(
-                  previousStock,
-                  currentStock,
-                  signal.signalLength,
-                )
+                  buyScore = MovingAverageConvergenceDivergence.crossOver(
+                    previousStock,
+                    currentStock,
+                    signal.signalLength,
+                  )
+                    ? (buyScore += 1)
+                    : buyScore;
+                }
+                break;
+              }
+              case SIGNALS.UPTREND: {
+                const { duration } = signal;
+                let qualified = true;
+
+                if (duration) {
+                  if (currentIndex - 1 >= duration) {
+                    for (let i = duration; i >= 0; i -= 1) {
+                      if (!SimpleMovingAverage.upTrend(stock)) {
+                        qualified = false;
+                        break;
+                      }
+                    }
+                  } else {
+                    qualified = false;
+                  }
+                } else {
+                  qualified = SimpleMovingAverage.upTrend(stock);
+                }
+
+                buyScore = qualified ? (buyScore += 1) : buyScore;
+                break;
+              }
+              case SIGNALS.PRICE_ABOVE_EMA: {
+                buyScore = ExponentialMovingAverage.priceAbove(stock, signal.periods[0], 'close')
                   ? (buyScore += 1)
                   : buyScore;
+                break;
               }
-              break;
-            }
-            case SIGNALS.UPTREND: {
-              buyScore = SimpleMovingAverage.upTrend(stock) ? (buyScore += 1) : buyScore;
-              break;
-            }
-            case SIGNALS.PRICE_ABOVE_EMA: {
-              buyScore = ExponentialMovingAverage.priceAbove(stock, signal.periods[0], 'close')
-                ? (buyScore += 1)
-                : buyScore;
-              break;
-            }
-            case SIGNALS.PRICE_ABOVE_SMA: {
-              buyScore = SimpleMovingAverage.priceAbove(stock, signal.periods[0], 'close')
-                ? (buyScore += 1)
-                : buyScore;
-              break;
-            }
-            default: {
-              console.error(`BUY SIGNAL: [${signal.code}] is not implemented!`);
+              case SIGNALS.PRICE_ABOVE_SMA: {
+                buyScore = SimpleMovingAverage.priceAbove(stock, signal.periods[0], 'close')
+                  ? (buyScore += 1)
+                  : buyScore;
+                break;
+              }
+              default: {
+                console.error(`BUY SIGNAL: [${signal.code}] is not implemented!`);
+                unIdentifiedBuySignalEncountered = true;
+              }
             }
           }
         });
@@ -157,52 +182,80 @@ export default class BackTest {
 
       if (this.lastAction() === 'buy') {
         sellSignal.forEach(signal => {
-          switch (signal.code) {
-            case SIGNALS.MACD_CROSSUNDER: {
-              const currentIndex = this.stockList.indexOf(stock);
+          const currentIndex = this.stockList.indexOf(stock);
 
-              if (currentIndex !== 0) {
-                const previousStock = this.stockList[currentIndex - 1];
-                const currentStock = stock;
+          if (!unIdentifiedSellSignalEncountered) {
+            switch (signal.code) {
+              case SIGNALS.MACD_CROSSUNDER: {
+                if (currentIndex !== 0) {
+                  const previousStock = this.stockList[currentIndex - 1];
+                  const currentStock = stock;
 
-                sellScore = MovingAverageConvergenceDivergence.crossUnder(
-                  previousStock,
-                  currentStock,
-                  signal.signalLength,
-                )
+                  sellScore = MovingAverageConvergenceDivergence.crossUnder(
+                    previousStock,
+                    currentStock,
+                    signal.signalLength,
+                  )
+                    ? (sellScore += 1)
+                    : sellScore;
+                }
+                break;
+              }
+              case SIGNALS.DOWNTREND: {
+                const { duration } = signal;
+                let qualified = true;
+
+                if (duration) {
+                  if (currentIndex - 1 >= duration) {
+                    for (let i = duration; i >= 0; i -= 1) {
+                      if (!SimpleMovingAverage.downTrend(stock)) {
+                        qualified = false;
+                        break;
+                      }
+                    }
+                  } else {
+                    qualified = false;
+                  }
+                } else {
+                  qualified = SimpleMovingAverage.downTrend(stock);
+                }
+
+                buyScore = qualified ? (buyScore += 1) : buyScore;
+                break;
+              }
+              case SIGNALS.PRICE_BELOW_EMA: {
+                sellScore = ExponentialMovingAverage.priceBelow(stock, signal.periods[0], 'close')
                   ? (sellScore += 1)
                   : sellScore;
+                break;
               }
-              break;
-            }
-            case SIGNALS.DOWNTREND: {
-              sellScore = SimpleMovingAverage.downTrend(stock) ? (sellScore += 1) : sellScore;
-              break;
-            }
-            case SIGNALS.PRICE_BELOW_EMA: {
-              sellScore = ExponentialMovingAverage.priceBelow(stock, signal.periods[0], 'close')
-                ? (sellScore += 1)
-                : sellScore;
-              break;
-            }
-            case SIGNALS.PRICE_BELOW_SMA: {
-              sellScore = SimpleMovingAverage.priceBelow(stock, signal.periods[0], 'close')
-                ? (sellScore += 1)
-                : sellScore;
-              break;
-            }
-            default: {
-              console.error(`SELL SIGNAL: [${signal.code}] is not implemented!`);
+              case SIGNALS.PRICE_BELOW_SMA: {
+                sellScore = SimpleMovingAverage.priceBelow(stock, signal.periods[0], 'close')
+                  ? (sellScore += 1)
+                  : sellScore;
+                break;
+              }
+              default: {
+                console.error(`SELL SIGNAL: [${signal.code}] is not implemented!`);
+                unIdentifiedSellSignalEncountered = true;
+              }
             }
           }
         });
 
         if (sellSignal.length !== 0 && sellScore === sellPerfectScore) {
+          const oneDay = 24 * 60 * 60 * 1000;
+          const firstDate = moment(stock.tradeDate, 'DD/MM/YYYY').toDate();
+          const secondDate = moment(
+            this.position[this.position.length - 1].stock.tradeDate,
+            'DD/MM/YYYY',
+          ).toDate();
+          const difference = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+
           console.log(
-            'P/L: ',
-            parseFloat(stock.close - this.position[this.position.length - 1].stock.close).toFixed(
-              4,
-            ),
+            `P/L: ${parseFloat(
+              stock.close - this.position[this.position.length - 1].stock.close,
+            ).toFixed(4)} Holding Days: ${difference}`,
           );
           this.position = [...this.position, Strategy.sell(stock, 'long')];
         }
