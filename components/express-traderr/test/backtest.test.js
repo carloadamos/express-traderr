@@ -209,4 +209,70 @@ describe('backtest', () => {
 
     expect(1).to.be.equal(1);
   });
+
+  it('should be able to backtest MAMA', () => {
+    const signals = {
+      buy: [
+        {
+          code: 'macd-crossover',
+          fastLength: 12,
+          slowLength: 26,
+          source: 'close',
+          signalLength: 9,
+        },
+        {
+          code: 'price-above-sma',
+          periods: [12],
+          source: 'close',
+          newProperty: 'SMA',
+        },
+      ],
+      sell: [
+        {
+          code: 'macd-crossunder',
+          fastLength: 12,
+          slowLength: 26,
+          source: 'close',
+          signalLength: 9,
+        },
+        {
+          code: 'price-below-sma',
+          periods: [12],
+          source: 'close',
+          newProperty: 'SMA',
+        },
+      ],
+    };
+    const backTest = new BackTest(backTestStockList, strategy, signals);
+    backTest.start();
+
+    expect(1).to.be.equal(1);
+  });
+
+  it('should be able to backtest uptrend with duration', () => {
+    const signals = {
+      buy: [
+        {
+          code: 'uptrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+      sell: [
+        {
+          code: 'downtrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+    };
+    const backTest = new BackTest(backTestStockList, strategy, signals);
+    backTest.start();
+
+    expect(1).to.be.equal(1);
+  });
 });
