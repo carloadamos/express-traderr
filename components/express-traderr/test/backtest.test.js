@@ -31,7 +31,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -56,7 +56,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -87,7 +87,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -119,7 +119,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backtest = new BackTest(backTestStockList, strategy, signals);
+    const backtest = new BackTest(backTestStockList, strategy, signals, 20000);
     backtest.start();
 
     expect(1).to.be.equal(1);
@@ -151,7 +151,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backtest = new BackTest(backTestStockList, strategy, signals);
+    const backtest = new BackTest(backTestStockList, strategy, signals, 20000);
     backtest.start();
 
     expect(1).to.be.equal(1);
@@ -179,7 +179,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backtest = new BackTest(backTestStockList, strategy, signals);
+    const backtest = new BackTest(backTestStockList, strategy, signals, 20000);
     backtest.start();
 
     expect(1).to.be.equal(1);
@@ -204,7 +204,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -243,7 +243,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
     expect(1).to.be.equal(1);
@@ -270,7 +270,7 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals);
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
     expect(1).to.be.equal(1);

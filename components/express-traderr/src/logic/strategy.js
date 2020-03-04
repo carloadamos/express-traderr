@@ -5,20 +5,36 @@
 export default class Strategy {
   /**
    * Buy a position.
+   * @param {Object} stock Stock.
+   * @param {string} strategy Long or short.
+   * @param {number} fund Amount of money.
    */
-  static buy(stock, strategy) {
-    console.info(`Bought stock ${stock.code} at ${stock.close}. Strategy: ${strategy}`);
+  static buy(stock, strategy, fund) {
+    const numberOfShares = Math.floor(fund / stock.close);
+
+    console.log(``);
+    console.log(
+      `BOUGHT ${numberOfShares} ${stock.code} shares at ${stock.close} STRATEGY: ${strategy}`,
+    );
     return {
       action: 'buy',
       stock,
+      numberOfShares,
     };
   }
 
   /**
    * Sell a position.
+   * @param {Object} stock Stock.
+   * @param {string} strategy Long or short.
+   * @param {number} boughtShares Total bought shares.
    */
-  static sell(stock, strategy) {
-    console.info(`Sold stock ${stock.code} at ${stock.close}. Strategy ${strategy}`);
+  static sell(stock, strategy, boughtShares) {
+    console.log(``);
+    console.log(
+      `SOLD   ${boughtShares} ${stock.code} shares at ${stock.close} STRATEGY: ${strategy}.`,
+    );
+    console.log(``);
     return {
       action: 'sell',
       stock,
