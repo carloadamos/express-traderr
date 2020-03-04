@@ -29,7 +29,7 @@ export default class BackTest {
     this.stockList = stockList;
     this.strategy = strategy;
     this.signals = signals;
-    this.position = [];
+    this.history = [];
     this._initialize();
   }
 
@@ -114,7 +114,7 @@ export default class BackTest {
       let buyScore = 0;
       let sellScore = 0;
 
-      if (this.lastAction() === 'Nothing' || this.lastAction() === 'sell') {
+      if (this.lastAction() === 'Nothing' || this.lastAction() === 'SELL') {
         buySignal.forEach(signal => {
           const currentIndex = this.stockList.indexOf(stock);
 
@@ -178,11 +178,11 @@ export default class BackTest {
         });
 
         if (buySignal.length !== 0 && buyScore === buyPerfectScore) {
-          this.position = [...this.position, Strategy.buy(stock, 'long', this.fund)];
+          this.history = [...this.history, Strategy.buy(stock, 'long', this.fund)];
         }
       }
 
-      if (this.lastAction() === 'buy') {
+      if (this.lastAction() === 'BUY') {
         sellSignal.forEach(signal => {
           const currentIndex = this.stockList.indexOf(stock);
 
@@ -246,14 +246,14 @@ export default class BackTest {
         });
 
         if (sellSignal.length !== 0 && sellScore === sellPerfectScore) {
-          const boughtStock = this.position[this.position.length - 1].stock;
-          const boughtShares = this.position[this.position.length - 1].numberOfShares;
+          const boughtStock = this.history[this.history.length - 1].stock;
+          const boughtShares = this.history[this.history.length - 1].numberOfShares;
           const soldStock = stock;
 
           const oneDay = 24 * 60 * 60 * 1000;
           const firstDate = moment(stock.tradeDate, 'DD/MM/YYYY').toDate();
           const secondDate = moment(
-            this.position[this.position.length - 1].stock.tradeDate,
+            this.history[this.history.length - 1].stock.tradeDate,
             'DD/MM/YYYY',
           ).toDate();
           const difference = Math.round(Math.abs((firstDate - secondDate) / oneDay));
@@ -264,10 +264,10 @@ export default class BackTest {
           const totalSold = soldPrice * boughtShares;
           const percentIncrease = ((totalSold - totalBought) / totalBought) * 100;
 
-          this.position = [...this.position, Strategy.sell(stock, 'long', boughtShares)];
+          this.history = [...this.history, Strategy.sell(stock, 'long', boughtShares)];
           console.log(
             `P/L: ${parseFloat(
-              stock.close - this.position[this.position.length - 2].stock.close,
+              stock.close - this.history[this.history.length - 2].stock.close,
             ).toFixed(4)} Holding Days: ${difference}`,
           );
           console.log(
@@ -276,11 +276,13 @@ export default class BackTest {
         }
       }
     });
+
+    return this.history;
   }
 
   lastAction() {
-    if (this.position.length === 0) return 'Nothing';
+    if (this.history.length === 0) return 'Nothing';
 
-    return this.position[this.position.length - 1].action;
+    return this.history[this.history.length - 1].action;
   }
 }

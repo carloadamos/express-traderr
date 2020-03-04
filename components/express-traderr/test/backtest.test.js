@@ -275,4 +275,31 @@ describe('backtest', () => {
 
     expect(1).to.be.equal(1);
   });
+
+  it('should be able to return history list', () => {
+    const signals = {
+      buy: [
+        {
+          code: 'uptrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+      sell: [
+        {
+          code: 'downtrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+    };
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
+    const history = backTest.start();
+
+    expect(history.length).to.be.not.equal(0);
+  });
 });

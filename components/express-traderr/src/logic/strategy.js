@@ -17,7 +17,7 @@ export default class Strategy {
       `BOUGHT ${numberOfShares} ${stock.code} shares at ${stock.close} STRATEGY: ${strategy}`,
     );
     return {
-      action: 'buy',
+      action: 'BUY',
       stock,
       numberOfShares,
     };
@@ -36,8 +36,9 @@ export default class Strategy {
     );
     console.log(``);
     return {
-      action: 'sell',
+      action: 'SELL',
       stock,
+      boughtShares,
     };
   }
 }
