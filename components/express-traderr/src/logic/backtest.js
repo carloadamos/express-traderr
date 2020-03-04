@@ -22,8 +22,10 @@ export default class BackTest {
    * @param {Array} stockList List of stocks to perform backtest on.
    * @param {String} strategy Long or short. Default to `long`.
    * @param {Array} signals Signals to look for when entering a position.
+   * @param {number} fund Amount of money to invest.
    */
-  constructor(stockList, strategy, signals) {
+  constructor(stockList, strategy, signals, fund) {
+    this.fund = fund;
     this.stockList = stockList;
     this.strategy = strategy;
     this.signals = signals;
@@ -176,7 +178,7 @@ export default class BackTest {
         });
 
         if (buySignal.length !== 0 && buyScore === buyPerfectScore) {
-          this.position = [...this.position, Strategy.buy(stock, 'long')];
+          this.position = [...this.position, Strategy.buy(stock, 'long', this.fund)];
         }
       }
 
@@ -244,6 +246,10 @@ export default class BackTest {
         });
 
         if (sellSignal.length !== 0 && sellScore === sellPerfectScore) {
+          const boughtStock = this.position[this.position.length - 1].stock;
+          const boughtShares = this.position[this.position.length - 1].numberOfShares;
+          const soldStock = stock;
+
           const oneDay = 24 * 60 * 60 * 1000;
           const firstDate = moment(stock.tradeDate, 'DD/MM/YYYY').toDate();
           const secondDate = moment(
@@ -251,13 +257,22 @@ export default class BackTest {
             'DD/MM/YYYY',
           ).toDate();
           const difference = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+          const boughtPrice = boughtStock.close;
+          const soldPrice = soldStock.close;
 
+          const totalBought = boughtPrice * boughtShares;
+          const totalSold = soldPrice * boughtShares;
+          const percentIncrease = ((totalSold - totalBought) / totalBought) * 100;
+
+          this.position = [...this.position, Strategy.sell(stock, 'long', boughtShares)];
           console.log(
             `P/L: ${parseFloat(
-              stock.close - this.position[this.position.length - 1].stock.close,
+              stock.close - this.position[this.position.length - 2].stock.close,
             ).toFixed(4)} Holding Days: ${difference}`,
           );
-          this.position = [...this.position, Strategy.sell(stock, 'long')];
+          console.log(
+            `Total bought price: ${totalBought}  Total sold price: ${totalSold}   Percentage: ${percentIncrease}`,
+          );
         }
       }
     });
