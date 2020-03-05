@@ -80,6 +80,48 @@ export default class MovingAverageConvergenceDivergence {
   }
 
   /**
+   * MACD is above the signal line on a certain period.
+   * @param {Array} stockList List of stocks.
+   * @param {Object} currentStock Current stock object.
+   * @param {number} signalPeriod Period of signal.
+   * @param {number} duration Duration of being above signal
+   */
+  static aboveSignal(stockList, currentStock, signalPeriod, duration) {
+    const currentIndex = stockList.indexOf(currentStock);
+    const macd = 'MACD';
+    const signal = 'SIGNAL'.concat(signalPeriod);
+    let qualified = true;
+
+    for (let i = duration; i >= 0; i -= 1) {
+      // This will set the `qualified` flag as false
+      qualified = stockList[currentIndex - i][macd] <= stockList[currentIndex - i][signal];
+    }
+
+    return qualified;
+  }
+
+  /**
+   * MACD is below the signal line on a certain period.
+   * @param {Array} stockList List of stocks.
+   * @param {Object} currentStock Current stock object.
+   * @param {number} signalPeriod Period of signal.
+   * @param {number} duration Duration of being above signal
+   */
+  static belowSignal(stockList, currentStock, signalPeriod, duration) {
+    const currentIndex = stockList.indexOf(currentStock);
+    const macd = 'MACD';
+    const signal = 'SIGNAL'.concat(signalPeriod);
+    let qualified = true;
+
+    for (let i = duration; i >= 0; i -= 1) {
+      // This will set the `qualified` flag as false
+      qualified = stockList[currentIndex - i][macd] >= stockList[currentIndex - i][signal];
+    }
+
+    return qualified;
+  }
+
+  /**
    * Compute for SMA of MACD.
    */
   _computeMACDSMA() {
