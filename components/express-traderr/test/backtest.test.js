@@ -302,4 +302,31 @@ describe('backtest', () => {
 
     expect(history.length).to.be.not.equal(0);
   });
+
+  it('should be able to test when date range is supplied', () => {
+    const dateRange = ['05/06/2012', '07/06/2012'];
+    const signals = {
+      buy: [
+        {
+          code: 'uptrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+      sell: [
+        {
+          code: 'downtrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+    };
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000, dateRange);
+
+    expect(backTest.stockList.length).to.be.equal(2);
+  });
 });
