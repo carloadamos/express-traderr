@@ -25,8 +25,10 @@ export default class BackTest {
    * @param {String} strategy Long or short. Default to `long`.
    * @param {Array} signals Signals to look for when entering a position.
    * @param {number} fund Amount of money to invest.
+   * @param {Array} dateRange Range of date for sampling..
    */
-  constructor(stockList, strategy, signals, fund) {
+  constructor(stockList, strategy, signals, fund, dateRange) {
+    this.dateRange = dateRange;
     this.fund = fund;
     this.stockList = stockList;
     this.strategy = strategy;
@@ -42,6 +44,7 @@ export default class BackTest {
    */
   _initialize() {
     const signals = [...this.signals.buy, ...this.signals.sell];
+    this.stockList = this.dateRange ? this.filterDates() : this.stockList;
 
     signals.forEach(signal => {
       switch (signal.code) {
@@ -325,5 +328,20 @@ export default class BackTest {
     if (this.history.length === 0) return 'Nothing';
 
     return this.history[this.history.length - 1].action;
+  }
+
+  filterDates() {
+    if (this.dateRange.length === 2) {
+      const startDate = moment(this.dateRange[0], 'DD/MM/YYYY').toDate();
+      const endDate = moment(this.dateRange[1], 'DD/MM/YYYY').toDate();
+
+      return this.stockList.filter(
+        stock =>
+          moment(stock.tradeDate, 'DD/MM/YYYY').toDate() >= startDate &&
+          moment(stock.tradeDate, 'DD/MM/YYYY').toDate() <= endDate,
+      );
+    }
+
+    return this.stockList;
   }
 }
