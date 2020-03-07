@@ -313,7 +313,6 @@ describe('backtest', () => {
           periods: [10, 20],
           source: 'close',
           newProperty: 'SMA',
-
         },
       ],
       sell: [
@@ -326,13 +325,13 @@ describe('backtest', () => {
         },
       ],
     };
-    
+
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000, dateRange);
     expect(backTest.stockList.length).to.be.equal(2);
-    
+
     expect(1).to.be.not.equal(0);
-  }
-     
+  });
+
   it('should be able to test macd-above-signal ', () => {
     const signals = {
       buy: [
