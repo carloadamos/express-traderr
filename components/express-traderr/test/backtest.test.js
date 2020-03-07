@@ -236,10 +236,11 @@ describe('backtest', () => {
           signalLength: 9,
         },
         {
-          code: 'price-below-sma',
+          code: 'price-below-ema',
           periods: [12],
-          source: 'close',
-          newProperty: 'SMA',
+          source: 'SMA',
+          newProperty: 'EMA',
+          smaSource: 'close',
         },
       ],
     };
@@ -312,6 +313,64 @@ describe('backtest', () => {
           periods: [10, 20],
           source: 'close',
           newProperty: 'SMA',
+
+        },
+      ],
+      sell: [
+        {
+          code: 'downtrend',
+          periods: [10, 20],
+          source: 'close',
+          newProperty: 'SMA',
+          duration: 10,
+        },
+      ],
+    };
+    
+    const backTest = new BackTest(backTestStockList, strategy, signals, 20000, dateRange);
+    expect(backTest.stockList.length).to.be.equal(2);
+    
+    expect(1).to.be.not.equal(0);
+  }
+     
+  it('should be able to test macd-above-signal ', () => {
+    const signals = {
+      buy: [
+        {
+          code: 'macd-above-signal',
+          fastLength: 12,
+          slowLength: 26,
+          source: 'close',
+          signalLength: 9,
+          duration: 10,
+        },
+      ],
+      sell: [
+        {
+          code: 'macd-below-signal',
+          fastLength: 12,
+          slowLength: 26,
+          source: 'close',
+          signalLength: 9,
+          duration: 10,
+        },
+      ],
+    };
+    const backTest = new BackTest(backTestStockList, strategy, signals);
+    backTest.start();
+
+    expect(1).to.be.not.equal(0);
+  });
+
+  it('should be able to test macd-below-signal ', () => {
+    const signals = {
+      buy: [
+        {
+          code: 'macd-below-signal',
+          fastLength: 12,
+          slowLength: 26,
+          source: 'close',
+          signalLength: 9,
           duration: 10,
         },
       ],
@@ -325,8 +384,9 @@ describe('backtest', () => {
         },
       ],
     };
-    const backTest = new BackTest(backTestStockList, strategy, signals, 20000, dateRange);
+    const backTest = new BackTest(backTestStockList, strategy, signals);
+    backTest.start();
 
-    expect(backTest.stockList.length).to.be.equal(2);
+    expect(1).to.be.not.equal(0);
   });
 });

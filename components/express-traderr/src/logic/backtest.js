@@ -9,11 +9,13 @@ const SIGNALS = Object.freeze({
   PRICE_ABOVE_EMA: 'price-above-ema',
   PRICE_ABOVE_SMA: 'price-above-sma',
   MACD_CROSSOVER: 'macd-crossover',
+  MACD_ABOVE_SIGNAL: 'macd-above-signal',
 
   DOWNTREND: 'downtrend',
   PRICE_BELOW_EMA: 'price-below-ema',
   PRICE_BELOW_SMA: 'price-below-sma',
   MACD_CROSSUNDER: 'macd-crossunder',
+  MACD_BELOW_SIGNAL: 'macd-below-signal',
 });
 
 export default class BackTest {
@@ -82,7 +84,9 @@ export default class BackTest {
           break;
         }
         case SIGNALS.MACD_CROSSOVER:
-        case SIGNALS.MACD_CROSSUNDER: {
+        case SIGNALS.MACD_CROSSUNDER:
+        case SIGNALS.MACD_ABOVE_SIGNAL:
+        case SIGNALS.MACD_BELOW_SIGNAL: {
           const { fastLength, slowLength, source, signalLength } = signal;
           const macd = new MovingAverageConvergenceDivergence(
             this.stockList,
@@ -132,6 +136,23 @@ export default class BackTest {
                     previousStock,
                     currentStock,
                     signal.signalLength,
+                  )
+                    ? (buyScore += 1)
+                    : buyScore;
+                }
+                break;
+              }
+              case SIGNALS.MACD_ABOVE_SIGNAL: {
+                const { stockList } = this;
+                const currentStock = stock;
+
+                /* istanbul ignore else */
+                if (currentIndex >= signal.duration) {
+                  buyScore = MovingAverageConvergenceDivergence.aboveSignal(
+                    stockList,
+                    currentStock,
+                    signal.signalLength,
+                    signal.duration,
                   )
                     ? (buyScore += 1)
                     : buyScore;
@@ -189,9 +210,11 @@ export default class BackTest {
         sellSignal.forEach(signal => {
           const currentIndex = this.stockList.indexOf(stock);
 
+          /* istanbul ignore else */
           if (!unIdentifiedSellSignalEncountered) {
             switch (signal.code) {
               case SIGNALS.MACD_CROSSUNDER: {
+                /* istanbul ignore else */
                 if (currentIndex !== 0) {
                   const previousStock = this.stockList[currentIndex - 1];
                   const currentStock = stock;
@@ -204,6 +227,24 @@ export default class BackTest {
                     ? (sellScore += 1)
                     : sellScore;
                 }
+                break;
+              }
+              case SIGNALS.MACD_BELOW_SIGNAL: {
+                const { stockList } = this;
+                const currentStock = stock;
+
+                /* istanbul ignore else */
+                if (currentIndex >= signal.duration) {
+                  buyScore = MovingAverageConvergenceDivergence.belowSignal(
+                    stockList,
+                    currentStock,
+                    signal.signalLength,
+                    signal.duration,
+                  )
+                    ? (buyScore += 1)
+                    : buyScore;
+                }
+
                 break;
               }
               case SIGNALS.DOWNTREND: {
