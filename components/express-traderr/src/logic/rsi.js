@@ -1,5 +1,3 @@
-import SimpleMovingAverage from './sma.js';
-
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 export default class RelativeStrengthIndex {
@@ -37,15 +35,31 @@ export default class RelativeStrengthIndex {
     });
 
     if (!Object.prototype.hasOwnProperty.call(this.stockList[1], 'avgU'.concat(this.length))) {
-      const sma = new SimpleMovingAverage(this.stockList, this.length, 'upMove', 'avgU');
+      // const sma = new SimpleMovingAverage(this.stockList, this.length, 'upMove', 'avgU');
+      this.stockList = this.stockList.map(stock => {
+        const currentIndex = this.stockList.indexOf(stock);
+        let avgU = 0;
+        let avgD = 0;
 
-      this.stockList = sma.compute();
-    }
+        if (currentIndex >= this.length) {
+          for (let i = this.length; i >= 0; i -= 1) {
+            avgU += this.stockList[currentIndex - i].upMove;
+            avgD += this.stockList[currentIndex - i].downMove;
+          }
+          avgU /= this.length;
+          avgD /= this.length;
+        }
+        console.log('AVG', avgU, avgD);
+        return {
+          ...stock,
+          avgU,
+          avgD,
+        };
+      });
 
-    if (!Object.prototype.hasOwnProperty.call(this.stockList[1], 'avgD'.concat(this.length))) {
-      const sma = new SimpleMovingAverage(this.stockList, this.length, 'downMove', 'avgD');
-
-      this.stockList = sma.compute();
+      this.stockList.forEach(stock => {
+        console.log('new implem', stock);
+      });
     }
 
     this.stockList = this.stockList.map(stock => {
@@ -53,10 +67,10 @@ export default class RelativeStrengthIndex {
       let rsi = 0;
 
       if (currentIndex >= this.length) {
-        const rs = stock['avgU'.concat(this.length)] / stock['avgD'.concat(this.length)];
+        const rs = stock.avgU / stock.avgD;
 
-        console.log(currentIndex, rs);
         rsi = 100 - 100 / (1 + rs);
+        console.log(`item no: ${currentIndex + 1} rs : ${rs} rsi: ${rsi} `);
       }
 
       return {
