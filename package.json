@@ -16,7 +16,9 @@
     "storybook:build": "build-storybook",
     "start:build": "cd dist && es-dev-server --open",
     "build": "rimraf dist && rollup -c rollup.config.js",
-    "start": "es-dev-server --app-index index.html --node-resolve --open --watch"
+    "start": "es-dev-server --app-index index.html --node-resolve --open --watch",
+    "client": "cd client && npm start",
+    "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\""
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -34,6 +36,10 @@
     "deepmerge": "^3.2.0",
     "es-dev-server": "^1.40.0",
     "eslint": "^6.1.0",
+    "eslint-plugin-flowtype": "^4.6.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "husky": "^1.0.0",
     "lint-staged": "^8.0.0",
     "rimraf": "^2.6.3",
@@ -71,9 +77,14 @@
     "@vaadin/vaadin-date-picker": "^4.0.7",
     "@vaadin/vaadin-grid": "^5.5.0",
     "@vaadin/vaadin-text-field": "^2.5.4",
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "firebase": "^7.8.2",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "mongoose": "^5.9.4"
   }
 }
