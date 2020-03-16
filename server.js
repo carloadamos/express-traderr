@@ -25,11 +25,11 @@ connection.once('open', () => {
 });
 
 stockRoutes.route('/').get((req, res) => {
-  Stock.map((err, stocks) => {
+  Stock.find((err, stocks) => {
     if (err) {
-      return console.log(err);
+      console.log(err);
     }
-    return res.json(stocks);
+    res.json(stocks);
   });
 });
 
