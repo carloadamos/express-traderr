@@ -1,6 +1,7 @@
 {
   "scripts": {
     "client": "cd client && npm start",
+    "backend": "nodemon server.js",
     "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\""
   },
   "name": "express-traderr",
@@ -13,9 +14,6 @@
     "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "firebase": "^7.8.2",
-    "lit-element": "^2.0.1",
-    "lit-html": "^1.0.0",
     "moment": "^2.24.0",
     "mongoose": "^5.9.4"
   }
