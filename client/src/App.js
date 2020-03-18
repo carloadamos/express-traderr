@@ -47,9 +47,11 @@ export default class App extends React.Component {
             </ul>
 
           </nav>
-          <div id="content">
+          <div id="content" class="container-fluid">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-              <button className="btn btn-dark" id="sidebarCollapse">Toggle Sidebar</button>
+              <button className="btn btn-dark " id="sidebarCollapse">
+                <i className="fas fa-align-left"></i>
+              </button>
             </nav>
             <Route path="/" exact component={Dashboard} />
             <Route path="/strategy" exact component={Strategy} />

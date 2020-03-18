@@ -12,8 +12,8 @@ body {
 
 #sidebar {
   height: 100vh;
-  min-width: 15%;
-  max-width: 15%;
+  min-width: 11%;
+  max-width: 11%;
   color: white;
 }
 
@@ -79,4 +79,23 @@ nav ul li:hover a {
 
 .fail {
   color: red;
+}
+
+@media screen and (max-width: 768px) {
+  #sidebar {
+    min-width: 80px;
+    max-width: 80px;
+    text-align: center;
+  }
+
+  #sidebar span {
+    display: none;
+  }
+  #sidebar .sidebar-header h3 {
+    display: none;
+  }
+
+  #sidebar .sidebar-header h1 {
+    display: block;
+  }
 }
