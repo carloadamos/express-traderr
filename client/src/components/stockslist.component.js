@@ -41,7 +41,7 @@ export default class StocksList extends Component {
 
   render() {
     return (
-      <div className="content-wrapper">
+      <div>
         <h3>Stock List</h3>
         {this.state.uploadSuccessful && <h4 className="success">Upload successful!</h4>}
         {this.state.uploadFailed && <h4 className="fail">Upload failed!</h4>}
