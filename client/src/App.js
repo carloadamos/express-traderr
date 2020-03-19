@@ -47,16 +47,18 @@ export default class App extends React.Component {
             </ul>
 
           </nav>
-          <div id="content" class="container-fluid">
+          <div id="content">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
               <button className="btn btn-dark " id="sidebarCollapse">
                 <i className="fas fa-align-left"></i>
               </button>
             </nav>
-            <Route path="/" exact component={Dashboard} />
-            <Route path="/strategy" exact component={Strategy} />
-            <Route path="/stocklist" exact component={StockList} />
-            <Route path="/backtest" exact component={Backtest} />
+            <div id="body" className="container-fluid">
+              <Route path="/" exact component={Dashboard} />
+              <Route path="/strategy" exact component={Strategy} />
+              <Route path="/stocklist" exact component={StockList} />
+              <Route path="/backtest" exact component={Backtest} />
+            </div>
           </div>
         </div>
       </Router >

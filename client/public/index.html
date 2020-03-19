@@ -46,8 +46,13 @@
     <div id="root"></div>
     <script>
       $(document).ready(function() {
-        $('#sidebarCollapse').on('click', function() {
-          $('#sidebar').toggleClass('active');
+        $("#sidebarCollapse").on("click", function() {
+          $("#sidebar").toggleClass("active");
+        });
+
+        $('input[type="file"]').change(function(e) {
+          var fileName = e.target.files[0].name;
+          $(".custom-file-label").html(fileName);
         });
       });
     </script>

@@ -81,7 +81,12 @@ nav ul li:hover a {
   color: red;
 }
 
-@media screen and (max-width: 768px) {
+.input-group {
+  min-width: 25%;
+  max-width: 25%;
+}
+
+@media screen and (max-width: 900px) {
   #sidebar {
     min-width: 80px;
     max-width: 80px;
@@ -97,5 +102,9 @@ nav ul li:hover a {
 
   #sidebar .sidebar-header h1 {
     display: block;
+  }
+
+  #sidebarCollapse {
+    display: none;
   }
 }
