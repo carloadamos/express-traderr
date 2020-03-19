@@ -13,7 +13,7 @@ const Stock = props => (
     <td> {props.stock.stock_volume} </td>
   </tr>
 );
-
+const API = 'http://localhost:4000/';
 let fileReader;
 
 export default class StocksList extends Component {
@@ -25,6 +25,7 @@ export default class StocksList extends Component {
       stockList: [],
       uploadSuccessful: false,
       uploadFailed: false,
+      error: '',
     };
   }
 
@@ -34,9 +35,9 @@ export default class StocksList extends Component {
 
   retrieveStockList() {
     axios
-      .get('http://localhost:4000/stocks/')
+      .get(`${API}stocks/`)
       .then(response => this.setState({ stocks: response.data }))
-      .catch(error => console.log(error));
+      .catch(error => this.setState({ error: error}));
   }
 
   render() {
@@ -44,32 +45,33 @@ export default class StocksList extends Component {
       <div>
         <h3>Stock List</h3>
         {this.state.uploadSuccessful && <h4 className="success">Upload successful!</h4>}
-        {this.state.uploadFailed && <h4 className="fail">Upload failed!</h4>}
+        {this.state.uploadFailed && <h4 className="fail">Upload failed! {this.state.error}</h4>}
         <Fileupload onFileChange={this.onFileChangeHandler} onSave={this.onSaveHandler} />
         {this.state.stocks.length === 0 ? (
           <p>No data</p>
         ) : (
-          <table className="table table-striped" style={{ marginTop: 20 }}>
-            <thead>
-              <tr>
-                <th>Stock Code</th>
-                <th>Date</th>
-                <th>Open</th>
-                <th>High</th>
-                <th>Low</th>
-                <th>Close</th>
-                <th>Volume</th>
-              </tr>
-            </thead>
-            <tbody>{this.mapStockList()}</tbody>
-          </table>
-        )}
+            <table className="table table-striped table-dark" style={{ marginTop: 20 }}>
+              <thead>
+                <tr>
+                  <th>Stock Code</th>
+                  <th>Date</th>
+                  <th>Open</th>
+                  <th>High</th>
+                  <th>Low</th>
+                  <th>Close</th>
+                  <th>Volume</th>
+                </tr>
+              </thead>
+              <tbody>{this.mapStockList()}</tbody>
+            </table>
+          )}
       </div>
     );
   }
 
   onFileChangeHandler = e => {
     const uploadedFile = e.target.files[0];
+    console.log(e.target.files[1])
 
     if (uploadedFile) {
       fileReader = new FileReader();
