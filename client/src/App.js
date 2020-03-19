@@ -48,7 +48,7 @@ export default class App extends React.Component {
 
           </nav>
           <div id="content">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
               <button className="btn btn-dark " id="sidebarCollapse">
                 <i className="fas fa-align-left"></i>
               </button>
