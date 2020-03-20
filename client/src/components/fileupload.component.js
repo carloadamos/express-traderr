@@ -18,7 +18,7 @@ export default class Fileupload extends Component {
         </button> */}
         <div className="input-group mb-3" id="jsonUploadForm">
           <div className="custom-file">
-            <input type="file" id="jsonFileUploader" onChange={this.props.onFileChange} />
+            <input type="file" id="jsonFileUploader" onChange={this.props.onFileChange} accept=".json"/>
             <label className="custom-file-label" htmlFor="jsonFileUploader">Choose a file</label>
           </div>
           <div className="input-group-append">

@@ -71,7 +71,6 @@ export default class StocksList extends Component {
 
   onFileChangeHandler = e => {
     const uploadedFile = e.target.files[0];
-    console.log(e.target.files[1])
 
     if (uploadedFile) {
       fileReader = new FileReader();
