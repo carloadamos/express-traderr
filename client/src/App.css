@@ -10,11 +10,37 @@ body {
   flex-direction: row;
 }
 
-.side-bar {
-  background-color: rgb(25, 7, 85);
-  min-width: 15%;
-  max-width: 15%;
+#sidebar {
   height: 100vh;
+  min-width: 11%;
+  max-width: 11%;
+  color: white;
+}
+
+#sidebar .sidebar-header h3 {
+  padding-top: 0.5rem;
+}
+
+#sidebar.active {
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
+#sidebar .sidebar-header h1 {
+  display: none;
+}
+
+#sidebar.active .sidebar-header h3 {
+  display: none;
+}
+
+#sidebar.active .sidebar-header h1 {
+  display: block;
+}
+
+#sidebar.active span {
+  display: none;
 }
 
 nav ul {
@@ -23,8 +49,16 @@ nav ul {
   padding: 0;
 }
 
+.title {
+  margin-left: 1em;
+}
 li a {
   color: white;
+}
+
+.nav-link {
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 0;
 }
 
 nav ul li:hover {
@@ -36,8 +70,11 @@ nav ul li:hover a {
   color: white;
 }
 
-.content-wrapper {
-  margin: 0 20px 0 20px;
+.navbar {
+  padding-left: 0.25rem;
+}
+
+#content {
   width: 100%;
   height: 100vh;
   max-height: 100vh;
@@ -50,4 +87,46 @@ nav ul li:hover a {
 
 .fail {
   color: red;
+}
+
+.input-group#jsonUploadForm {
+  min-width: 25%;
+  max-width: 25%;
+}
+
+/* Strategy Form */
+.strategy-form {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+#btnSaveStrat {
+  margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 900px) {
+  #sidebar {
+    min-width: 80px;
+    max-width: 80px;
+    text-align: center;
+  }
+
+  #sidebar span {
+    display: none;
+  }
+  #sidebar .sidebar-header h3 {
+    display: none;
+  }
+
+  #sidebar .sidebar-header h1 {
+    display: block;
+  }
+
+  #sidebarCollapse {
+    display: none;
+  }
 }

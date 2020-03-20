@@ -13,37 +13,55 @@ export default class App extends React.Component {
     return (
       <Router>
         <div className="body-container">
-          <nav className="side-bar">
+          <nav id="sidebar" className="bg-dark">
+            <div className="sidebar-header">
+              <h3>Express-Traderr</h3>
+              <h1>ET</h1>
+            </div>
+
             <ul>
               <li>
-                <Link to="/" className="nav-link">
-                  Dashboard
+                <Link to="/" className="nav-link" id="dashBoard" >
+                  <i className="fas fa-home"></i>
+                  <span className="title">Dashboard</span>
                 </Link>
               </li>
               <li>
-                <Link to="/strategy" className="nav-link">
-                  Strategy
+                <Link to="/strategy" className="nav-link" id="strategy">
+                  <i className="fas fa-chess-king"></i>
+                  <span className="title">Strategy</span>
                 </Link>
               </li>
               <li>
-                <Link to="/stocklist" className="nav-link">
-                  Stock List
+                <Link to="/stocklist" className="nav-link" id="stockList">
+                  <i className="fas fa-chart-bar"></i>
+                  <span className="title">Stock List</span>
                 </Link>
               </li>
               <li>
-                <Link to="/backtest" className="nav-link">
-                  Backtest
+                <Link to="/backtest" className="nav-link" id="backTest">
+                  <i className="fas fa-vial"></i>
+                  <span className="title">Backtest</span>
                 </Link>
               </li>
             </ul>
-          </nav>
 
-          <Route path="/" exact component={Dashboard} />
-          <Route path="/strategy" exact component={Strategy} />
-          <Route path="/stocklist" exact component={StockList} />
-          <Route path="/backtest" exact component={Backtest} />
+          </nav>
+          <div id="content">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+              <button className="btn btn-dark " id="sidebarCollapse">
+                <i className="fas fa-align-left"></i>
+              </button>
+            </nav>
+            <div id="body" className="container-fluid">
+              <Route path="/" exact component={Dashboard} />
+              <Route path="/strategy" exact component={Strategy} />
+              <Route path="/stocklist" exact component={StockList} />
+              <Route path="/backtest" exact component={Backtest} />
+            </div>
+          </div>
         </div>
-      </Router>
+      </Router >
     );
   }
 }

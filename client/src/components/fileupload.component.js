@@ -12,13 +12,21 @@ export default class Fileupload extends Component {
   render() {
     return (
       <div>
-        <p>File uploader here</p>
-        <input type="file" name="file" onChange={this.props.onFileChange}></input>
-        <button type="button" onClick={this.props.onSave}>
+        {/* <input type="file" name="file" onChange={this.props.onFileChange}></input>
+        <button className="btn btn-dark" type="button" onClick={this.props.onSave}>
           Save
-        </button>
-        {/* {this.state.success && <p className="success">File saved successfully</p>}
-        {this.state.fail && <p className="fail">File not saved</p>} */}
+        </button> */}
+        <div className="input-group mb-3" id="jsonUploadForm">
+          <div className="custom-file">
+            <input type="file" id="jsonFileUploader" onChange={this.props.onFileChange} />
+            <label className="custom-file-label" htmlFor="jsonFileUploader">Choose a file</label>
+          </div>
+          <div className="input-group-append">
+            <button className="btn btn-primary" type="button" onClick={this.props.onSave}>
+              Save
+          </button>
+          </div>
+        </div>
       </div>
     );
   }

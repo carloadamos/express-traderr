@@ -45,12 +45,12 @@ stockRoutes.route('/add').post((req, res) => {
   const stockList = req.body;
 
   stockList.forEach(item => {
-    console.log(item);
-
     const stock = new Stock(item);
     stock.save();
   });
 
+  console.log(!!stockList)
+  if (!!stockList) return res.status(400).json({ stock: 'Error saving' });
   res.status(200).json({ stock: 'stock added successfully' });
 });
 
