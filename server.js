@@ -49,8 +49,7 @@ stockRoutes.route('/add').post((req, res) => {
     stock.save();
   });
 
-  console.log(!!stockList)
-  if (!!stockList) return res.status(400).json({ stock: 'Error saving' });
+  if (stockList.length === 0) return res.status(400).json({ stock: 'Error saving' });
   res.status(200).json({ stock: 'stock added successfully' });
 });
 
