@@ -29,6 +29,7 @@ export default class Strategy extends Component {
   render() {
     return (
       <div className="container-fluid">
+        <h3>Strategy</h3>
         {this.renderStrategyForm()}
         {this.renderFormActions()}
         {this.renderStrategyList()}
