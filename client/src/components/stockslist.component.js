@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Fileupload from './fileupload.component';
-import { baseAPI } from './constant';
+import React, { Component } from "react";
+import axios from "axios";
+import Fileupload from "./fileupload.component";
+import { baseAPI } from "./constant";
 
 const Stock = props => (
   <tr>
@@ -25,7 +25,8 @@ export default class StocksList extends Component {
       stockList: [],
       uploadSuccessful: false,
       uploadFailed: false,
-      error: '',
+      error: "",
+      showUpload: false
     };
   }
 
@@ -43,28 +44,45 @@ export default class StocksList extends Component {
   render() {
     return (
       <div>
-        <h3>Stock List</h3>
-        {this.state.uploadSuccessful && <h4 className="success">Upload successful!</h4>}
-        {this.state.uploadFailed && <h4 className="fail">Upload failed! {this.state.error}</h4>}
-        <Fileupload onFileChange={this.onFileChangeHandler} onSave={this.onSaveHandler} />
+        <div className="header">
+          <h3>Stock List</h3>
+          <button className="btn btn-primary" onClick={this.setShow.bind(this)}>
+            <i className="fas fa-cloud-upload-alt"></i>{" "}
+            {this.state.showUpload ? "Cancel Upload" : "Upload File"}
+          </button>
+        </div>
+        {this.state.showUpload && (
+          <div>
+            {this.state.uploadSuccessful && (
+              <h4 className="success">Upload successful!</h4>
+            )}
+            {this.state.uploadFailed && (
+              <h4 className="fail">Upload failed! {this.state.error}</h4>
+            )}
+            <Fileupload
+              onFileChange={this.onFileChangeHandler}
+              onSave={this.onSaveHandler}
+            />
+          </div>
+        )}
         {this.state.stocks.length === 0 ? (
           <p>No data</p>
         ) : (
-            <table className="table table-striped" style={{ marginTop: 20 }}>
-              <thead>
-                <tr>
-                  <th>Stock Code</th>
-                  <th>Date</th>
-                  <th>Open</th>
-                  <th>High</th>
-                  <th>Low</th>
-                  <th>Close</th>
-                  <th>Volume</th>
-                </tr>
-              </thead>
-              <tbody>{this.mapStockList()}</tbody>
-            </table>
-          )}
+          <table className="table table-striped" style={{ marginTop: 20 }}>
+            <thead>
+              <tr>
+                <th>Stock Code</th>
+                <th>Date</th>
+                <th>Open</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Close</th>
+                <th>Volume</th>
+              </tr>
+            </thead>
+            <tbody>{this.mapStockList()}</tbody>
+          </table>
+        )}
       </div>
     );
   }
@@ -82,7 +100,7 @@ export default class StocksList extends Component {
   onSaveHandler = () => {
     this.resetFlag();
     axios
-      .post('http://localhost:4000/stocks/add', this.state.stockList)
+      .post("http://localhost:4000/stocks/add", this.state.stockList)
       .then(() => {
         this.setState({ uploadSuccessful: true, stocks: [] });
 
@@ -96,7 +114,7 @@ export default class StocksList extends Component {
     const content = JSON.parse(fileReader.result);
 
     this.setState({
-      stockList: content,
+      stockList: content
     });
   };
 
@@ -108,5 +126,10 @@ export default class StocksList extends Component {
 
   resetFlag() {
     this.setState({ uploadSuccessful: false, uploadFailed: false });
+  }
+
+  setShow() {
+    this.setState({ showUpload: !this.state.showUpload });
+    this.resetFlag();
   }
 }

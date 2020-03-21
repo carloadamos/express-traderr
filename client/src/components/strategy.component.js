@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import BreadCrumbs from './breadcrumbs.component';
 import { baseAPI } from './constant'
 
 const StratList = props => (
@@ -10,6 +11,7 @@ const StratList = props => (
     <td> {props.item.strategy_sell} </td>
   </tr>
 );
+
 export default class Strategy extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +30,8 @@ export default class Strategy extends Component {
 
   render() {
     return (
-      <div className="container-fluid">
+      <div>
+        <BreadCrumbs/>
         <h3>Strategy</h3>
         {this.renderStrategyForm()}
         {this.renderFormActions()}
@@ -142,6 +145,4 @@ export default class Strategy extends Component {
       </div>
     );
   }
-
-
 }
