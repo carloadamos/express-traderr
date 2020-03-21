@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import BreadCrumbs from './breadcrumbs.component';
-import { baseAPI } from './constant'
+import React, { Component } from "react";
+import axios from "axios";
+import BreadCrumbs from "./breadcrumbs.component";
+import { baseAPI } from "./constant";
 
 const StratList = props => (
   <tr onClick={() => console.log(`${props.item.strategy_id} is clicked`)}>
@@ -18,9 +18,9 @@ export default class Strategy extends Component {
 
     this.state = {
       strategyList: [],
-      error: '',
-      buyStrategy: '',
-      sellStrategy: '',
+      error: "",
+      buyStrategy: "",
+      sellStrategy: ""
     };
   }
 
@@ -31,8 +31,10 @@ export default class Strategy extends Component {
   render() {
     return (
       <div>
-        <BreadCrumbs/>
-        <h3>Strategy</h3>
+        <BreadCrumbs />
+        <div className="header">
+          <h1>Strategy</h1>
+        </div>
         {this.renderStrategyForm()}
         {this.renderFormActions()}
         {this.renderStrategyList()}
@@ -43,13 +45,13 @@ export default class Strategy extends Component {
   addStrategy() {
     const strat = {
       strategy_id: 1,
-      strategy_name: 'Sample',
+      strategy_name: "Sample",
       strategy_buy: this.state.buyStrategy,
-      strategy_sell: this.state.sellStrategy,
+      strategy_sell: this.state.sellStrategy
     };
 
     axios
-      .post('http://localhost:4000/strategy/add', strat)
+      .post("http://localhost:4000/strategy/add", strat)
       .then(() => {
         // this.setState({ uploadSuccessful: true, stocks: [] });
 
@@ -63,18 +65,18 @@ export default class Strategy extends Component {
     axios
       .get(`${baseAPI}strategy/`)
       .then(response => {
-        this.setState({ strategyList: response.data })
+        this.setState({ strategyList: response.data });
       })
       .catch(error => this.setState({ error: error }));
   }
 
   handleBuyInputChange = e => {
     this.setState({ buyStrategy: e.target.value });
-  }
+  };
 
   handleSellInputChange = e => {
     this.setState({ sellStrategy: e.target.value });
-  }
+  };
 
   mapStrategyToList() {
     return this.state.strategyList.map((strat, i) => {
@@ -89,7 +91,13 @@ export default class Strategy extends Component {
           <div className="input-group-prepend">
             <span className="input-group-text">BUY Strategy</span>
           </div>
-          <textarea className="form-control" id="buy-input" aria-label="BUY Strategy" rows="10" onChange={this.handleBuyInputChange}></textarea>
+          <textarea
+            className="form-control"
+            id="buy-input"
+            aria-label="BUY Strategy"
+            rows="10"
+            onChange={this.handleBuyInputChange}
+          ></textarea>
         </div>
       </div>
     );
@@ -98,8 +106,16 @@ export default class Strategy extends Component {
   renderFormActions() {
     return (
       <div className="form-actions">
-        <button className="btn btn-primary" id="btnSaveStrat" onClick={this.addStrategy.bind(this)}>Save</button>
-        <button className="btn btn-secondary" id="btnCancelStrat">Cancel</button>
+        <button
+          className="btn btn-primary"
+          id="btnSaveStrat"
+          onClick={this.addStrategy.bind(this)}
+        >
+          Save
+        </button>
+        <button className="btn btn-secondary" id="btnCancelStrat">
+          Cancel
+        </button>
       </div>
     );
   }
@@ -111,7 +127,13 @@ export default class Strategy extends Component {
           <div className="input-group-prepend">
             <span className="input-group-text">SELL Strategy</span>
           </div>
-          <textarea className="form-control" id="sell-input" aria-label="SELL Strategy" rows="10" onChange={this.handleSellInputChange}></textarea>
+          <textarea
+            className="form-control"
+            id="sell-input"
+            aria-label="SELL Strategy"
+            rows="10"
+            onChange={this.handleSellInputChange}
+          ></textarea>
         </div>
       </div>
     );
@@ -138,9 +160,7 @@ export default class Strategy extends Component {
               <th>Sell Signal</th>
             </tr>
           </thead>
-          <tbody>
-            {this.mapStrategyToList()}
-          </tbody>
+          <tbody>{this.mapStrategyToList()}</tbody>
         </table>
       </div>
     );

@@ -196,9 +196,11 @@ thead {
 }
 
 /* Header */
-.header h3 {
+.header h1 {
+  color: var(--black);
   display: inline-block;
   vertical-align: middle;
+  font-weight: bold;
 }
 
 .header button {
@@ -207,6 +209,10 @@ thead {
 
 .upload {
   display: inline;
+}
+
+.upload-btn {
+  padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
 @media screen and (max-width: 900px) {

@@ -45,9 +45,8 @@ export default class StocksList extends Component {
     return (
       <div>
         <div className="header">
-          <h3>Stock List</h3>
-          <button className="btn btn-primary" onClick={this.setShow.bind(this)}>
-            <i className="fas fa-cloud-upload-alt"></i>{" "}
+          <h1>Stock List</h1>
+          <button className="upload-btn btn btn-primary" onClick={this.setShow.bind(this)}>
             {this.state.showUpload ? "Cancel Upload" : "Upload File"}
           </button>
         </div>
