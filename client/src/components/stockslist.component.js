@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Fileupload from './fileupload.component';
+import { baseAPI } from './constant';
 
 const Stock = props => (
   <tr>
@@ -13,7 +14,6 @@ const Stock = props => (
     <td> {props.stock.stock_volume} </td>
   </tr>
 );
-const API = 'http://localhost:4000/';
 let fileReader;
 
 export default class StocksList extends Component {
@@ -35,9 +35,9 @@ export default class StocksList extends Component {
 
   retrieveStockList() {
     axios
-      .get(`${API}stocks/`)
+      .get(`${baseAPI}stocks/`)
       .then(response => this.setState({ stocks: response.data }))
-      .catch(error => this.setState({ error: error}));
+      .catch(error => this.setState({ error: error }));
   }
 
   render() {
@@ -50,7 +50,7 @@ export default class StocksList extends Component {
         {this.state.stocks.length === 0 ? (
           <p>No data</p>
         ) : (
-            <table className="table table-striped table-dark" style={{ marginTop: 20 }}>
+            <table className="table table-striped" style={{ marginTop: 20 }}>
               <thead>
                 <tr>
                   <th>Stock Code</th>
@@ -71,7 +71,6 @@ export default class StocksList extends Component {
 
   onFileChangeHandler = e => {
     const uploadedFile = e.target.files[0];
-    console.log(e.target.files[1])
 
     if (uploadedFile) {
       fileReader = new FileReader();
@@ -81,6 +80,7 @@ export default class StocksList extends Component {
   };
 
   onSaveHandler = () => {
+    this.resetFlag();
     axios
       .post('http://localhost:4000/stocks/add', this.state.stockList)
       .then(() => {
@@ -104,5 +104,9 @@ export default class StocksList extends Component {
     return this.state.stocks.map((currentStock, i) => {
       return <Stock stock={currentStock} key={i} />;
     });
+  }
+
+  resetFlag() {
+    this.setState({ uploadSuccessful: false, uploadFailed: false });
   }
 }

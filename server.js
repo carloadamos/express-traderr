@@ -8,8 +8,10 @@ const port = process.env.PORT || 4000;
 const mongoose = require('mongoose');
 
 const stockRoutes = express.Router();
+const strategyRoutes = express.Router();
 
 const Stock = require('./backend/stock.model');
+const Strategy = require('./backend/strategy.model');
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -79,7 +81,26 @@ stockRoutes.route('/update/:id').post((req, res) => {
   });
 });
 
+strategyRoutes.route('/').get((req, res) => {
+  Strategy.find((err, strats) => {
+    if (err) {
+      console.log(err);
+    }
+    res.json(strats);
+  })
+})
+
+strategyRoutes.route('/add').post((req, res) => {
+  const strat = new Strategy(req.body);
+  strat.save();
+
+  console.log(strat)
+  if (!strat) return res.status(400).json({ strat: 'Error saving' });
+  res.status(200).json({ strat: 'stock added successfully' });
+})
+
 app.use('/stocks', stockRoutes);
+app.use('/strategy', strategyRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
