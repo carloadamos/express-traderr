@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Express Traderr",
+  "name": "Trade watcher and decision making web app",
   "icons": [
     {
       "src": "favicon.ico",
