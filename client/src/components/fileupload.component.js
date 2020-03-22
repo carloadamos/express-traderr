@@ -13,7 +13,6 @@ export default class Fileupload extends Component {
 
   render() {
     return (
-      <div>
         <div id="uploader">
           <div className="stocks-list-uploader">
             <input
@@ -28,14 +27,12 @@ export default class Fileupload extends Component {
               className="btn btn-primary"
               id="uploadFileBtn"
               type="button"
-              disabled={!this.props.hasChosen}
               onClick={this.props.onSave}
             >
               Upload file
             </button>
           </div>
         </div>
-      </div>
     );
   }
 

@@ -71,6 +71,7 @@ export default class App extends React.Component {
       <div id="content">
         <nav className="navbar navbar-expand-lg navbar-dark" id="topbar">
           <h1>{this.state.title}</h1>
+          <img src={require("./avatar.png")} alt="Avatar"/>
         </nav>
         <div id="body" className="container-fluid">
           <Route path="/" exact component={Dashboard} />

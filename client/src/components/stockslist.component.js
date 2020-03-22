@@ -10,13 +10,14 @@ export default class StocksList extends Component {
     super(props);
 
     this.state = {
-      fileLabel: "Chooose a file",
+      error: "",
+      fileLabel: "Choose a file",
       hasChosenFile: false,
+      message: "",
       stocks: [],
       stockList: [],
       uploadSuccessful: false,
-      uploadFailed: false,
-      error: ""
+      uploadFailed: false
     };
   }
 
@@ -34,19 +35,19 @@ export default class StocksList extends Component {
   render() {
     return (
       <div>
-        <div>
-          {this.state.uploadSuccessful && (
-            <h4 className="success">Upload successful!</h4>
-          )}
-          {this.state.uploadFailed && (
-            <h4 className="fail">Upload failed! {this.state.error}</h4>
-          )}
+        <div id="uploadHead">
           <Fileupload
             hasChosen={this.state.hasChosenFile}
             label={this.state.fileLabel}
             onFileChange={this.onFileChangeHandler}
             onSave={this.onSaveHandler}
           />
+          {this.state.uploadSuccessful && (
+            <p className="success">Upload successful!</p>
+          )}
+          {this.state.uploadFailed && (
+            <p className="fail">Upload failed!</p>
+          )}
         </div>
         {this.state.stocks.length === 0 ? (
           <p>No data</p>
@@ -83,6 +84,9 @@ export default class StocksList extends Component {
   };
 
   onSaveHandler = () => {
+    if (!this.state.hasChosenFile) {
+      this.setLabel();
+    }
     this.reset();
     axios
       .post("http://localhost:4000/stocks/add", this.state.stockList)
