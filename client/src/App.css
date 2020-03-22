@@ -28,12 +28,12 @@ h6 {
   color: var(--white);
 }
 
-p,
+p, h1,  
 h3 {
   color: var(--black);
 }
 
-h3 {
+h1 {
   font-weight: bold;
 }
 
@@ -51,6 +51,11 @@ h3 {
 
 .container-fluid {
   padding-top: 1rem;
+}
+
+/* Top bar */
+#topbar h1 {
+  padding: 1rem;
 }
 
 /* Navigation */
@@ -79,7 +84,7 @@ h3 {
   padding-left: 1em;
 }
 
-#sidebar.active {
+#sidebar.active{
   min-width: 80px;
   max-width: 80px;
   text-align: center;
@@ -91,6 +96,14 @@ h3 {
 
 #sidebar.active .sidebar-header h4 {
   display: none;
+}
+
+#sidebar.active .nav-link {
+  padding-left: 0;
+}
+
+#sidebar.active .sidebar-header {
+  padding: 1rem;
 }
 
 #sidebar.active .sidebar-header h1 {
@@ -138,23 +151,50 @@ nav ul li:hover a {
 }
 
 .navbar {
-  padding-left: 0.25rem;
+  padding: 0;
   border-bottom: var(--border-color) solid 1px;
   height: var(--top-nav-size);
 }
 
 /* File Upload */
+#uploader {
+  display: inline-block;
+}
+
+.stocks-list-uploader {
+  width: 400px;
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#uploadFileInput {
+  display: none;
+}
+
+#fileUploadLabel {
+  display: inline-block;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  color: var(--black);
+  flex: 2;
+  cursor: pointer;
+}
+
+#uploadFileBtn {
+  margin: 0.3rem;
+  border-radius: 5px;
+  flex: 1;
+}
+
 .success {
   color: var(--green);
 }
 
 .fail {
   color: var(--red);
-}
-
-.input-group#jsonUploadForm {
-  min-width: 400px;
-  max-width: 400px;
 }
 
 /* Strategy Form */
@@ -231,7 +271,6 @@ thead {
   }
 
   #sidebar .sidebar-header {
-    padding: 0;
     padding: 1rem;
   }
 

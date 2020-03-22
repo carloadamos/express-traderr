@@ -3,17 +3,6 @@ import axios from "axios";
 import Fileupload from "./fileupload.component";
 import { baseAPI } from "./constant";
 
-const Stock = props => (
-  <tr>
-    <td> {props.stock.stock_code} </td>
-    <td> {props.stock.stock_trade_date} </td>
-    <td> {props.stock.stock_open} </td>
-    <td> {props.stock.stock_high} </td>
-    <td> {props.stock.stock_low} </td>
-    <td> {props.stock.stock_close} </td>
-    <td> {props.stock.stock_volume} </td>
-  </tr>
-);
 let fileReader;
 
 export default class StocksList extends Component {
@@ -21,12 +10,13 @@ export default class StocksList extends Component {
     super(props);
 
     this.state = {
+      fileLabel: "Chooose a file",
+      hasChosenFile: false,
       stocks: [],
       stockList: [],
       uploadSuccessful: false,
       uploadFailed: false,
-      error: "",
-      showUpload: false
+      error: ""
     };
   }
 
@@ -44,26 +34,20 @@ export default class StocksList extends Component {
   render() {
     return (
       <div>
-        <div className="header">
-          <h1>Stock List</h1>
-          <button className="upload-btn btn btn-primary" onClick={this.setShow.bind(this)}>
-            {this.state.showUpload ? "Cancel Upload" : "Upload File"}
-          </button>
+        <div>
+          {this.state.uploadSuccessful && (
+            <h4 className="success">Upload successful!</h4>
+          )}
+          {this.state.uploadFailed && (
+            <h4 className="fail">Upload failed! {this.state.error}</h4>
+          )}
+          <Fileupload
+            hasChosen={this.state.hasChosenFile}
+            label={this.state.fileLabel}
+            onFileChange={this.onFileChangeHandler}
+            onSave={this.onSaveHandler}
+          />
         </div>
-        {this.state.showUpload && (
-          <div>
-            {this.state.uploadSuccessful && (
-              <h4 className="success">Upload successful!</h4>
-            )}
-            {this.state.uploadFailed && (
-              <h4 className="fail">Upload failed! {this.state.error}</h4>
-            )}
-            <Fileupload
-              onFileChange={this.onFileChangeHandler}
-              onSave={this.onSaveHandler}
-            />
-          </div>
-        )}
         {this.state.stocks.length === 0 ? (
           <p>No data</p>
         ) : (
@@ -88,8 +72,10 @@ export default class StocksList extends Component {
 
   onFileChangeHandler = e => {
     const uploadedFile = e.target.files[0];
+    this.setLabel(uploadedFile.name);
 
     if (uploadedFile) {
+      this.setChosen();
       fileReader = new FileReader();
       fileReader.onloadend = this.handleFileRead;
       fileReader.readAsText(uploadedFile);
@@ -97,7 +83,7 @@ export default class StocksList extends Component {
   };
 
   onSaveHandler = () => {
-    this.resetFlag();
+    this.reset();
     axios
       .post("http://localhost:4000/stocks/add", this.state.stockList)
       .then(() => {
@@ -119,16 +105,34 @@ export default class StocksList extends Component {
 
   mapStockList() {
     return this.state.stocks.map((currentStock, i) => {
-      return <Stock stock={currentStock} key={i} />;
+      return (
+        <tr key={i}>
+          <td> {currentStock.stock_code} </td>
+          <td> {currentStock.stock_trade_date} </td>
+          <td> {currentStock.stock_open} </td>
+          <td> {currentStock.stock_high} </td>
+          <td> {currentStock.stock_low} </td>
+          <td> {currentStock.stock_close} </td>
+          <td> {currentStock.stock_volume} </td>
+        </tr>
+      );
     });
   }
 
-  resetFlag() {
-    this.setState({ uploadSuccessful: false, uploadFailed: false });
+  reset() {
+    this.setState({
+      uploadSuccessful: false,
+      uploadFailed: false,
+      hasChosenFile: false,
+      fileLabel: "Choose a file"
+    });
   }
 
-  setShow() {
-    this.setState({ showUpload: !this.state.showUpload });
-    this.resetFlag();
+  setChosen() {
+    this.setState({ hasChosenFile: true });
+  }
+
+  setLabel(fileName) {
+    this.setState({ fileLabel: fileName });
   }
 }

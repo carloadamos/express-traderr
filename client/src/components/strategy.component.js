@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import BreadCrumbs from "./breadcrumbs.component";
 import { baseAPI } from "./constant";
 
 const StratList = props => (
@@ -31,10 +30,6 @@ export default class Strategy extends Component {
   render() {
     return (
       <div>
-        <BreadCrumbs />
-        <div className="header">
-          <h1>Strategy</h1>
-        </div>
         {this.renderStrategyForm()}
         {this.renderFormActions()}
         {this.renderStrategyList()}
