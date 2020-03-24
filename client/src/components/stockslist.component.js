@@ -45,9 +45,7 @@ export default class StocksList extends Component {
           {this.state.uploadSuccessful && (
             <p className="success">Upload successful!</p>
           )}
-          {this.state.uploadFailed && (
-            <p className="fail">Upload failed!</p>
-          )}
+          {this.state.uploadFailed && <p className="fail">Upload failed!</p>}
         </div>
         {this.state.stocks.length === 0 ? (
           <p>No data</p>
@@ -73,9 +71,9 @@ export default class StocksList extends Component {
 
   onFileChangeHandler = e => {
     const uploadedFile = e.target.files[0];
-    this.setLabel(uploadedFile.name);
 
     if (uploadedFile) {
+      this.setLabel(uploadedFile.name);
       this.setChosen();
       fileReader = new FileReader();
       fileReader.onloadend = this.handleFileRead;
