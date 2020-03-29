@@ -21,17 +21,11 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6, p {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   background-color: var(--darkblue);
-  color: var(--white);
-}
-
-p,
-h1,
-h3 {
   color: var(--black);
 }
 
