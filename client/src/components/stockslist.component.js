@@ -48,7 +48,7 @@ export default class StocksList extends Component {
           {this.state.uploadFailed && <p className="fail">Upload failed!</p>}
         </div>
         {this.state.stocks.length === 0 ? (
-          <p>No data</p>
+          <h1>No data</h1>
         ) : (
           <table className="table table-striped" style={{ marginTop: 20 }}>
             <thead>

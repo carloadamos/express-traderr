@@ -11,6 +11,7 @@
   --border-color: #e5e6eb;
   --nav-border-color: #1d244b;
   --top-nav-size: 5rem;
+  --border-radius: 4px;
 }
 
 html,
@@ -189,7 +190,7 @@ nav ul li:hover a {
 .stocks-list-uploader {
   width: 400px;
   background-color: var(--secondary-color);
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -210,7 +211,7 @@ nav ul li:hover a {
 
 #uploadFileBtn {
   margin: 0.3rem;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   flex: 1;
 }
 
@@ -279,6 +280,30 @@ thead {
 .upload-btn {
   padding: 0.5rem 1rem 0.5rem 1rem;
 }
+
+/* Backtest */
+#backtestDropdown {
+  display: inline-block;
+}
+
+#backtestDropdown h5 {
+  color: var(--black);
+}
+
+#backtestDropdown .dropdown {
+  padding-top: 0.5rem;
+}
+
+#backtestDropdown .dropdown-toggle{
+  background-color: var(--primary-color);
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border: 0;
+}
+
+#backtestDatepicker {
+  display: inline-block;
+}
+
 
 @media screen and (max-width: 900px) {
   #sidebar {
