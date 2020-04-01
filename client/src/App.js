@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Dashboard from "./components/dashboard.component";
 import Strategy from "./components/strategy.component";
 import StockList from "./components/stockslist.component";
 import Backtest from "./components/backtest.component";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./App.css";
 

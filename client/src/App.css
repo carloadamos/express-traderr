@@ -276,8 +276,16 @@ thead {
 }
 
 /* Backtest */
-#backtestDropdown {
+#backtestDropdown, #backtestDatePicker, #fromDatePicker, #toDatePicker {
   display: inline-block;
+}
+
+#backtestDropdown {
+  float: left;
+}
+
+#fromDatePicker, #toDatePicker {
+  vertical-align: top;
 }
 
 #backtestDropdown h5 {
@@ -294,10 +302,17 @@ thead {
   border: 0;
 }
 
-#backtestDatepicker {
-  display: inline-block;
+#fromDatePicker h5, #toDatePicker h5 {
+  margin-left: 1.5rem;
 }
 
+#monthPicker, #yearPicker {
+  border-radius: var(--border-radius);
+}
+
+#monthPicker {
+  margin-right: 0.5rem;
+}
 
 @media screen and (max-width: 900px) {
   #sidebar {
