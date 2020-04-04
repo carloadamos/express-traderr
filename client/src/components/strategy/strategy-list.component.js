@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Strategy from './strategy.component';
+import { baseAPI } from "../constant";
+import Button from 'react-bootstrap/Button';
 import axios from "axios";
-import { baseAPI } from "./constant";
 
 const StratList = props => (
   <tr onClick={() => console.log(`${props.item.strategy_id} is clicked`)}>
@@ -11,7 +14,7 @@ const StratList = props => (
   </tr>
 );
 
-export default class Strategy extends Component {
+export default class StrategyList extends Component {
   constructor(props) {
     super(props);
 
@@ -29,11 +32,15 @@ export default class Strategy extends Component {
 
   render() {
     return (
-      <div>
-        {this.renderStrategyForm()}
-        {this.renderFormActions()}
-        {this.renderStrategyList()}
-      </div>
+      <Router>
+        <div>
+          <Link to="/strategy">
+            <Button variant="primary">New Strategy</Button>
+            {this.renderRouteArea()}
+            {}
+          </Link>
+        </div>
+      </Router>
     );
   }
 
@@ -79,70 +86,6 @@ export default class Strategy extends Component {
     });
   }
 
-  renderBuyInput() {
-    return (
-      <div className="col-lg">
-        <div className="input-group">
-          <div className="input-group-prepend">
-            <span className="input-group-text">BUY Strategy</span>
-          </div>
-          <textarea
-            className="form-control"
-            id="buy-input"
-            aria-label="BUY Strategy"
-            rows="10"
-            onChange={this.handleBuyInputChange}
-          ></textarea>
-        </div>
-      </div>
-    );
-  }
-
-  renderFormActions() {
-    return (
-      <div className="form-actions">
-        <button
-          className="btn btn-primary"
-          id="btnSaveStrat"
-          onClick={this.addStrategy.bind(this)}
-        >
-          Save
-        </button>
-        <button className="btn btn-secondary" id="btnCancelStrat">
-          Cancel
-        </button>
-      </div>
-    );
-  }
-
-  renderSellInput() {
-    return (
-      <div className="col-lg">
-        <div className="input-group">
-          <div className="input-group-prepend">
-            <span className="input-group-text">SELL Strategy</span>
-          </div>
-          <textarea
-            className="form-control"
-            id="sell-input"
-            aria-label="SELL Strategy"
-            rows="10"
-            onChange={this.handleSellInputChange}
-          ></textarea>
-        </div>
-      </div>
-    );
-  }
-
-  renderStrategyForm() {
-    return (
-      <div className="row strategy-form">
-        {this.renderBuyInput()}
-        {this.renderSellInput()}
-      </div>
-    );
-  }
-
   renderStrategyList() {
     return (
       <div id="strategyList">
@@ -157,6 +100,15 @@ export default class Strategy extends Component {
           </thead>
           <tbody>{this.mapStrategyToList()}</tbody>
         </table>
+      </div>
+    );
+  }
+
+  renderRouteArea() {
+    return (
+      <div id="newStrategy">
+        {this.renderStrategyList()}
+        <Route path="/strategy" exact component={Strategy} />
       </div>
     );
   }

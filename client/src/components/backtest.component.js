@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-// import DayPicker from 'react-day-picker';
 import DayPickerInput from 'react-day-picker';
+import axios from "axios";
+import { baseAPI } from "./constant";
 import 'react-day-picker/lib/style.css';
 
 export default class Backtest extends Component {
@@ -17,7 +18,13 @@ export default class Backtest extends Component {
       toDate: undefined,
       fMonth: fromMonth,
       tMonth: fromMonth,
+      result: [],
+      strategies: [],
     };
+  }
+
+  componentDidMount() {
+    this.retrieveStrategyList();
   }
 
   render() {
@@ -25,35 +32,59 @@ export default class Backtest extends Component {
       <div id="backtest">
         {this._renderDropDown()}
         {this._renderDatePicker()}
-      </div>
-    );
-  }
-
-  _renderDropDown() {
-    return (
-      <div id="backtestDropdown">
-        <h5>Select Strategy</h5>
-        <div className="dropdown">
-          <button className="btn btn-secondary dropdown-toggle" type="button" id="strategyDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Select Strategy
-          </button>
-          <div className="dropdown-menu" aria-labelledby="strategyDropDown">
-            <a className="dropdown-item" href="#!">Macd SMA</a>
-            <a className="dropdown-item" href="#!">ALMA</a>
-          </div>
-        </div>
+        {this._renderResultsTable()}
       </div>
     );
   }
 
   handleFromYearMonthChange(month) {
-    console.log(month)
     this.setState({ fMonth: month });
   }
-  
+
   handleToYearMonthChange(month) {
-    console.log(month)
     this.setState({ tMonth: month });
+  }
+
+  handleFromClick(day, { selected }) {
+    if (selected) {
+      this.setState({ fromDate: undefined });
+      return;
+    }
+
+    this.setState({ fromDate: day });
+  }
+
+  handleToClick(day, { selected }) {
+    if (selected) {
+      this.setState({ toDate: undefined });
+      return;
+    }
+
+    this.setState({ toDate: day });
+  }
+
+  mapResultList() {
+    return this.state.result.map((res, i) => {
+      return (
+        <tr key={i}>
+          <td> {res.exec_id} </td>
+          <td> {res.stock_code} </td>
+          <td> {res.stock_bought_date} </td>
+          <td> {res.stock_bought_price} </td>
+          <td> {res.stock_sold_date} </td>
+          <td> {res.stock_sold_price} </td>
+          <td> {res.stock_units} </td>
+          <td> {res.stock_pnl} </td>
+        </tr>
+      );
+    });
+  }
+
+  retrieveStrategyList() {
+    axios
+      .get(`${baseAPI}strategy/`)
+      .then(response => this.setState({ strategies: response.data }))
+      .catch(error => console.log(error));
   }
 
   _renderDatePicker() {
@@ -79,7 +110,7 @@ export default class Backtest extends Component {
           {this.state.fromDate ? (
             <p>You clicked {this.state.fromDate.toLocaleDateString()}</p>
           ) : (
-              <p>Please select a day.</p>
+              <p>.</p>
             )}
         </div>
         <div id="fromDatePicker">
@@ -109,25 +140,50 @@ export default class Backtest extends Component {
     );
   }
 
-  handleFromClick(day, { selected }) {
-    if (selected) {
-      this.setState({ fromDate: undefined });
-      return;
-    }
-
-    this.setState({ fromDate: day });
+  _renderDropDown() {
+    return (
+      <div id="backtestDropdown">
+        <h5>Select Strategy</h5>
+        <div className="dropdown">
+          <button className="btn btn-secondary dropdown-toggle" type="button" id="strategyDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select Strategy
+          </button>
+          <div className="dropdown-menu" aria-labelledby="strategyDropDown">
+            <a className="dropdown-item" href="#!">Macd SMA</a>
+            <a className="dropdown-item" href="#!">ALMA</a>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  handleToClick(day, { selected }) {
-    if (selected) {
-      this.setState({ toDate: undefined });
-      return;
-    }
-
-    this.setState({ toDate: day });
+  _renderResultsTable() {
+    return (
+      this.state.result.length === 0 ?
+        (<h5>No Result</h5>)
+        :
+        (
+          <table className="table table-striped" style={{ marginTop: 20 }}>
+            <thead>
+              <tr>
+                <th>Execution ID</th>
+                <th>Stock Code</th>
+                <th>Bought Date</th>
+                <th>Bought Price</th>
+                <th>Sold Date</th>
+                <th>Sold Price</th>
+                <th>Units</th>
+                <th>P/&L</th>
+              </tr>
+            </thead>
+            <tbody>{this.mapResultList()}</tbody>
+          </table>
+        )
+    );
   }
 }
 
+/** Datepicker selector */
 const currentYear = new Date().getFullYear();
 const fromMonth = new Date(currentYear - 10, 0);
 const toMonth = new Date(currentYear, 11);

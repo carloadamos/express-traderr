@@ -1,11 +1,17 @@
 import React, { Component } from "react";
 
+let fileReader;
+/**
+ * @class FileUpload
+ * @prop {Method} onFileChange method that will process when file is selected.
+ * @prop {Method} onSave method that will fire when `Upload File` button is clicked.
+ */
 export default class Fileupload extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      stockList: []
+      fileName: 'Please select a file',
     };
 
     this.inputFileRef = React.createRef();
@@ -13,30 +19,55 @@ export default class Fileupload extends Component {
 
   render() {
     return (
-        <div id="uploader">
-          <div className="stocks-list-uploader">
-            <input
-              id="uploadFileInput"
-              type="file"
-              ref={this.inputFileRef}
-              onChange={this.props.onFileChange}
-              accept=".json"
-            />
-            <span id="fileUploadLabel" onClick={() => this.openInputFile()}>{this.props.label}</span>
-            <button
-              className="btn btn-primary"
-              id="uploadFileBtn"
-              type="button"
-              onClick={this.props.onSave}
-            >
-              Upload file
+      <div id="uploader">
+        <div className="stocks-list-uploader">
+          <input
+            id="uploadFileInput"
+            type="file"
+            ref={this.inputFileRef}
+            onChange={this.handleFileChange}
+            accept=".json"
+          />
+          <span id="fileUploadLabel" onClick={() => this.openInputFile()}>
+            {this.state.fileName}
+          </span>
+          <button
+            className="btn btn-primary"
+            id="uploadFileBtn"
+            type="button"
+            onClick={this.props.onSave}
+          >
+            Upload file
             </button>
-          </div>
         </div>
+      </div>
     );
+  }
+
+  handleFileChange = e => {
+    const uploadedFile = e.target.files[0];
+
+    if (uploadedFile) {
+      this.setFileName(uploadedFile.name);
+      fileReader = new FileReader();
+      fileReader.onloadend = this.handleFileRead;
+      fileReader.readAsText(uploadedFile);
+    }
+  }
+
+  handleFileRead = e => {
+    const content = JSON.parse(fileReader.result);
+
+    if (this.props.onFileChange) {
+      this.props.onFileChange(content);
+    }
   }
 
   openInputFile() {
     this.inputFileRef.current.click();
+  }
+
+  setFileName(fileName) {
+    this.setState({ fileName: fileName });
   }
 }
