@@ -31,14 +31,17 @@ export default class Fileupload extends Component {
           <span id="fileUploadLabel" onClick={() => this.openInputFile()}>
             {this.state.fileName}
           </span>
-          <button
-            className="btn btn-primary"
-            id="uploadFileBtn"
-            type="button"
-            onClick={this.props.onActionTriggered}
-          >
-            {this.props.actionLabel}
-          </button>
+          {
+            this.props.actionLabel &&
+            <button
+              className="btn btn-primary"
+              id="uploadFileBtn"
+              type="button"
+              onClick={this.props.onActionTriggered}
+            >
+              {this.props.actionLabel}
+            </button>
+          }
         </div>
       </div>
     );
