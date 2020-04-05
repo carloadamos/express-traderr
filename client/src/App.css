@@ -1,8 +1,36 @@
+:root {
+  --white: #ffffff;
+  --black: #161a25;
+  --nav-background: #181f47;
+  --nav-selected: #101634;
+  --white: #ffffff;
+  --primary-color: #306bff;
+  --secondary-color: #e0eafd;
+  --green: #189e70;
+  --red: #d15967;
+  --border-color: #e5e6eb;
+  --nav-border-color: #1d244b;
+  --top-nav-size: 5rem;
+  --border-radius: 4px;
+}
+
 html,
-body {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6, p {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background-color: var(--darkblue);
+  color: var(--black);
+}
+
+h1 {
+  font-weight: bold;
 }
 
 .body-container {
@@ -10,15 +38,61 @@ body {
   flex-direction: row;
 }
 
-#sidebar {
+#content {
+  width: 100%;
   height: 100vh;
-  min-width: 11%;
-  max-width: 11%;
-  color: white;
+  max-height: 100vh;
+  overflow-y: scroll;
 }
 
-#sidebar .sidebar-header h3 {
-  padding-top: 0.5rem;
+.container-fluid {
+  padding-top: 1rem;
+}
+
+/* Top bar */
+#topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#topbar h1 {
+  padding: 1rem;
+}
+
+#topbar img {
+  max-width: 100%;
+  height: 60%;
+  border-radius: 50%;
+  border: 1px solid var(--secondary-color);
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+/* Navigation */
+#sidebar {
+  height: 100vh;
+  min-width: 200px;
+  max-width: 200px;
+  color: var(--white);
+  background-color: var(--nav-background);
+}
+
+#sidebar .sidebar-header {
+  border-bottom: var(--nav-border-color) 1px solid;
+  height: var(--top-nav-size);
+  display: flex;
+  align-items: center;
+  padding-left: 3rem;
+}
+
+/* This is from developer tools */
+#sidebar .svg-inline--fa {
+  width: 20px;
+}
+
+#sidebar .nav-link {
+  padding-left: 1em;
 }
 
 #sidebar.active {
@@ -31,8 +105,16 @@ body {
   display: none;
 }
 
-#sidebar.active .sidebar-header h3 {
+#sidebar.active .sidebar-header h4 {
   display: none;
+}
+
+#sidebar.active .nav-link {
+  padding-left: 0;
+}
+
+#sidebar.active .sidebar-header {
+  padding: 1rem;
 }
 
 #sidebar.active .sidebar-header h1 {
@@ -41,6 +123,15 @@ body {
 
 #sidebar.active span {
   display: none;
+}
+
+.toggle-navigation {
+  color: var(--secondary-color);
+  background-color: var(--black);
+}
+
+.fa-align-left {
+  color: white;
 }
 
 nav ul {
@@ -53,45 +144,77 @@ nav ul {
   margin-left: 1em;
 }
 li a {
-  color: white;
+  color: var(--white);
 }
 
 .nav-link {
   margin: 0;
-  padding: 0.5rem 0 0.5rem 0;
+  padding: 1rem 0 1rem 0;
 }
 
 nav ul li:hover {
-  color: white;
-  background-color: rgb(75, 75, 230);
+  color: var(--white);
+  background-color: var(--nav-selected);
 }
 
 nav ul li:hover a {
-  color: white;
+  color: var(--white);
 }
 
 .navbar {
-  padding-left: 0.25rem;
+  padding: 0;
+  border-bottom: var(--border-color) solid 1px;
+  height: var(--top-nav-size);
 }
 
-#content {
-  width: 100%;
-  height: 100vh;
-  max-height: 100vh;
-  overflow-y: scroll;
+/* File Upload */
+#uploadHead {
+  display: flex;
+  align-items: center;
+}
+
+#uploadHead p {
+  margin: 0  0 0 1rem;
+}
+
+#uploader {
+  display: inline-block;
+}
+
+.stocks-list-uploader {
+  width: 400px;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#uploadFileInput {
+  display: none;
+}
+
+#fileUploadLabel {
+  display: inline-block;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  color: var(--black);
+  flex: 2;
+  cursor: pointer;
+}
+
+#uploadFileBtn {
+  margin: 0.3rem;
+  border-radius: var(--border-radius);
+  flex: 1;
 }
 
 .success {
-  color: green;
+  color: var(--green);
 }
 
 .fail {
-  color: red;
-}
-
-.input-group#jsonUploadForm {
-  min-width: 25%;
-  max-width: 25%;
+  color: var(--red);
 }
 
 /* Strategy Form */
@@ -104,7 +227,100 @@ nav ul li:hover a {
   text-align: right;
 }
 
+.input-group-text {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+thead {
+  background-color: var(--nav-background);
+  color: var(--white);
+}
+
 #btnSaveStrat {
+  margin-right: 0.5rem;
+}
+
+#strategyList {
+  padding-top: 1rem;
+}
+
+#strategyList td {
+  cursor: pointer;
+}
+
+/* Strategy Add */
+#uploadStrategy {
+  display: flex;
+  flex-direction: column;
+}
+
+#action {
+  float: right;
+}
+
+/* Breadcrumbs */
+#breadCrumbs p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+.header h1 {
+  color: var(--black);
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+.header button {
+  float: right;
+}
+
+.upload {
+  display: inline;
+}
+
+.upload-btn {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+/* Backtest */
+#backtestDropdown, #backtestDatePicker, #fromDatePicker, #toDatePicker {
+  display: inline-block;
+}
+
+#backtestDropdown {
+  float: left;
+}
+
+#fromDatePicker, #toDatePicker {
+  vertical-align: top;
+}
+
+#backtestDropdown h5 {
+  color: var(--black);
+}
+
+#backtestDropdown .dropdown {
+  padding-top: 0.5rem;
+}
+
+#backtestDropdown .dropdown-toggle{
+  background-color: var(--primary-color);
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border: 0;
+}
+
+#fromDatePicker h5, #toDatePicker h5 {
+  margin-left: 1.5rem;
+}
+
+#monthPicker, #yearPicker {
+  border-radius: var(--border-radius);
+}
+
+#monthPicker {
   margin-right: 0.5rem;
 }
 
@@ -118,7 +334,16 @@ nav ul li:hover a {
   #sidebar span {
     display: none;
   }
-  #sidebar .sidebar-header h3 {
+
+  #sidebar .nav-link {
+    padding-left: 0;
+  }
+
+  #sidebar .sidebar-header {
+    padding: 1rem;
+  }
+
+  #sidebar .sidebar-header h4 {
     display: none;
   }
 
@@ -127,6 +352,10 @@ nav ul li:hover a {
   }
 
   #sidebarCollapse {
+    display: none;
+  }
+
+  #breadCrumbs {
     display: none;
   }
 }

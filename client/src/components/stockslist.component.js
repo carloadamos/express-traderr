@@ -1,31 +1,18 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Fileupload from './fileupload.component';
-
-const Stock = props => (
-  <tr>
-    <td> {props.stock.stock_code} </td>
-    <td> {props.stock.stock_trade_date} </td>
-    <td> {props.stock.stock_open} </td>
-    <td> {props.stock.stock_high} </td>
-    <td> {props.stock.stock_low} </td>
-    <td> {props.stock.stock_close} </td>
-    <td> {props.stock.stock_volume} </td>
-  </tr>
-);
-const API = 'http://localhost:4000/';
-let fileReader;
+import React, { Component } from "react";
+import axios from "axios";
+import FileUpload from "./fileupload.component";
+import { baseAPI } from "./constant";
 
 export default class StocksList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      error: "",
       stocks: [],
       stockList: [],
       uploadSuccessful: false,
-      uploadFailed: false,
-      error: '',
+      uploadFailed: false
     };
   }
 
@@ -35,22 +22,29 @@ export default class StocksList extends Component {
 
   retrieveStockList() {
     axios
-      .get(`${API}stocks/`)
+      .get(`${baseAPI}stocks/`)
       .then(response => this.setState({ stocks: response.data }))
-      .catch(error => this.setState({ error: error}));
+      .catch(error => this.setState({ error: error }));
   }
 
   render() {
     return (
       <div>
-        <h3>Stock List</h3>
-        {this.state.uploadSuccessful && <h4 className="success">Upload successful!</h4>}
-        {this.state.uploadFailed && <h4 className="fail">Upload failed! {this.state.error}</h4>}
-        <Fileupload onFileChange={this.onFileChangeHandler} onSave={this.onSaveHandler} />
+        <div id="uploadHead">
+          <FileUpload
+            actionLabel="Upload File"
+            onActionTriggered={this.onSaveHandler}
+            onFileChange={this.onFileChangeHandler}
+          />
+          {this.state.uploadSuccessful && (
+            <p className="success">Upload successful!</p>
+          )}
+          {this.state.uploadFailed && <p className="fail">Upload failed!</p>}
+        </div>
         {this.state.stocks.length === 0 ? (
-          <p>No data</p>
+          <h1>No data</h1>
         ) : (
-            <table className="table table-striped table-dark" style={{ marginTop: 20 }}>
+            <table className="table table-striped" style={{ marginTop: 20 }}>
               <thead>
                 <tr>
                   <th>Stock Code</th>
@@ -69,20 +63,13 @@ export default class StocksList extends Component {
     );
   }
 
-  onFileChangeHandler = e => {
-    const uploadedFile = e.target.files[0];
-    console.log(e.target.files[1])
-
-    if (uploadedFile) {
-      fileReader = new FileReader();
-      fileReader.onloadend = this.handleFileRead;
-      fileReader.readAsText(uploadedFile);
-    }
+  onFileChangeHandler = (content) => {
+    this.setState({ stockList: content });
   };
 
   onSaveHandler = () => {
     axios
-      .post('http://localhost:4000/stocks/add', this.state.stockList)
+      .post("http://localhost:4000/stocks/add", this.state.stockList)
       .then(() => {
         this.setState({ uploadSuccessful: true, stocks: [] });
 
@@ -92,17 +79,19 @@ export default class StocksList extends Component {
       .catch(() => this.setState({ uploadFailed: true }));
   };
 
-  handleFileRead = e => {
-    const content = JSON.parse(fileReader.result);
-
-    this.setState({
-      stockList: content,
-    });
-  };
-
   mapStockList() {
     return this.state.stocks.map((currentStock, i) => {
-      return <Stock stock={currentStock} key={i} />;
+      return (
+        <tr key={i}>
+          <td> {currentStock.stock_code} </td>
+          <td> {currentStock.stock_trade_date} </td>
+          <td> {currentStock.stock_open} </td>
+          <td> {currentStock.stock_high} </td>
+          <td> {currentStock.stock_low} </td>
+          <td> {currentStock.stock_close} </td>
+          <td> {currentStock.stock_volume} </td>
+        </tr>
+      );
     });
   }
 }
