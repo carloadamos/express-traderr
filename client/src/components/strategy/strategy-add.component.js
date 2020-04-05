@@ -10,19 +10,23 @@ export default class StrategyAdd extends Component {
 
     this.state = {
       buyStrategy: undefined,
-      sellStrategy: {},
+      sellStrategy: undefined,
     }
   }
 
   render() {
     return (
       <div id="strategyAdd">
-        <section id="uploadStrategy">
+        <section id="uploadForm">
           {this.renderBuySection()}
           {this.renderSellSection()}
+        </section>
+        <section id="strategyContent">
           {this.renderActionSection()}
           {this.renderBuyContent()}
-        </section> </div>
+          {this.renderSellContent()}
+        </section>
+      </div>
     );
   }
 
@@ -31,11 +35,9 @@ export default class StrategyAdd extends Component {
    */
   renderBuySection() {
     return (
-      <section>
+      <section class="upload-card">
         <h5>Buy</h5>
         <FileUpload
-          actionLabel="Validate"
-          onActionTriggered={this.onBuyValidate}
           onFileChange={this.onBuyFileChange}
         />
       </section>
@@ -47,11 +49,9 @@ export default class StrategyAdd extends Component {
    */
   renderSellSection() {
     return (
-      <section>
+      <section class="upload-card">
         <h5>Sell</h5>
         <FileUpload
-          actionLabel="Validate"
-          onActionTriggered={this.onSellValidate}
           onFileChange={this.onSellFileChange}
         />
       </section>
@@ -64,16 +64,7 @@ export default class StrategyAdd extends Component {
     });
   }
 
-  onBuyValidate = () => {
-    console.log('Buy Validate');
-  }
-
-  onSellValidate = () => {
-    console.log('Sell Validate');
-  }
-
   onSellFileChange = (content) => {
-    console.log('sell', content)
     this.setState({
       sellStrategy: content,
     });
@@ -82,16 +73,25 @@ export default class StrategyAdd extends Component {
   renderActionSection() {
     return (
       <section id="action">
-        <Button >Save</Button>
-        <Button >Reset</Button>
+        <Button class="form-btn">Save</Button>
+        <Button class="form-btn">Reset</Button>
       </section>
     )
   }
 
   renderBuyContent() {
     return (
-      this.state.buyStrategy &&
-      <JSONPretty data={this.state.buyStrategy} />
+      <section class="strat-content">
+        {this.state.buyStrategy && <JSONPretty data={this.state.buyStrategy} />}
+      </section>
+    );
+  }
+
+  renderSellContent() {
+    return (
+      <section class="strat-content">
+        {this.state.sellStrategy && <JSONPretty data={this.state.sellStrategy} />}
+      </section>
     );
   }
 }
