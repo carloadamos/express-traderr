@@ -31,8 +31,7 @@ export default class Fileupload extends Component {
           <span id="fileUploadLabel" onClick={() => this.openInputFile()}>
             {this.state.fileName}
           </span>
-          {
-            this.props.actionLabel &&
+          {this.props.actionLabel &&
             <button
               className="btn btn-primary"
               id="uploadFileBtn"
@@ -40,8 +39,7 @@ export default class Fileupload extends Component {
               onClick={this.props.onActionTriggered}
             >
               {this.props.actionLabel}
-            </button>
-          }
+            </button>}
         </div>
       </div>
     );

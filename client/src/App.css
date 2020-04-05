@@ -188,8 +188,20 @@ nav ul li:hover a {
   align-items: center;
 }
 
+.stocks-list-uploader span {
+  flex: 3;
+}
+
+.stocks-list-uploader button {
+  flex: 1;
+}
+
 #uploadFileInput {
   display: none;
+}
+
+#uploadHead {
+  background-color: var(--white);
 }
 
 #fileUploadLabel {
