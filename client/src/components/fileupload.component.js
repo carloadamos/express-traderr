@@ -4,7 +4,7 @@ let fileReader;
 /**
  * @class FileUpload
  * @prop {Method} onFileChange method that will process when file is selected.
- * @prop {Method} onSave method that will fire when `Upload File` button is clicked.
+ * @prop {Method} onAction method that will fire when `Upload File` button is clicked.
  */
 export default class Fileupload extends Component {
   constructor(props) {
@@ -35,10 +35,10 @@ export default class Fileupload extends Component {
             className="btn btn-primary"
             id="uploadFileBtn"
             type="button"
-            onClick={this.props.onSave}
+            onClick={this.props.onActionTriggered}
           >
-            Upload file
-            </button>
+            {this.props.actionLabel}
+          </button>
         </div>
       </div>
     );

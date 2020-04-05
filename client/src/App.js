@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Dashboard from "./components/dashboard.component";
-import Strategy from "./components/strategy/strategy-list.component";
+import Strategy from "./components/strategy/strategy.component";
 import StockList from "./components/stockslist.component";
 import Backtest from "./components/backtest.component";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -44,7 +44,7 @@ export default class App extends React.Component {
             </Link>
           </li>
           <li onClick={() => this.setTitle("Strategy")}>
-            <Link to="/strategylist" className="nav-link" id="strategy">
+            <Link to="/strategy" className="nav-link" id="strategy">
               <i className="fas fa-chess-king"></i>
               <span className="title">Strategy</span>
             </Link>
@@ -75,7 +75,7 @@ export default class App extends React.Component {
         </nav>
         <div id="body" className="container-fluid">
           <Route path="/" exact component={Dashboard} />
-          <Route path="/strategylist" exact component={Strategy} />
+          <Route path="/strategy" exact component={Strategy} />
           <Route path="/stocklist" exact component={StockList} />
           <Route path="/backtest" exact component={Backtest} />
         </div>

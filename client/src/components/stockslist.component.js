@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Fileupload from "./fileupload.component";
+import FileUpload from "./fileupload.component";
 import { baseAPI } from "./constant";
 
 export default class StocksList extends Component {
@@ -31,9 +31,10 @@ export default class StocksList extends Component {
     return (
       <div>
         <div id="uploadHead">
-          <Fileupload
+          <FileUpload
+            actionLabel="Upload File"
+            onActionTriggered={this.onSaveHandler}
             onFileChange={this.onFileChangeHandler}
-            onSave={this.onSaveHandler}
           />
           {this.state.uploadSuccessful && (
             <p className="success">Upload successful!</p>

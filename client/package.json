@@ -12,6 +12,7 @@
     "react-bootstrap": "^1.0.0",
     "react-day-picker": "^7.4.0",
     "react-dom": "^16.13.0",
+    "react-json-pretty": "^2.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.0"
   },

@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Strategy from './strategy.component';
 import { baseAPI } from "../constant";
-import Button from 'react-bootstrap/Button';
 import axios from "axios";
 
 const StratList = props => (
@@ -32,15 +29,7 @@ export default class StrategyList extends Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Link to="/strategy">
-            <Button variant="primary">New Strategy</Button>
-            {this.renderRouteArea()}
-            {}
-          </Link>
-        </div>
-      </Router>
+      this.renderStrategyList()
     );
   }
 
@@ -100,15 +89,6 @@ export default class StrategyList extends Component {
           </thead>
           <tbody>{this.mapStrategyToList()}</tbody>
         </table>
-      </div>
-    );
-  }
-
-  renderRouteArea() {
-    return (
-      <div id="newStrategy">
-        {this.renderStrategyList()}
-        <Route path="/strategy" exact component={Strategy} />
       </div>
     );
   }

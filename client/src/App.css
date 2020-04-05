@@ -249,6 +249,16 @@ thead {
   cursor: pointer;
 }
 
+/* Strategy Add */
+#uploadStrategy {
+  display: flex;
+  flex-direction: column;
+}
+
+#action {
+  float: right;
+}
+
 /* Breadcrumbs */
 #breadCrumbs p {
   margin: 0;
