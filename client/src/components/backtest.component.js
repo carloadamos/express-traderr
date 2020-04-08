@@ -163,7 +163,7 @@ export default class Backtest extends Component {
         (<h5>No Result</h5>)
         :
         (
-          <table className="table table-striped" style={{ marginTop: 20 }}>
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th>Execution ID</th>
