@@ -35,7 +35,7 @@ export default class StrategyAdd extends Component {
    */
   renderBuySection() {
     return (
-      <section class="upload-card">
+      <section className="upload-card">
         <h5>Buy</h5>
         <FileUpload
           onFileChange={this.onBuyFileChange}
@@ -49,7 +49,7 @@ export default class StrategyAdd extends Component {
    */
   renderSellSection() {
     return (
-      <section class="upload-card">
+      <section className="upload-card">
         <h5>Sell</h5>
         <FileUpload
           onFileChange={this.onSellFileChange}
@@ -73,25 +73,32 @@ export default class StrategyAdd extends Component {
   renderActionSection() {
     return (
       <section id="action">
-        <Button class="form-btn">Save</Button>
-        <Button class="form-btn">Reset</Button>
+        <Button className="form-btn">Save</Button>
+        <Button className="form-btn">Reset</Button>
       </section>
     )
   }
 
   renderBuyContent() {
     return (
-      <section class="strat-content">
-        {this.state.buyStrategy && <JSONPretty data={this.state.buyStrategy} />}
-      </section>
+      this.state.buyStrategy &&
+      (
+        <section className="card">
+          <JSONPretty data={this.state.buyStrategy} />
+        </section>
+      )
     );
   }
 
   renderSellContent() {
     return (
-      <section class="strat-content">
-        {this.state.sellStrategy && <JSONPretty data={this.state.sellStrategy} />}
-      </section>
+      this.state.sellStrategy &&
+      (
+        <section className="card">
+          <JSONPretty data={this.state.sellStrategy} />
+        </section>
+      )
+
     );
   }
 }

@@ -78,17 +78,21 @@ export default class StrategyList extends Component {
   renderStrategyList() {
     return (
       <div id="strategyList">
-        <table className="table table-striped table-light">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Buy Signal</th>
-              <th>Sell Signal</th>
-            </tr>
-          </thead>
-          <tbody>{this.mapStrategyToList()}</tbody>
-        </table>
+        <div className="card">
+          <div className="table-responsive">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Buy Signal</th>
+                  <th>Sell Signal</th>
+                </tr>
+              </thead>
+              <tbody>{this.mapStrategyToList()}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }

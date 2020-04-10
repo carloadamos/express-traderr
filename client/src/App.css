@@ -1,17 +1,17 @@
 :root {
-  --white: #ffffff;
+  --background: #F0F1F7;
   --black: #161a25;
-  --nav-background: #181f47;
-  --nav-selected: #101634;
-  --white: #ffffff;
-  --primary-color: #306bff;
-  --secondary-color: #e0eafd;
-  --green: #189e70;
-  --red: #d15967;
   --border-color: #e5e6eb;
-  --nav-border-color: #1d244b;
-  --top-nav-size: 5rem;
   --border-radius: 4px;
+  --green: #189e70;
+  --nav-background: #181f47;
+  --nav-border-color: #1d244b;
+  --nav-selected: #101634;
+  --primary-color: #306bff;
+  --red: #d15967;
+  --secondary-color: #e0eafd;
+  --top-nav-size: 5rem;
+  --white: #ffffff;
 }
 
 html,
@@ -21,7 +21,8 @@ h2,
 h3,
 h4,
 h5,
-h6, p {
+h6,
+p {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -39,18 +40,33 @@ h1 {
 }
 
 #content {
-  background-color: var(--secondary-color);
+  background-color: var(--background);
   width: 100%;
   height: 100vh;
   max-height: 100vh;
   overflow-y: scroll;
 }
 
+.card {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  margin: 0;
+}
+
 .container-fluid {
   padding-top: 1rem;
 }
 
+
 /* Top bar */
+
 #topbar {
   background-color: var(--white);
   display: flex;
@@ -71,7 +87,9 @@ h1 {
   cursor: pointer;
 }
 
+
 /* Navigation */
+
 #sidebar {
   height: 100vh;
   min-width: 200px;
@@ -88,11 +106,14 @@ h1 {
   padding-left: 3rem;
 }
 
-.sidebar-header h4, .sidebar-header h1 {
+.sidebar-header h4,
+.sidebar-header h1 {
   color: var(--white)
 }
 
+
 /* This is from developer tools */
+
 #sidebar .svg-inline--fa {
   width: 20px;
 }
@@ -149,6 +170,7 @@ nav ul {
 .title {
   margin-left: 1em;
 }
+
 li a {
   color: var(--white);
 }
@@ -173,7 +195,9 @@ nav ul li:hover a {
   height: var(--top-nav-size);
 }
 
+
 /* File Upload */
+
 #uploader {
   width: 100%;
   display: inline-block;
@@ -227,7 +251,9 @@ nav ul li:hover a {
   color: var(--red);
 }
 
+
 /* Strategy Form */
+
 .strategy-form {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -251,15 +277,13 @@ thead {
   margin-right: 0.5rem;
 }
 
-#strategyList {
-  padding-top: 1rem;
-}
-
 #strategyList td {
   cursor: pointer;
 }
 
+
 /* Strategy Add */
+
 #uploadForm {
   margin-bottom: 1rem;
   display: flex;
@@ -268,18 +292,18 @@ thead {
 }
 
 #action {
-  float: right;
+  display: block;
 }
 
 .upload-card {
   padding: 1rem;
-  margin-top: 1rem;
   background-color: var(--white);
   border-radius: var(--border-radius);
   width: 49.5%;
 }
 
-.upload-card h5, #action {
+.upload-card h5,
+#action {
   margin-bottom: 0.5rem;
 }
 
@@ -287,17 +311,22 @@ thead {
   margin-left: 0.5rem;
 }
 
-#strategy .strat-content  {
+#strategy .strat-content {
   background-color: var(--white);
 }
 
+
 /* Breadcrumbs */
-#breadCrumbs p {
-  margin: 0;
-  padding: 0;
+.breadcrumb {
+  background-color: var(--secondary-color);
+}
+
+.breadcrumb-item a {
+  color: var(--black);
 }
 
 /* Header */
+
 .header h1 {
   color: var(--black);
   display: inline-block;
@@ -317,8 +346,13 @@ thead {
   padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
+
 /* Backtest */
-#backtestDropdown, #backtestDatePicker, #fromDatePicker, #toDatePicker {
+
+#backtestDropdown,
+#backtestDatePicker,
+#fromDatePicker,
+#toDatePicker {
   display: inline-block;
 }
 
@@ -326,7 +360,8 @@ thead {
   float: left;
 }
 
-#fromDatePicker, #toDatePicker {
+#fromDatePicker,
+#toDatePicker {
   vertical-align: top;
 }
 
@@ -338,22 +373,31 @@ thead {
   padding-top: 0.5rem;
 }
 
-#backtestDropdown .dropdown-toggle{
+#backtestDropdown .dropdown-toggle {
   background-color: var(--primary-color);
   padding: 0.5rem 1rem 0.5rem 1rem;
   border: 0;
 }
 
-#fromDatePicker h5, #toDatePicker h5 {
+#fromDatePicker h5,
+#toDatePicker h5 {
   margin-left: 1.5rem;
 }
 
-#monthPicker, #yearPicker {
+#monthPicker,
+#yearPicker {
   border-radius: var(--border-radius);
 }
 
 #monthPicker {
   margin-right: 0.5rem;
+}
+
+
+/* Stock List */
+
+.table-responsive {
+  width: auto;
 }
 
 @media screen and (max-width: 900px) {
@@ -362,31 +406,24 @@ thead {
     max-width: 80px;
     text-align: center;
   }
-
   #sidebar span {
     display: none;
   }
-
   #sidebar .nav-link {
     padding-left: 0;
   }
-
   #sidebar .sidebar-header {
     padding: 1rem;
   }
-
   #sidebar .sidebar-header h4 {
     display: none;
   }
-
   #sidebar .sidebar-header h1 {
     display: block;
   }
-
   #sidebarCollapse {
     display: none;
   }
-
   #breadCrumbs {
     display: none;
   }

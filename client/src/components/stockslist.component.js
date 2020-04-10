@@ -30,7 +30,7 @@ export default class StocksList extends Component {
   render() {
     return (
       <div>
-        <div class="upload-card">
+        <div className="upload-card">
           <FileUpload
             actionLabel="Upload File"
             onActionTriggered={this.onSaveHandler}
@@ -44,20 +44,24 @@ export default class StocksList extends Component {
         {this.state.stocks.length === 0 ? (
           <h1>No data</h1>
         ) : (
-            <table className="table table-striped" style={{ marginTop: 20 }}>
-              <thead>
-                <tr>
-                  <th>Stock Code</th>
-                  <th>Date</th>
-                  <th>Open</th>
-                  <th>High</th>
-                  <th>Low</th>
-                  <th>Close</th>
-                  <th>Volume</th>
-                </tr>
-              </thead>
-              <tbody>{this.mapStockList()}</tbody>
-            </table>
+            <div className="card">
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Stock Code</th>
+                      <th>Date</th>
+                      <th>Open</th>
+                      <th>High</th>
+                      <th>Low</th>
+                      <th>Close</th>
+                      <th>Volume</th>
+                    </tr>
+                  </thead>
+                  <tbody>{this.mapStockList()}</tbody>
+                </table>
+              </div>
+            </div>
           )}
       </div>
     );
