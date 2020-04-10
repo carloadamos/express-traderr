@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import DayPickerInput from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import axios from "axios";
 import { baseAPI } from "./constant";
 import 'react-day-picker/lib/style.css';
+import Button from "react-bootstrap/Button";
 
 export default class Backtest extends Component {
   constructor() {
@@ -30,8 +31,12 @@ export default class Backtest extends Component {
   render() {
     return (
       <div id="backtest">
-        {this._renderDropDown()}
-        {this._renderDatePicker()}
+        <div id="backtestForm" className="card">
+          {this._renderDropDown()}
+          {this._renderFromDatePicker()}
+          {this._renderToDatePicker()}
+          {this._renderRunButton()}
+        </div>
         {this._renderResultsTable()}
       </div>
     );
@@ -87,55 +92,47 @@ export default class Backtest extends Component {
       .catch(error => console.log(error));
   }
 
-  _renderDatePicker() {
+  _renderFromDatePicker() {
     return (
-      <div id="backtestDatePicker">
-        <div id="fromDatePicker" className="card">
-          <h5>From:</h5>
-          <DayPickerInput
-            id="fromDate"
-            onDayClick={this.handleFromClick}
-            selectedDays={this.state.fromDate}
-            month={this.state.fMonth}
-            fromMonth={fromMonth}
-            toMonth={toMonth}
-            captionElement={({ date, localeUtils }) => (
-              <YearMonthForm
-                date={date}
-                localeUtils={localeUtils}
-                onChange={this.handleFromYearMonthChange}
-              />
-            )}
-          />
-          {this.state.fromDate ? (
-            <p>You clicked {this.state.fromDate.toLocaleDateString()}</p>
-          ) : (
-              <p>.</p>
-            )}
-        </div>
-        <div id="toDatePicker" className="card">
-          <h5>To:</h5>
-          <DayPickerInput
-            id="toDate"
-            onDayClick={this.handleToClick}
-            selectedDays={this.state.toDate}
-            month={this.state.tMonth}
-            fromMonth={fromMonth}
-            toMonth={toMonth}
-            captionElement={({ date, localeUtils }) => (
-              <YearMonthForm
-                date={date}
-                localeUtils={localeUtils}
-                onChange={this.handleToYearMonthChange}
-              />
-            )}
-          />
-          {this.state.toDate ? (
-            <p>You clicked {this.state.toDate.toLocaleDateString()}</p>
-          ) : (
-              <p>Please select a day.</p>
-            )}
-        </div>
+      <div id="fromDatePicker">
+        <DayPickerInput
+          id="fromDate"
+          onDayClick={this.handleFromClick}
+          selectedDays={this.state.fromDate}
+          month={this.state.fMonth}
+          fromMonth={fromMonth}
+          toMonth={toMonth}
+          captionElement={({ date, localeUtils }) => (
+            <YearMonthForm
+              date={date}
+              localeUtils={localeUtils}
+              onChange={this.handleFromYearMonthChange}
+            />
+          )}
+        />
+      </div>
+
+    );
+  }
+
+  _renderToDatePicker() {
+    return (
+      <div id="toDatePicker">
+        <DayPickerInput
+          id="toDate"
+          onDayClick={this.handleToClick}
+          selectedDays={this.state.toDate}
+          month={this.state.tMonth}
+          fromMonth={fromMonth}
+          toMonth={toMonth}
+          captionElement={({ date, localeUtils }) => (
+            <YearMonthForm
+              date={date}
+              localeUtils={localeUtils}
+              onChange={this.handleToYearMonthChange}
+            />
+          )}
+        />
       </div>
     );
   }
@@ -143,9 +140,14 @@ export default class Backtest extends Component {
   _renderDropDown() {
     return (
       <div id="backtestDropdown">
-        <h5>Select Strategy</h5>
         <div className="dropdown">
-          <button className="btn btn-secondary dropdown-toggle" type="button" id="strategyDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button
+            className="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="strategyDropDown"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
             Select Strategy
           </button>
           <div className="dropdown-menu" aria-labelledby="strategyDropDown">
@@ -180,6 +182,14 @@ export default class Backtest extends Component {
           </table>
         )
     );
+  }
+
+  _renderRunButton() {
+    return (
+      <div id="runButton">
+        <Button>Run</Button>
+      </div>
+    )
   }
 }
 

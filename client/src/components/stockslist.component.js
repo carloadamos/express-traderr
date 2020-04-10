@@ -30,7 +30,7 @@ export default class StocksList extends Component {
   render() {
     return (
       <div>
-        <div className="upload-card">
+        <div className="upload-card card">
           <FileUpload
             actionLabel="Upload File"
             onActionTriggered={this.onSaveHandler}

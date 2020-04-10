@@ -35,7 +35,7 @@ export default class StrategyAdd extends Component {
    */
   renderBuySection() {
     return (
-      <section className="upload-card">
+      <section className="card upload-card">
         <h5>Buy</h5>
         <FileUpload
           onFileChange={this.onBuyFileChange}
@@ -49,7 +49,7 @@ export default class StrategyAdd extends Component {
    */
   renderSellSection() {
     return (
-      <section className="upload-card">
+      <section className="card upload-card">
         <h5>Sell</h5>
         <FileUpload
           onFileChange={this.onSellFileChange}

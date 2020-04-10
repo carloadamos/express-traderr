@@ -49,8 +49,6 @@ h1 {
 
 .card {
   display: block;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   padding: 1rem;
   box-sizing: border-box;
 }
@@ -296,7 +294,6 @@ thead {
 }
 
 .upload-card {
-  padding: 1rem;
   background-color: var(--white);
   border-radius: var(--border-radius);
   width: 49.5%;
@@ -350,7 +347,6 @@ thead {
 /* Backtest */
 
 #backtestDropdown,
-#backtestDatePicker,
 #fromDatePicker,
 #toDatePicker {
   display: inline-block;
@@ -369,19 +365,10 @@ thead {
   color: var(--black);
 }
 
-#backtestDropdown .dropdown {
-  padding-top: 0.5rem;
-}
-
 #backtestDropdown .dropdown-toggle {
   background-color: var(--primary-color);
   padding: 0.5rem 1rem 0.5rem 1rem;
   border: 0;
-}
-
-#fromDatePicker h5,
-#toDatePicker h5 {
-  margin-left: 1.5rem;
 }
 
 #monthPicker,
@@ -393,6 +380,22 @@ thead {
   margin-right: 0.5rem;
 }
 
+#backtestForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 5fr;
+  grid-gap: 1rem;
+  align-items: center;
+}
+
+.DayPickerInput input {
+  padding: 0.3rem;
+}
+
+#runButton Button{
+  float: right;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
 
 /* Stock List */
 
