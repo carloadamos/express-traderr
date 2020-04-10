@@ -90,7 +90,7 @@ export default class Backtest extends Component {
   _renderDatePicker() {
     return (
       <div id="backtestDatePicker">
-        <div id="fromDatePicker">
+        <div id="fromDatePicker" className="card">
           <h5>From:</h5>
           <DayPickerInput
             id="fromDate"
@@ -113,7 +113,7 @@ export default class Backtest extends Component {
               <p>.</p>
             )}
         </div>
-        <div id="fromDatePicker">
+        <div id="toDatePicker" className="card">
           <h5>To:</h5>
           <DayPickerInput
             id="toDate"

@@ -277,10 +277,6 @@ thead {
   margin-right: 0.5rem;
 }
 
-#strategyList {
-  padding-top: 1rem;
-}
-
 #strategyList td {
   cursor: pointer;
 }
@@ -301,7 +297,6 @@ thead {
 
 .upload-card {
   padding: 1rem;
-  margin-top: 1rem;
   background-color: var(--white);
   border-radius: var(--border-radius);
   width: 49.5%;
@@ -322,12 +317,13 @@ thead {
 
 
 /* Breadcrumbs */
-
-#breadCrumbs p {
-  margin: 0;
-  padding: 0;
+.breadcrumb {
+  background-color: var(--secondary-color);
 }
 
+.breadcrumb-item a {
+  color: var(--black);
+}
 
 /* Header */
 

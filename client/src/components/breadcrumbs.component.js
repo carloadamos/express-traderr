@@ -1,11 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class BreadCrumbs extends Component {
-  render() {
-    return (
-      <div id="breadCrumbs">
-        <p>Strategy > Add</p>
-      </div>
-    );
-  }
+const Breadcrumb = (props) => {
+  let children = React.Children.toArray(props.children);
+
+  children = children.map((child, index) => (
+    <BreadcrumbItem key={`breadcrumb_item${index}`}>{child}</BreadcrumbItem>
+  ))
+
+  return <ol className='breadcrumb'>{children}</ol>
 }
+
+const BreadcrumbItem = ({ children, ...props }) => (
+  <li className='breadcrumb-item' {...props}>
+    {children}
+  </li>
+)
+
+export default Breadcrumb

@@ -1,19 +1,18 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Link } from "react-router-dom";
 import StrategyList from './strategy-list.component';
 import StrategyAdd from './strategy-add.component';
-import Button from 'react-bootstrap/Button';
+import Breadcrumb from '../breadcrumbs.component';
+
+const items = [
+  { to: '/strategy/list', label: 'Strategy List' },
+  { to: '/strategy/add', label: 'Add Strategy' },
+]
 
 export default class Strategy extends Component {
   render() {
     return (
       <Router>
-        <Link to="/strategy">
-          <Button variant="primary">Strategy List</Button>
-        </Link>
-        <Link to="/strategy/add">
-          <Button variant="primary">New Strategy</Button>
-        </Link>
         {this.renderRouteArea()}
       </Router>
     );
@@ -22,8 +21,16 @@ export default class Strategy extends Component {
   renderRouteArea() {
     return (
       <div id="strategy">
-        <Route path="/strategy" exact component={StrategyList} />
-        <Route path="/strategy/add" exact component={StrategyAdd} />
+        <Breadcrumb>
+          {items.map(({ to, label }) => (
+            <Link key={to} to={to}>
+              {label}
+            </Link>
+          ))}
+        </Breadcrumb>
+        <Route path="/strategy"><Redirect to="/strategy/list"/></Route>
+        <Route path="/strategy/list" exact component={StrategyList} />
+        <Route path="/strategy/add" exact render={props => <StrategyAdd callMe={this.sampleMethod} />} />
       </div>
     );
   }
