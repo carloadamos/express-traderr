@@ -291,6 +291,7 @@ thead {
 
 #strategyName {
   width: 100%;
+  bottom: 0;
 }
 
 #action {

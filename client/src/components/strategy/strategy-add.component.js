@@ -72,7 +72,7 @@ export default class StrategyAdd extends Component {
 
   setFileName = e => {
     this.setState({
-      fileName: e.target.value
+      strategyName: e.target.value
     });
   }
 
@@ -133,14 +133,11 @@ export default class StrategyAdd extends Component {
       strategy_sell: this.state.sellStrategy,
     };
 
-    console.log(`BUY: ${this.state.buyStrategy}`);
-    console.log(`SELL: ${this.state.sellStrategy}`);
-
     axios
       .post("http://localhost:4000/strategy/add", strategy)
       .then(() => {
-        console.log('Fucking successful!')
+        console.log('Upload successful!')
       })
-      .catch(() => this.setstate({ uploadfailed: true }));
+      .catch(() => console.log('Upload failed!'));
   }
 }

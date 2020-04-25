@@ -3,11 +3,10 @@ import { baseAPI } from "../constant";
 import axios from "axios";
 
 const StratList = props => (
-  <tr onClick={() => console.log(`${props.item.strategy_id} is clicked`)}>
-    <td> {props.item.strategy_id} </td>
+  <tr onClick={() => console.log(`${props.key} is clicked`)}>
     <td> {props.item.strategy_name} </td>
-    <td> {props.item.strategy_buy} </td>
-    <td> {props.item.strategy_sell} </td>
+    <td> {JSON.stringify(props.item.strategy_buy)} </td>
+    <td> {JSON.stringify(props.item.strategy_sell)} </td>
   </tr>
 );
 
@@ -31,25 +30,6 @@ export default class StrategyList extends Component {
     return (
       this.renderStrategyList()
     );
-  }
-
-  addStrategy() {
-    const strat = {
-      strategy_id: 1,
-      strategy_name: "Sample",
-      strategy_buy: this.state.buyStrategy,
-      strategy_sell: this.state.sellStrategy
-    };
-
-    axios
-      .post("http://localhost:4000/strategy/add", strat)
-      .then(() => {
-        // this.setState({ uploadSuccessful: true, stocks: [] });
-
-        this.fetchStrategyList();
-        this.mapStrategyToList();
-      })
-      .catch(() => this.setState({ uploadFailed: true }));
   }
 
   fetchStrategyList() {
@@ -83,7 +63,6 @@ export default class StrategyList extends Component {
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Name</th>
                   <th>Buy Signal</th>
                   <th>Sell Signal</th>
