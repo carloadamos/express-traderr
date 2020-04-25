@@ -3,20 +3,16 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const Strategy = new Schema({
-  strategy_id: {
-    type: Number,
-  },
-
   strategy_name: {
     type: String,
   },
 
   strategy_buy: {
-    type: String,
+    type: Object,
   },
 
   strategy_sell: {
-    type: String,
+    type: Object,
   },
 });
 
