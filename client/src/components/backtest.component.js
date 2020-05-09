@@ -1,25 +1,26 @@
 import React, { Component } from "react";
-import DayPickerInput from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import axios from "axios";
 import { baseAPI } from "./constant";
 import 'react-day-picker/lib/style.css';
+import Button from "react-bootstrap/Button";
+
+import { formatDate, parseDate } from 'react-day-picker/moment';
 
 export default class Backtest extends Component {
   constructor() {
     super();
 
-    this.handleFromClick = this.handleFromClick.bind(this);
-    this.handleToClick = this.handleToClick.bind(this);
-    this.handleFromYearMonthChange = this.handleFromYearMonthChange.bind(this);
-    this.handleToYearMonthChange = this.handleToYearMonthChange.bind(this);
+    this.handleFromDayChange = this.handleFromDayChange.bind(this);
+    this.handleToDayChange = this.handleToDayChange.bind(this);
+    this._findSelectedStocks = this._findSelectedStocks.bind(this);
     this.state = {
-      selected: "",
-      fromDate: undefined,
-      toDate: undefined,
-      fMonth: fromMonth,
-      tMonth: fromMonth,
-      result: [],
+      selectedFromDay: undefined,
+      selectedStrategy: undefined,
+      selectedStocks: undefined,
+      selectedToDay: undefined,
       strategies: [],
+      result: [],
     };
   }
 
@@ -30,37 +31,15 @@ export default class Backtest extends Component {
   render() {
     return (
       <div id="backtest">
-        {this._renderDropDown()}
-        {this._renderDatePicker()}
+        <div id="backtestForm" className="card">
+          {this._renderSelectStrategy()}
+          {this._renderFromDatePicker()}
+          {this._renderToDatePicker()}
+          {this._renderRunButton()}
+        </div>
         {this._renderResultsTable()}
       </div>
     );
-  }
-
-  handleFromYearMonthChange(month) {
-    this.setState({ fMonth: month });
-  }
-
-  handleToYearMonthChange(month) {
-    this.setState({ tMonth: month });
-  }
-
-  handleFromClick(day, { selected }) {
-    if (selected) {
-      this.setState({ fromDate: undefined });
-      return;
-    }
-
-    this.setState({ fromDate: day });
-  }
-
-  handleToClick(day, { selected }) {
-    if (selected) {
-      this.setState({ toDate: undefined });
-      return;
-    }
-
-    this.setState({ toDate: day });
   }
 
   mapResultList() {
@@ -87,70 +66,78 @@ export default class Backtest extends Component {
       .catch(error => console.log(error));
   }
 
-  _renderDatePicker() {
+  _renderFromDatePicker() {
     return (
-      <div id="backtestDatePicker">
-        <div id="fromDatePicker" className="card">
-          <h5>From:</h5>
-          <DayPickerInput
-            id="fromDate"
-            onDayClick={this.handleFromClick}
-            selectedDays={this.state.fromDate}
-            month={this.state.fMonth}
-            fromMonth={fromMonth}
-            toMonth={toMonth}
-            captionElement={({ date, localeUtils }) => (
-              <YearMonthForm
-                date={date}
-                localeUtils={localeUtils}
-                onChange={this.handleFromYearMonthChange}
-              />
-            )}
-          />
-          {this.state.fromDate ? (
-            <p>You clicked {this.state.fromDate.toLocaleDateString()}</p>
-          ) : (
-              <p>.</p>
-            )}
-        </div>
-        <div id="toDatePicker" className="card">
-          <h5>To:</h5>
-          <DayPickerInput
-            id="toDate"
-            onDayClick={this.handleToClick}
-            selectedDays={this.state.toDate}
-            month={this.state.tMonth}
-            fromMonth={fromMonth}
-            toMonth={toMonth}
-            captionElement={({ date, localeUtils }) => (
-              <YearMonthForm
-                date={date}
-                localeUtils={localeUtils}
-                onChange={this.handleToYearMonthChange}
-              />
-            )}
-          />
-          {this.state.toDate ? (
-            <p>You clicked {this.state.toDate.toLocaleDateString()}</p>
-          ) : (
-              <p>Please select a day.</p>
-            )}
-        </div>
+      <div id="fromDatePicker">
+        <DayPickerInput
+          formatDate={formatDate}
+          parseDate={parseDate}
+          placeholder={`${formatDate(new Date())}`}
+          onDayChange={this.handleFromDayChange}
+          id="fromDate"
+          dayPickerProps={{
+            todayButton: 'Today'
+          }}
+        />
       </div>
     );
   }
 
-  _renderDropDown() {
+  handleFromDayChange(day) {
+    this.setState({
+      selectedFromDay: this.convertToUTC(day),
+    });
+  }
+
+  handleToDayChange(day) {
+    this.setState({
+      selectedToDay: this.convertToUTC(day),
+    });
+  }
+
+  convertToUTC(date) {
+    if (!date) return;
+    let day = date.getUTCDate() + 1;
+    let month = date.getUTCMonth() + 1;
+    let year = date.getUTCFullYear();
+
+    return month + "/" + day + "/" + year;
+  }
+
+  _renderToDatePicker() {
+    return (
+      <div id="toDatePicker">
+        <DayPickerInput
+          formatDate={formatDate}
+          parseDate={parseDate}
+          placeholder={`${formatDate(new Date())}`}
+          onDayChange={this.handleToDayChange}
+          id="toDate"
+          dayPickerProps={{
+            todayButton: 'Today'
+          }}
+        />
+      </div>
+    );
+  }
+
+  _renderSelectStrategy() {
     return (
       <div id="backtestDropdown">
-        <h5>Select Strategy</h5>
         <div className="dropdown">
-          <button className="btn btn-secondary dropdown-toggle" type="button" id="strategyDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Select Strategy
+          <button
+            className="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="strategyDropDown"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+            {this.state.selectedStrategy || "Select Strategy"}
           </button>
           <div className="dropdown-menu" aria-labelledby="strategyDropDown">
-            <a className="dropdown-item" href="#!">Macd SMA</a>
-            <a className="dropdown-item" href="#!">ALMA</a>
+            {this.state.strategies.map((strat, i) => {
+              return (<a key={i} className="dropdown-item" href="#!" onClick={() => this._setSelectedStrategy(strat.strategy_name)}>{strat.strategy_name}</a>);
+            })}
           </div>
         </div>
       </div>
@@ -181,42 +168,37 @@ export default class Backtest extends Component {
         )
     );
   }
-}
 
-/** Datepicker selector */
-const currentYear = new Date().getFullYear();
-const fromMonth = new Date(currentYear - 10, 0);
-const toMonth = new Date(currentYear, 11);
-
-function YearMonthForm({ date, localeUtils, onChange }) {
-  const months = localeUtils.getMonths();
-  const years = [];
-
-  for (let i = fromMonth.getFullYear(); i <= toMonth.getFullYear(); i += 1) {
-    years.push(i);
+  _renderRunButton() {
+    return (
+      <div id="runButton">
+        <Button onClick={this._findSelectedStocks}>Run</Button>
+      </div>
+    )
   }
 
-  const handleChange = function handleChange(e) {
-    const { year, month } = e.target.form;
-    onChange(new Date(year.value, month.value));
-  };
+  _findSelectedStocks = () => {
+    axios
+      .post(`${baseAPI}stocks/range/`, {
+        dateFrom: this.state.selectedFromDay,
+        dateTo: this.state.selectedToDay,
+      })
+      .then(response => {
+        // response.data -- stock list
+        axios.post(`${baseAPI}backtest/test/`, {
+          stockList: response.data,
+          // buyStrategy:
+          // sellStrategy:
+        })
+      })
+      .catch(error => console.error(error));
+  }
 
-  return (
-    <form className="DayPicker-Caption">
-      <select id="monthPicker" name="month" onChange={handleChange} value={date.getMonth()}>
-        {months.map((month, i) => (
-          <option key={month} value={i}>
-            {month}
-          </option>
-        ))}
-      </select>
-      <select id="yearPicker" name="year" onChange={handleChange} value={date.getFullYear()}>
-        {years.map(year => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
-      </select>
-    </form>
-  );
+
+
+  _setSelectedStrategy = (name) => {
+    this.setState({
+      selectedStrategy: name,
+    });
+  }
 }

@@ -1,11 +1,10 @@
-import { expect } from '@open-wc/testing';
-import BackTest from '../src/logic/backtest.js';
+import BackTest from '../backtest.js';
 import backTestStockList from './test-data/backtest.testdata.js';
 
 const strategy = 'long';
 
 describe('backtest', () => {
-  it('should be able to backtest macd-crossover', () => {
+  it('should be able backtest macd-crossover', () => {
     const signals = {
       buy: [
         {
@@ -34,10 +33,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest uptrend', () => {
+  it('should be able backtest uptrend', () => {
     const signals = {
       buy: [
         {
@@ -59,10 +58,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest price-above-sma', () => {
+  it('should be able backtest price-above-sma', () => {
     const signals = {
       buy: [
         {
@@ -90,10 +89,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest price-above-ema', () => {
+  it('should be able backtest price-above-ema', () => {
     const signals = {
       buy: [
         {
@@ -122,10 +121,10 @@ describe('backtest', () => {
     const backtest = new BackTest(backTestStockList, strategy, signals, 20000);
     backtest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest uptrend and macd-crossover', () => {
+  it('should be able backtest uptrend and macd-crossover', () => {
     const signals = {
       buy: [
         {
@@ -154,10 +153,10 @@ describe('backtest', () => {
     const backtest = new BackTest(backTestStockList, strategy, signals, 20000);
     backtest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to throw error when unimplemented signal is encoutered.', () => {
+  it('should be able throw error when unimplemented signal is encoutered.', () => {
     const signals = {
       buy: [
         {
@@ -182,10 +181,10 @@ describe('backtest', () => {
     const backtest = new BackTest(backTestStockList, strategy, signals, 20000);
     backtest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest downtrend', () => {
+  it('should be able backtest downtrend', () => {
     const signals = {
       buy: [
         {
@@ -207,10 +206,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest MAMA', () => {
+  it('should be able backtest MAMA', () => {
     const signals = {
       buy: [
         {
@@ -247,10 +246,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to backtest uptrend with duration', () => {
+  it('should be able backtest uptrend with duration', () => {
     const signals = {
       buy: [
         {
@@ -274,10 +273,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
     backTest.start();
 
-    expect(1).to.be.equal(1);
+    expect(1).toEqual(1);
   });
 
-  it('should be able to return history list', () => {
+  it('should be able return hiry list', () => {
     const signals = {
       buy: [
         {
@@ -299,12 +298,12 @@ describe('backtest', () => {
       ],
     };
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000);
-    const history = backTest.start();
+    const hiry = backTest.start();
 
-    expect(history.length).to.be.not.equal(0);
+    expect(hiry.length).not.toEqual(0);
   });
 
-  it('should be able to test when date range is supplied', () => {
+  it('should be able test when date range is supplied', () => {
     const dateRange = ['05/06/2012', '07/06/2012'];
     const signals = {
       buy: [
@@ -327,12 +326,12 @@ describe('backtest', () => {
     };
 
     const backTest = new BackTest(backTestStockList, strategy, signals, 20000, dateRange);
-    expect(backTest.stockList.length).to.be.equal(2);
+    expect(backTest.start().length).toEqual(1);
 
-    expect(1).to.be.not.equal(0);
+    expect(1).not.toEqual(0);
   });
 
-  it('should be able to test macd-above-signal ', () => {
+  it('should be able test macd-above-signal ', () => {
     const signals = {
       buy: [
         {
@@ -358,10 +357,10 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals);
     backTest.start();
 
-    expect(1).to.be.not.equal(0);
+    expect(1).not.toEqual(0);
   });
 
-  it('should be able to test macd-below-signal ', () => {
+  it('should be able test macd-below-signal ', () => {
     const signals = {
       buy: [
         {
@@ -386,6 +385,6 @@ describe('backtest', () => {
     const backTest = new BackTest(backTestStockList, strategy, signals);
     backTest.start();
 
-    expect(1).to.be.not.equal(0);
+    expect(1).not.toEqual(0);
   });
 });

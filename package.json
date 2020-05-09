@@ -1,21 +1,39 @@
 {
-  "scripts": {
-    "client": "cd client && npm start",
-    "backend": "nodemon server.js",
-    "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\""
+  "author": "carloadamos",
+  "bugs": {
+    "url": "https://github.com/carloadamos/express-traderr/issues"
   },
-  "name": "express-traderr",
-  "version": "0.0.0",
-  "description": "Webcomponent express-traderr following open-wc recommendations",
-  "author": "express-traderr",
-  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "moment": "^2.24.0",
     "mongoose": "^5.9.4",
     "nodemon": "^2.0.2"
-  }
+  },
+  "description": "Personal project. Trading web app.",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/register": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "jasmine": "^3.5.0",
+    "jasmine-es6": "^0.4.3"
+  },
+  "homepage": "https://github.com/carloadamos/express-traderr#readme",
+  "license": "ISC",
+  "name": "express-traderr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carloadamos/express-traderr.git"
+  },
+  "scripts": {
+    "client": "cd client && npm start",
+    "backend": "cd backend && nodemon server.js --exec babel-node server.js",
+    "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\"",
+    "test": "babel-node spec/run.js"
+  },
+  "version": "1.0.0"
 }

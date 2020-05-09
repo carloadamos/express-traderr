@@ -19,6 +19,21 @@ stockRoutes.route('/:id').get((req, res) => {
   });
 });
 
+stockRoutes.route('/range').post((req, res) => {
+  const { dateFrom, dateTo } = req.body;
+
+  Stock.find(
+    {
+      stock_trade_date: {
+        $gte: new Date(dateFrom),
+        $lte: new Date(dateTo),
+      }
+    }
+    , (err, stock) => {
+      res.json(stock);
+    });
+});
+
 stockRoutes.route('/add').post((req, res) => {
   const stockList = req.body;
 
@@ -48,7 +63,7 @@ stockRoutes.route('/update/:id').post((req, res) => {
       newStock
         .save()
         .then(() => {
-          res.json('Todo updated!');
+          res.json('Stock updated!');
         })
         .catch(error => {
           res.status(400).send(`${error} Update not possible`);

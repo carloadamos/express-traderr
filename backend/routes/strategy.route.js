@@ -13,6 +13,7 @@ strategyRoutes.route("/").get((req, res) => {
 
 strategyRoutes.route("/add").post((req, res) => {
   const strat = new Strategy(req.body);
+  console.log(JSON.stringify(strat))
   strat.save();
 
   console.log(strat);

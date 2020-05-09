@@ -1,5 +1,4 @@
-import { expect } from '@open-wc/testing';
-import RelativeStrengthIndex from '../src/logic/rsi.js';
+import RelativeStrengthIndex from '../rsi.js';
 import stocks from './test-data/test-data.js';
 
 describe('ema', () => {
@@ -7,7 +6,7 @@ describe('ema', () => {
     const rsi = new RelativeStrengthIndex(stocks, 14, 'close');
     const rsiList = rsi.compute();
 
-    expect(rsiList[0]).to.have.property('upMove');
-    expect(rsiList[0]).to.have.property('downMove');
+    expect(rsiList[0].upMove).toBeDefined();
+    expect(rsiList[0].downMove).toBeDefined();
   });
 });

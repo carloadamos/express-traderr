@@ -8,7 +8,7 @@ const Stock = new Schema({
   },
 
   stock_trade_date: {
-    type: String,
+    type: Date,
   },
 
   stock_open: {
