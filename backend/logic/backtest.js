@@ -1,4 +1,3 @@
-import moment from 'moment/src/moment';
 import SimpleMovingAverage from './sma.js';
 import ExponentialMovingAverage from './ema.js';
 import MovingAverageConvergenceDivergence from './macd.js';
@@ -229,11 +228,9 @@ export default class BackTest {
           const soldStock = stock;
 
           const oneDay = 24 * 60 * 60 * 1000;
-          const firstDate = moment(stock.tradeDate, 'DD/MM/YYYY').toDate();
-          const secondDate = moment(
-            this.history[this.history.length - 1].stock.tradeDate,
-            'DD/MM/YYYY',
-          ).toDate();
+          const firstDate = stock.tradeDate;
+          const secondDate = 
+            this.history[this.history.length - 1].stock.tradeDate;
           const difference = Math.round(Math.abs((firstDate - secondDate) / oneDay));
           const boughtPrice = boughtStock.close;
           const soldPrice = soldStock.close;
@@ -390,13 +387,13 @@ export default class BackTest {
 
   filterDates() {
     if (this.dateRange.length === 2) {
-      const startDate = moment(this.dateRange[0], 'DD/MM/YYYY').toDate();
-      const endDate = moment(this.dateRange[1], 'DD/MM/YYYY').toDate();
+      const startDate = this.dateRange[0];
+      const endDate = this.dateRange[1];
 
       return this.stockList.filter(
         stock =>
-          moment(stock.tradeDate, 'DD/MM/YYYY').toDate() >= startDate &&
-          moment(stock.tradeDate, 'DD/MM/YYYY').toDate() <= endDate,
+          stock.tradeDate >= startDate &&
+          stock.tradeDate <= endDate,
       );
     }
 

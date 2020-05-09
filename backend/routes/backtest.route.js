@@ -1,7 +1,7 @@
 const express = require('express');
 const backTestRoutes = express.Router();
 const BackTestModel = require('../model/backtest.model');
-const BackTest = require('../../components/express-traderr/src/logic/backtest');
+const BackTest = require('../logic/backtest');
 
 backTestRoutes.route("/").get((req, res) => {
   BackTestModel.find((err, strats) => {

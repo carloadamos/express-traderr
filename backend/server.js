@@ -1,6 +1,6 @@
-const stockRoutes = require('./backend/routes/stock.route');
-const strategyRoutes = require('./backend/routes/strategy.route');
-const backTestRoutes = require('./backend/routes/backtest.route');
+const stockRoutes = require('./routes/stock.route');
+const strategyRoutes = require('./routes/strategy.route');
+const backTestRoutes = require('./routes/backtest.route');
 
 const express = require("express");
 const app = express();
