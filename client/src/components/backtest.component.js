@@ -13,9 +13,11 @@ export default class Backtest extends Component {
 
     this.handleFromDayChange = this.handleFromDayChange.bind(this);
     this.handleToDayChange = this.handleToDayChange.bind(this);
+    this._findSelectedStocks = this._findSelectedStocks.bind(this);
     this.state = {
       selectedFromDay: undefined,
       selectedStrategy: undefined,
+      selectedStocks: undefined,
       selectedToDay: undefined,
       strategies: [],
       result: [],
@@ -95,7 +97,7 @@ export default class Backtest extends Component {
 
   convertToUTC(date) {
     if (!date) return;
-    let day = date.getUTCDate()+1;
+    let day = date.getUTCDate() + 1;
     let month = date.getUTCMonth() + 1;
     let year = date.getUTCFullYear();
 
@@ -170,7 +172,7 @@ export default class Backtest extends Component {
   _renderRunButton() {
     return (
       <div id="runButton">
-        <Button onClick={() => this._findSelectedStocks()}>Run</Button>
+        <Button onClick={this._findSelectedStocks}>Run</Button>
       </div>
     )
   }
@@ -181,11 +183,18 @@ export default class Backtest extends Component {
         dateFrom: this.state.selectedFromDay,
         dateTo: this.state.selectedToDay,
       })
-      .then(response => this.setState({ result: response.data }))
-      .catch(error => console.log(error));
-
-      console.log(this.state.result)
+      .then(response => {
+        // response.data -- stock list
+        axios.post(`${baseAPI}backtest/test/`, {
+          stockList: response.data,
+          // buyStrategy:
+          // sellStrategy:
+        })
+      })
+      .catch(error => console.error(error));
   }
+
+
 
   _setSelectedStrategy = (name) => {
     this.setState({

@@ -1,5 +1,6 @@
 const stockRoutes = require('./backend/routes/stock.route');
 const strategyRoutes = require('./backend/routes/strategy.route');
+const backTestRoutes = require('./backend/routes/backtest.route');
 
 const express = require("express");
 const app = express();
@@ -22,6 +23,7 @@ connection.once("open", () => {
 
 app.use("/stocks", stockRoutes);
 app.use("/strategy", strategyRoutes);
+app.use("/backTest", backTestRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

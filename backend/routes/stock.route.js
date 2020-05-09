@@ -63,7 +63,7 @@ stockRoutes.route('/update/:id').post((req, res) => {
       newStock
         .save()
         .then(() => {
-          res.json('Todo updated!');
+          res.json('Stock updated!');
         })
         .catch(error => {
           res.status(400).send(`${error} Update not possible`);

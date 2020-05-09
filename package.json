@@ -2,7 +2,8 @@
   "scripts": {
     "client": "cd client && npm start",
     "backend": "nodemon server.js",
-    "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\""
+    "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\"",
+    "test": "jasmine"
   },
   "name": "express-traderr",
   "version": "0.0.0",
@@ -10,12 +11,21 @@
   "author": "express-traderr",
   "license": "MIT",
   "dependencies": {
+    "@types/moment": "^2.13.0",
     "body-parser": "^1.19.0",
     "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "moment": "^2.24.0",
+    "jasmine": "^3.5.0",
+    "moment": "^2.25.3",
     "mongoose": "^5.9.4",
     "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "jasmine-console-reporter": "^3.1.0",
+    "jasmine-core": "^3.5.0",
+    "karma": "^5.0.4",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-jasmine": "^3.1.1"
   }
 }
