@@ -32,7 +32,7 @@
   "scripts": {
     "client": "cd client && npm start",
     "backend": "cd backend && nodemon server.js --exec babel-node server.js",
-    "dev": "concurrently -n \"server,client\" \"nodemon server.js\" \"npm run client\"",
+    "dev": "concurrently -n \"server,client\" \"npm run backend\" \"npm run client\"",
     "test": "babel-node spec/run.js"
   },
   "version": "1.0.0"
