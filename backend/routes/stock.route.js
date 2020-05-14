@@ -1,6 +1,6 @@
-const express = require('express');
-const stockRoutes = express.Router();
-const Stock = require("../model/stock.model");
+import { Router } from 'express';
+const stockRoutes = Router();
+import Stock from "../model/stock.model";
 
 stockRoutes.route('/').get((req, res) => {
   Stock.find((err, stocks) => {
@@ -24,7 +24,7 @@ stockRoutes.route('/range').post((req, res) => {
 
   Stock.find(
     {
-      stock_trade_date: {
+      trade_date: {
         $gte: new Date(dateFrom),
         $lte: new Date(dateTo),
       }
@@ -35,14 +35,14 @@ stockRoutes.route('/range').post((req, res) => {
 });
 
 stockRoutes.route('/add').post((req, res) => {
-  const stockList = req.body;
+  const stocklist = req.body;
 
-  stockList.forEach(item => {
-    const stock = new Stock(item);
+  stocklist.forEach(item => {
+    const stock = new stock(item);
     stock.save();
   });
 
-  if (stockList.length === 0) return res.status(400).json({ stock: 'Error saving' });
+  if (stocklist.length === 0) return res.status(400).json({ stock: 'error saving' });
   res.status(200).json({ stock: 'stock added successfully' });
 });
 
@@ -72,4 +72,4 @@ stockRoutes.route('/update/:id').post((req, res) => {
   });
 });
 
-module.exports = stockRoutes;
+export default stockRoutes;

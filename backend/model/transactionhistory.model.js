@@ -2,12 +2,8 @@ import mongoose, { model } from 'mongoose';
 
 const { Schema } = mongoose;
 
-const BackTestModel = new Schema({
-  execution_id: {
-    type: Number,
-  },
-
-  stock_code: {
+const TransactionHistory = new Schema({
+  code: {
     type: String,
   },
 
@@ -30,10 +26,10 @@ const BackTestModel = new Schema({
   units: {
     type: Number,
   },
- 
+
   pnl: {
     type: Number,
-  }, 
+  },
 });
 
-export default model('BackTestModel', BackTestModel);
+export default model('TransactionHistory', TransactionHistory);

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const strategyRoutes = express.Router();
-const Strategy = require("../model/strategy.model");
+import Strategy from '../model/strategy.model';
 
 strategyRoutes.route("/").get((req, res) => {
   Strategy.find((err, strats) => {

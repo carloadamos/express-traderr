@@ -87,13 +87,13 @@ export default class StocksList extends Component {
     return this.state.stocks.map((currentStock, i) => {
       return (
         <tr key={i}>
-          <td> {currentStock.stock_code} </td>
-          <td> {currentStock.stock_trade_date} </td>
-          <td> {currentStock.stock_open} </td>
-          <td> {currentStock.stock_high} </td>
-          <td> {currentStock.stock_low} </td>
-          <td> {currentStock.stock_close} </td>
-          <td> {currentStock.stock_volume} </td>
+          <td> {currentStock.code} </td>
+          <td> {currentStock.trade_date} </td>
+          <td> {currentStock.open} </td>
+          <td> {currentStock.high} </td>
+          <td> {currentStock.low} </td>
+          <td> {currentStock.close} </td>
+          <td> {currentStock.volume} </td>
         </tr>
       );
     });

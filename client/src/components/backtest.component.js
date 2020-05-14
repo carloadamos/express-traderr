@@ -13,7 +13,7 @@ export default class Backtest extends Component {
 
     this.handleFromDayChange = this.handleFromDayChange.bind(this);
     this.handleToDayChange = this.handleToDayChange.bind(this);
-    this._findSelectedStocks = this._findSelectedStocks.bind(this);
+    this._processBacktest = this._processBacktest.bind(this);
     this.state = {
       selectedFromDay: undefined,
       selectedStrategy: undefined,
@@ -21,6 +21,7 @@ export default class Backtest extends Component {
       selectedToDay: undefined,
       strategies: [],
       result: [],
+      transactionHistory: [],
     };
   }
 
@@ -46,14 +47,13 @@ export default class Backtest extends Component {
     return this.state.result.map((res, i) => {
       return (
         <tr key={i}>
-          <td> {res.exec_id} </td>
-          <td> {res.stock_code} </td>
-          <td> {res.stock_bought_date} </td>
-          <td> {res.stock_bought_price} </td>
-          <td> {res.stock_sold_date} </td>
-          <td> {res.stock_sold_price} </td>
-          <td> {res.stock_units} </td>
-          <td> {res.stock_pnl} </td>
+          <td> {res.code} </td>
+          <td> {res.bought_date} </td>
+          <td> {res.bought_price} </td>
+          <td> {res.sold_date} </td>
+          <td> {res.sold_price} </td>
+          <td> {res.units} </td>
+          <td> {res.pnl} </td>
         </tr>
       );
     });
@@ -85,23 +85,20 @@ export default class Backtest extends Component {
 
   handleFromDayChange(day) {
     this.setState({
-      selectedFromDay: this.convertToUTC(day),
+      selectedFromDay: this._convertToLocaleDateString(day)
     });
   }
 
   handleToDayChange(day) {
     this.setState({
-      selectedToDay: this.convertToUTC(day),
+      selectedToDay: this._convertToLocaleDateString(day)
     });
   }
 
-  convertToUTC(date) {
+  _convertToLocaleDateString(date) {
     if (!date) return;
-    let day = date.getUTCDate() + 1;
-    let month = date.getUTCMonth() + 1;
-    let year = date.getUTCFullYear();
 
-    return month + "/" + day + "/" + year;
+    return date.toLocaleDateString();
   }
 
   _renderToDatePicker() {
@@ -132,11 +129,11 @@ export default class Backtest extends Component {
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-            {this.state.selectedStrategy || "Select Strategy"}
+            {this.state.selectedStrategy ? this.state.selectedStrategy.strategy_name : "Select Strategy"}
           </button>
           <div className="dropdown-menu" aria-labelledby="strategyDropDown">
             {this.state.strategies.map((strat, i) => {
-              return (<a key={i} className="dropdown-item" href="#!" onClick={() => this._setSelectedStrategy(strat.strategy_name)}>{strat.strategy_name}</a>);
+              return (<a key={i} className="dropdown-item" href="#!" onClick={() => this._setSelectedStrategy(strat)}>{strat.strategy_name}</a>);
             })}
           </div>
         </div>
@@ -153,7 +150,6 @@ export default class Backtest extends Component {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>Execution ID</th>
                 <th>Stock Code</th>
                 <th>Bought Date</th>
                 <th>Bought Price</th>
@@ -172,33 +168,68 @@ export default class Backtest extends Component {
   _renderRunButton() {
     return (
       <div id="runButton">
-        <Button onClick={this._findSelectedStocks}>Run</Button>
+        <Button onClick={this._processBacktest}>Run</Button>
       </div>
     )
   }
 
-  _findSelectedStocks = () => {
+  _processBacktest = () => {
     axios
       .post(`${baseAPI}stocks/range/`, {
         dateFrom: this.state.selectedFromDay,
         dateTo: this.state.selectedToDay,
       })
       .then(response => {
-        // response.data -- stock list
-        axios.post(`${baseAPI}backtest/test/`, {
-          stockList: response.data,
-          // buyStrategy:
-          // sellStrategy:
-        })
+        if (!response.data) return;
+
+        this._runBacktest(response.data);
       })
       .catch(error => console.error(error));
   }
 
+  /**
+   * Perform backtest sequence.
+   * @param {Array} stockList List of stock to be tested
+   */
+  _runBacktest(stockList) {
+    const buyStrategy = this.state.selectedStrategy.strategy_buy;
+    const sellStrategy = this.state.selectedStrategy.strategy_sell;
+    const dateRange = {
+      from: this.state.dateFrom,
+      to: this.state.dateTo,
+    }
 
+    axios.post(`${baseAPI}back_test/test/`, {
+      stockList,
+      buyStrategy,
+      sellStrategy,
+      dateRange,
+    })
+      .then(response => {
+        if (!response.data) return;
 
-  _setSelectedStrategy = (name) => {
+        this._saveTransactionHistory(response.data);
+      })
+      .catch(error => console.error(error));
+  }
+
+  /**
+   * Save transaction history to database
+   * @param {Array} transactionList Transaction history
+   */
+  _saveTransactionHistory(transactionList) {
+    axios.post(`${baseAPI}transaction_history/add`, {
+      transactionList,
+    })
+      .then(response => {
+        this.setState({ transactionHistory: response.data });
+      })
+      .catch(error => console.error(error));
+  }
+
+  _setSelectedStrategy = (strat) => {
     this.setState({
-      selectedStrategy: name,
+      selectedStrategy: strat,
     });
   }
 }

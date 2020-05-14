@@ -22,12 +22,10 @@ export default class BackTest {
    * You know what constructor is. Just feed me with parameters that it need.
    * @param {Array} stockList List of stocks to perform backtest on.
    * @param {String} strategy Long or short. Default to `long`.
-   * @param {Array} signals Signals to look for when entering a position.
+   * @param {Object} signals Composed of buy and sell signal.
    * @param {number} fund Amount of money to invest.
-   * @param {Array} dateRange Range of date for sampling..
    */
-  constructor(stockList, strategy, signals, fund, dateRange) {
-    this.dateRange = dateRange;
+  constructor(stockList, strategy, signals, fund) {
     this.fund = fund;
     this.stockList = stockList;
     this.strategy = strategy;
@@ -43,7 +41,6 @@ export default class BackTest {
    */
   _initialize() {
     const signals = [...this.signals.buy, ...this.signals.sell];
-    this.stockList = this.dateRange ? this.filterDates() : this.stockList;
 
     signals.forEach(signal => {
       switch (signal.code) {
@@ -122,6 +119,7 @@ export default class BackTest {
   start() {
     let unIdentifiedBuySignalEncountered = false;
     let unIdentifiedSellSignalEncountered = false;
+    let results = [];
 
     this.stockList.forEach(stock => {
       const buySignal = this.signals.buy ? this.signals.buy : [];
@@ -228,10 +226,10 @@ export default class BackTest {
           const soldStock = stock;
 
           const oneDay = 24 * 60 * 60 * 1000;
-          const firstDate = stock.tradeDate;
-          const secondDate = 
-            this.history[this.history.length - 1].stock.tradeDate;
-          const difference = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+          const soldDate = stock.trade_date;
+          const boughtDate =
+            this.history[this.history.length - 1].stock.trade_date;
+          const difference = Math.round(Math.abs((boughtDate - soldDate) / oneDay));
           const boughtPrice = boughtStock.close;
           const soldPrice = soldStock.close;
 
@@ -239,20 +237,31 @@ export default class BackTest {
           const totalSold = soldPrice * boughtShares;
           const percentIncrease = ((totalSold - totalBought) / totalBought) * 100;
 
-          this.history = [...this.history, Strategy.sell(stock, 'long', boughtShares)];
-          console.log(
-            `P/L: ${parseFloat(
-              stock.close - this.history[this.history.length - 2].stock.close,
-            ).toFixed(4)} Holding Days: ${difference}`,
-          );
-          console.log(
-            `Total bought price: ${totalBought}  Total sold price: ${totalSold}   Percentage: ${percentIncrease}`,
-          );
+          this.history = [
+            ...this.history,
+            Strategy.sell(stock, 'long', boughtShares),
+            difference,
+            percentIncrease,
+          ];
+
+          results = [
+            ...results,
+            {
+              exec_id: 1,
+              code: stock.code,
+              bought_date: boughtDate,
+              bought_price: boughtPrice,
+              sold_date: soldDate,
+              sold_price: soldPrice,
+              units: boughtShares,
+              pnl: percentIncrease
+            }
+          ];
         }
       }
     });
 
-    return this.history;
+    return results;
   }
 
   macdBelowSignal(stock, currentIndex, signal, sellScore) {
@@ -383,20 +392,5 @@ export default class BackTest {
     if (this.history.length === 0) return 'Nothing';
 
     return this.history[this.history.length - 1].action === 'BUY' ? 'SELL' : 'BUY';
-  }
-
-  filterDates() {
-    if (this.dateRange.length === 2) {
-      const startDate = this.dateRange[0];
-      const endDate = this.dateRange[1];
-
-      return this.stockList.filter(
-        stock =>
-          stock.tradeDate >= startDate &&
-          stock.tradeDate <= endDate,
-      );
-    }
-
-    return this.stockList;
   }
 }
