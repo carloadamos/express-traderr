@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import BackTestModel from '../model/backtest.model';
-import BackTest from '../logic/backtest';
 const backTestRoutes = Router();
+import BacktestSchema from '../model/backtest.model';
+import BackTest from '../logic/backtest';
 
 backTestRoutes.route('/').get((req, res) => {
-  BackTestModel.find((err, strats) => {
+  BacktestSchema.find((err, strats) => {
     if (err) {
       console.log(err);
     }

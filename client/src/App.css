@@ -1,9 +1,9 @@
 :root {
   --background: #F0F1F7;
   --black: #161a25;
+  --green: #46B04A;
   --border-color: #e5e6eb;
   --border-radius: 4px;
-  --green: #189e70;
   --nav-background: #181f47;
   --nav-border-color: #1d244b;
   --nav-selected: #101634;
@@ -11,7 +11,7 @@
   --red: #d15967;
   --secondary-color: #e0eafd;
   --top-nav-size: 5rem;
-  --white: #ffffff;
+  --white: #FEFEFF;
 }
 
 html,
@@ -26,7 +26,6 @@ p {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  background-color: var(--darkblue);
   color: var(--black);
 }
 
@@ -36,15 +35,15 @@ h1 {
 
 .body-container {
   display: flex;
-  flex-direction: row;
 }
 
 #content {
-  background-color: var(--background);
+  background-color: var(--white);
   width: 100%;
   height: 100vh;
   max-height: 100vh;
   overflow-y: scroll;
+  box-shadow: -10px 0 15px #ECF0EA;
 }
 
 .card {
@@ -64,7 +63,6 @@ table {
 
 
 /* Top bar */
-
 #topbar {
   background-color: var(--white);
   display: flex;
@@ -72,119 +70,82 @@ table {
   justify-content: space-between;
 }
 
-#topbar h1 {
-  padding: 1rem;
+#topbar#left {
+  background-color: #F4F6F3;
 }
 
-#topbar img {
-  max-width: 100%;
-  height: 60%;
+/* Sidebar */
+#sidebar {
+  height: calc(100vh - var(--top-nav-size));
+  padding: 3rem 0 0 0;
+  min-width: 250px;
+  max-width: 250px;
+  background-color: #F4F6F3;/* Sidebar background color */
+}
+
+#user {
+  margin-bottom: 30px;
+}
+
+#user img {
+  height: 50px;
+  margin: 0 40px;
   border-radius: 50%;
   border: 1px solid var(--secondary-color);
   margin-right: 1rem;
   cursor: pointer;
 }
 
-
-/* Navigation */
-
-#sidebar {
-  height: 100vh;
-  min-width: 200px;
-  max-width: 200px;
-  color: var(--white);
-  background-color: var(--nav-background);
-}
-
-#sidebar .sidebar-header {
-  border-bottom: var(--nav-border-color) 1px solid;
-  height: var(--top-nav-size);
-  display: flex;
-  align-items: center;
-  padding-left: 3rem;
-}
-
-.sidebar-header h4,
-.sidebar-header h1 {
-  color: var(--white)
-}
-
-
-/* This is from developer tools */
-
-#sidebar .svg-inline--fa {
-  width: 20px;
-}
-
-#sidebar .nav-link {
-  padding-left: 1em;
-}
-
-#sidebar.active {
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#sidebar .sidebar-header h1 {
-  display: none;
-}
-
-#sidebar.active .sidebar-header h4 {
-  display: none;
-}
-
-#sidebar.active .nav-link {
-  padding-left: 0;
-}
-
-#sidebar.active .sidebar-header {
-  padding: 1rem;
-}
-
-#sidebar.active .sidebar-header h1 {
-  display: block;
-}
-
-#sidebar.active span {
-  display: none;
-}
-
-.toggle-navigation {
-  color: var(--secondary-color);
-  background-color: var(--black);
-}
-
-.fa-align-left {
-  color: white;
-}
-
 nav ul {
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 
-.title {
-  margin-left: 1em;
-}
-
-li a {
-  color: var(--white);
+nav ul li {
+  width: 230px;
+  margin: 10px auto 10px auto;
 }
 
 .nav-link {
-  margin: 0;
-  padding: 1rem 0 1rem 0;
+  margin: 0 25px;
+  padding: 10px 0;
+  color: #456038;
+  border-radius: 25px;
 }
 
-nav ul li:hover {
+.nav-link.star{
+  margin: 0 25px;
+  padding: 10px 0;
   color: var(--white);
-  background-color: var(--nav-selected);
+  border-radius: 5px;
+  background-color: var(--green);
 }
 
-nav ul li:hover a {
+.nav-link svg {
+  margin-left: 25px;
+}
+
+.nav-link.star svg {
+  margin: 0 25px 0 0;
+}
+
+.nav-link span {
+  margin: 0 10px;
+}
+
+.nav-link.star span {
+  margin-left: 25px;
+}
+
+.nav-link:hover {
+  color: #456038;
+  background-color: var(--white);
+  box-shadow: 0 0 15px #ECF0EA;
+}
+
+.nav-link.star:hover {
   color: var(--white);
+  background-color: var(--green);
 }
 
 .navbar {
@@ -193,6 +154,11 @@ nav ul li:hover a {
   height: var(--top-nav-size);
 }
 
+/* Header Title */
+.header p {
+  margin: 0;
+  font-size: 60px;
+}
 
 /* File Upload */
 
@@ -346,60 +312,6 @@ thead {
 
 .upload-btn {
   padding: 0.5rem 1rem 0.5rem 1rem;
-}
-
-
-/* Backtest */
-
-#backtestDropdown,
-#fromDatePicker,
-#toDatePicker {
-  display: inline-block;
-}
-
-#backtestDropdown {
-  float: left;
-}
-
-#fromDatePicker,
-#toDatePicker {
-  vertical-align: top;
-}
-
-#backtestDropdown h5 {
-  color: var(--black);
-}
-
-#backtestDropdown .dropdown-toggle {
-  background-color: var(--primary-color);
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  border: 0;
-}
-
-#monthPicker,
-#yearPicker {
-  border-radius: var(--border-radius);
-}
-
-#monthPicker {
-  margin-right: 0.5rem;
-}
-
-#backtestForm {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 5fr;
-  grid-gap: 1rem;
-  align-items: center;
-}
-
-.DayPickerInput input {
-  padding: 0.3rem;
-}
-
-#runButton Button{
-  float: right;
-  padding-right: 1rem;
-  padding-left: 1rem;
 }
 
 /* Stock List */

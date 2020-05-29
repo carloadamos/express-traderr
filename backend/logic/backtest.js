@@ -216,52 +216,55 @@ export default class BackTest {
           }
         });
 
-        /**
-         * Temporary code for checking the P/L
-         * TODO: create a transastion list for this.
-         */
         if (sellSignal.length !== 0 && sellScore === sellPerfectScore) {
-          const boughtStock = this.history[this.history.length - 1].stock;
-          const boughtShares = this.history[this.history.length - 1].numberOfShares;
-          const soldStock = stock;
-
-          const oneDay = 24 * 60 * 60 * 1000;
-          const soldDate = stock.trade_date;
-          const boughtDate =
-            this.history[this.history.length - 1].stock.trade_date;
-          const difference = Math.round(Math.abs((boughtDate - soldDate) / oneDay));
-          const boughtPrice = boughtStock.close;
-          const soldPrice = soldStock.close;
-
-          const totalBought = boughtPrice * boughtShares;
-          const totalSold = soldPrice * boughtShares;
-          const percentIncrease = ((totalSold - totalBought) / totalBought) * 100;
-
-          this.history = [
-            ...this.history,
-            Strategy.sell(stock, 'long', boughtShares),
-            difference,
-            percentIncrease,
-          ];
-
-          results = [
-            ...results,
-            {
-              exec_id: 1,
-              code: stock.code,
-              bought_date: boughtDate,
-              bought_price: boughtPrice,
-              sold_date: soldDate,
-              sold_price: soldPrice,
-              units: boughtShares,
-              pnl: percentIncrease
-            }
-          ];
+          results = this.createTransactionHistory(stock, results);
         }
       }
     });
 
     return results;
+  }
+
+  /**
+   * Create transaction history. 
+   * @param {Object} stock Current stock.
+   * @param {Array} result Temporary transaction list.
+   */
+  createTransactionHistory(stock, result) {
+    const boughtStock = this.history[this.history.length - 1].stock;
+    const boughtShares = this.history[this.history.length - 1].numberOfShares;
+    const soldStock = stock;
+    const oneDay = 24 * 60 * 60 * 1000;
+    const soldDate = stock.trade_date;
+    const boughtDate = this.history[this.history.length - 1].stock.trade_date;
+    const difference = Math.round(Math.abs((boughtDate - soldDate) / oneDay));
+    const boughtPrice = boughtStock.close;
+    const soldPrice = soldStock.close;
+    const totalBought = boughtPrice * boughtShares;
+    const totalSold = soldPrice * boughtShares;
+    const percentIncrease = ((totalSold - totalBought) / totalBought) * 100;
+
+    this.history = [
+      ...this.history,
+      Strategy.sell(stock, 'long', boughtShares),
+      difference,
+      percentIncrease,
+    ];
+
+    result = [
+      ...result,
+      {
+        code: stock.code,
+        bought_date: boughtDate,
+        bought_price: boughtPrice,
+        sold_date: soldDate,
+        sold_price: soldPrice,
+        units: boughtShares,
+        pnl: percentIncrease
+      }
+    ];
+
+    return result;
   }
 
   macdBelowSignal(stock, currentIndex, signal, sellScore) {

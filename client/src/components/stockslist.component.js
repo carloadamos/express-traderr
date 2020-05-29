@@ -30,6 +30,9 @@ export default class StocksList extends Component {
   render() {
     return (
       <div>
+        <div className="header">
+          <p>STOCKS</p>
+        </div>
         <div className="upload-card card">
           <FileUpload
             actionLabel="Upload File"

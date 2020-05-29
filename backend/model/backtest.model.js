@@ -2,7 +2,7 @@ import mongoose, { model } from 'mongoose';
 
 const { Schema } = mongoose;
 
-const BackTestModel = new Schema({
+const BacktestSchema = new Schema({
   execution_id: {
     type: Number,
   },
@@ -36,4 +36,4 @@ const BackTestModel = new Schema({
   }, 
 });
 
-export default model('BackTestModel', BackTestModel);
+export default model('BackTestModel', BacktestSchema);

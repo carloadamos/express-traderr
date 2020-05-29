@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import TransactionHistory from '../model/transactionhistory.model';
+import TransactionHistorySchema from '../model/transactionhistory.model';
 const transactionHistoryRoutes = Router();
 
 transactionHistoryRoutes.route('/').get((req, res) => {
-  TransactionHistory.find((err, trans) => {
+  TransactionHistorySchema.find((err, trans) => {
     if (err) {
       console.log(err);
     }
@@ -15,7 +15,7 @@ transactionHistoryRoutes.route('/add').post((req, res) => {
   const { transactionList } = req.body;
 
   transactionList.forEach(item => {
-    const transaction = new TransactionHistory(item);
+    const transaction = new TransactionHistorySchema(item);
     transaction.save();
   });
 

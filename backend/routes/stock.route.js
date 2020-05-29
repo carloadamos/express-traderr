@@ -1,9 +1,9 @@
 import { Router } from 'express';
 const stockRoutes = Router();
-import Stock from "../model/stock.model";
+import StockSchema from "../model/stock.model";
 
 stockRoutes.route('/').get((req, res) => {
-  Stock.find((err, stocks) => {
+  StockSchema.find((err, stocks) => {
     if (err) {
       console.log(err);
     }
@@ -14,7 +14,7 @@ stockRoutes.route('/').get((req, res) => {
 stockRoutes.route('/:id').get((req, res) => {
   const { id } = req.params;
 
-  Stock.findById(id, (err, stock) => {
+  StockSchema.findById(id, (err, stock) => {
     res.json(stock);
   });
 });
@@ -22,7 +22,7 @@ stockRoutes.route('/:id').get((req, res) => {
 stockRoutes.route('/range').post((req, res) => {
   const { dateFrom, dateTo } = req.body;
 
-  Stock.find(
+  StockSchema.find(
     {
       trade_date: {
         $gte: new Date(dateFrom),
@@ -38,7 +38,7 @@ stockRoutes.route('/add').post((req, res) => {
   const stocklist = req.body;
 
   stocklist.forEach(item => {
-    const stock = new stock(item);
+    const stock = new StockSchema(item);
     stock.save();
   });
 
@@ -47,7 +47,7 @@ stockRoutes.route('/add').post((req, res) => {
 });
 
 stockRoutes.route('/update/:id').post((req, res) => {
-  Stock.findById(req.params.id, (err, stock) => {
+  StockSchema.findById(req.params.id, (err, stock) => {
     if (!stock) {
       res.status(404).send('data not found');
     } else {

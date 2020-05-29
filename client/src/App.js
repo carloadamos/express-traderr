@@ -4,19 +4,12 @@ import Dashboard from "./components/dashboard.component";
 import Strategy from "./components/strategy/strategy.component";
 import StockList from "./components/stockslist.component";
 import Backtest from "./components/backtest.component";
+import TestRunner from "./components/runner/test-runner.component";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./App.css";
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      title: "Dashboard"
-    };
-  }
-
   render() {
     return (
       <Router>
@@ -28,62 +21,73 @@ export default class App extends React.Component {
     );
   }
 
+  renderTopHeader() {
+    return (
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-dark" id="topbar">
+        </nav>
+      </div>
+    );
+  }
   renderSideNavigation() {
     return (
-      <nav id="sidebar">
-        <div className="sidebar-header">
-          <h4>Traderr</h4>
-          <h1>ET</h1>
-        </div>
-
-        <ul>
-          <li onClick={() => this.setTitle("Dashboard")}>
-            <Link to="/" className="nav-link" id="dashBoard">
-              <i className="fas fa-columns"></i>
-              <span className="title">Dashboard</span>
-            </Link>
-          </li>
-          <li onClick={() => this.setTitle("Strategy")}>
-            <Link to="/strategy" className="nav-link" id="strategy">
-              <i className="fas fa-chess-king"></i>
-              <span className="title">Strategy</span>
-            </Link>
-          </li>
-          <li onClick={() => this.setTitle("Stocks")}>
-            <Link to="/stocklist" className="nav-link" id="stockList">
-              <i className="fas fa-chart-bar"></i>
-              <span className="title">Stock List</span>
-            </Link>
-          </li>
-          <li onClick={() => this.setTitle("Backtest")}>
-            <Link to="/backtest" className="nav-link" id="backTest">
-              <i className="fas fa-vial"></i>
-              <span className="title">Backtest</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <div>
+        <nav className="navbar" id="topbar left">
+        </nav>
+        <nav id="sidebar">
+          <div id="user">
+            <img src={require("./avatar.png")} alt="Avatar" />
+            <span>Carlo</span>
+          </div>
+          <ul>
+            <li>
+              <Link to="/runner" className="nav-link star" id="newBacktest">
+                <span className="title">New Backtest</span>
+                <i className="fas fa-plus fa-fw"></i>
+              </Link>
+            </li>
+            <li>
+              <Link to="/" className="nav-link" id="dashBoard">
+                <i className="fas fa-chart-pie fa-fw"></i>
+                <span className="title">Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/stocklist" className="nav-link" id="stockList">
+                <i className="fas fa-chart-line fa-fw"></i>
+                <span className="title">Stocks</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/strategy" className="nav-link" id="strategy">
+                <i className="fas fa-lightbulb fa-fw"></i>
+                <span className="title">Strategy</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/backtest" className="nav-link" id="backTest">
+                <i className="fas fa-vials fa-fw"></i>
+                <span className="title">Backtests</span>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     );
   }
 
   renderContentArea() {
     return (
       <div id="content">
-        <nav className="navbar navbar-expand-lg navbar-dark" id="topbar">
-          <h1>{this.state.title}</h1>
-          <img src={require("./avatar.png")} alt="Avatar"/>
-        </nav>
+        {this.renderTopHeader()}
         <div id="body" className="container-fluid">
           <Route path="/" exact component={Dashboard} />
           <Route path="/strategy" exact component={Strategy} />
           <Route path="/stocklist" exact component={StockList} />
           <Route path="/backtest" exact component={Backtest} />
+          <Route path="/runner" exact component={TestRunner} />
         </div>
       </div>
     );
-  }
-
-  setTitle(name) {
-    this.setState({ title: name });
   }
 }

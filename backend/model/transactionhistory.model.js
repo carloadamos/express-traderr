@@ -2,7 +2,7 @@ import mongoose, { model } from 'mongoose';
 
 const { Schema } = mongoose;
 
-const TransactionHistory = new Schema({
+const TransactionHistorySchema = new Schema({
   code: {
     type: String,
   },
@@ -32,4 +32,4 @@ const TransactionHistory = new Schema({
   },
 });
 
-export default model('TransactionHistory', TransactionHistory);
+export default model('TransactionHistory', TransactionHistorySchema);

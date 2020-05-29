@@ -2,7 +2,7 @@ import mongoose, { model } from 'mongoose';
 
 const { Schema } = mongoose;
 
-const Stock = new Schema({
+const StockSchema = new Schema({
   code: {
     type: String,
   },
@@ -32,4 +32,4 @@ const Stock = new Schema({
   },
 });
 
-export default model('Stock', Stock);
+export default model('Stock', StockSchema);
