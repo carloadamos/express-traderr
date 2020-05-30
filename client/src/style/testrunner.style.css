@@ -19,3 +19,8 @@
   color: #6D6D6D;
   border: 0;
 }
+
+.formTextField {
+  display: inline-block;
+  width: min-content;
+}

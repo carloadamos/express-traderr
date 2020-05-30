@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import '../../style/testrunner.style.css'
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component';
+import 'react-day-picker/lib/style.css';
 
 export default class TestRunner extends Component {
   constructor(props) {
@@ -7,7 +10,10 @@ export default class TestRunner extends Component {
 
     this.state = {
       stockList: ['ALI', 'NOW', 'BDO'],
-    }
+      datePickerOpen: false,
+    };
+
+    this.datePickerRef = React.createRef();
   }
 
   render() {
@@ -17,9 +23,11 @@ export default class TestRunner extends Component {
           <p>LABORATORY</p>
         </div>
         <div className="card">
-          FROM TO STRATEGY STOPLOSS
+          {this._renderFromDatePicker()}
+          {this._renderToDatePicker()}
           {this._renderSelectStock()}
           {this._renderSelectStrategy()}
+          {this._renderStopLoss()}
         </div>
       </div>
     );
@@ -70,6 +78,27 @@ export default class TestRunner extends Component {
         </div>
       </div>
     );
+  }
+
+  _renderFromDatePicker() {
+    return (
+      <TraderDatepicker label="From" />
+    );
+  }
+
+  _renderToDatePicker() {
+    return (
+      <TraderDatepicker label="To" />
+    );
+  }
+
+  _renderStopLoss() {
+    return (
+      <div className="formTextField">
+        <span>Stoploss</span>
+        <input type="text"></input>
+      </div>
+    )
   }
 }
 
