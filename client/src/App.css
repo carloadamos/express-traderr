@@ -50,6 +50,7 @@ h1 {
   display: block;
   padding: 1rem;
   box-sizing: border-box;
+  width: min-content;
 }
 
 table {

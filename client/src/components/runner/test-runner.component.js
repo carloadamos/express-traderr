@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import '../../style/testrunner.style.css'
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component';
+import TraderTextField from '../../library/trader-textfield/trader-textfield.component';
 import 'react-day-picker/lib/style.css';
+import Button from "react-bootstrap/Button";
 
 export default class TestRunner extends Component {
   constructor(props) {
@@ -22,12 +23,20 @@ export default class TestRunner extends Component {
         <div className="header">
           <p>LABORATORY</p>
         </div>
-        <div className="card">
-          {this._renderFromDatePicker()}
-          {this._renderToDatePicker()}
-          {this._renderSelectStock()}
-          {this._renderSelectStrategy()}
-          {this._renderStopLoss()}
+        <div className="testRunnerControls">
+          <div className="card">
+            <div className="testRunnerFields">
+              {this._renderFromDatePicker()}
+              {this._renderToDatePicker()}
+              {this._renderSelectStock()}
+              {this._renderSelectStrategy()}
+              {this._renderStopLoss()}
+            </div>
+          </div>
+          <div className="testRunnerActions">
+            <Button id="trSearchBtn">Search</Button>
+            <Button id="trResetBtn">Reset</Button>
+          </div>
         </div>
       </div>
     );
@@ -94,10 +103,7 @@ export default class TestRunner extends Component {
 
   _renderStopLoss() {
     return (
-      <div className="formTextField">
-        <span>Stoploss</span>
-        <input type="text"></input>
-      </div>
+      <TraderTextField label="Stoploss" />
     )
   }
 }
