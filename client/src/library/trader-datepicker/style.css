@@ -1,0 +1,19 @@
+.DayPickerInput input{
+  display: none;
+}
+
+#trader-datepicker {
+  display: inline-block;
+  width: max-content;
+  margin: 0 0.5rem;
+}
+
+#trader-datepicker-wrapper {
+  background-color: #F4F6F3;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+#trader-datepicker-wrapper .fa-calendar {
+  margin-left: 0.5rem;
+}

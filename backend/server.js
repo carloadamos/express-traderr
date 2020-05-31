@@ -1,30 +1,45 @@
-const stockRoutes = require('./routes/stock.route');
-const strategyRoutes = require('./routes/strategy.route');
-const backTestRoutes = require('./routes/backtest.route');
+/**
+ * Libraries
+ */
+import express from "express";
+import { json } from "body-parser";
+import cors from "cors";
+import mongoose from "mongoose";
 
-const express = require("express");
+/**
+ * Routes
+ */
+import stockRoutes from './routes/stock.route';
+import strategyRoutes from './routes/strategy.route';
+import backTestRoutes from './routes/backtest.route';
+import transactionHistoryRoutes from './routes/transactionhistory.route';
+
+/**
+ * Constant
+ */
+import connectionUrl from './constant';
+
 const app = express();
-const bodyParser = require("body-parser");
-const cors = require("cors");
 const port = process.env.PORT || 4000;
-const mongoose = require("mongoose");
 
 app.use(cors());
-app.use(bodyParser.json({ limit: "50mb" }));
+app.use(json({ limit: "50mb" }));
 
-mongoose.connect("mongodb://127.0.0.1:27017/express-traderr", {
+mongoose.connect(connectionUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 const { connection } = mongoose;
+
 connection.once("open", () => {
-  console.log("MongoDB database connection established successfully");
+  console.log("Connected to sacred database successfully!");
 });
 
 app.use("/stocks", stockRoutes);
 app.use("/strategy", strategyRoutes);
-app.use("/backTest", backTestRoutes);
+app.use("/back_test", backTestRoutes);
+app.use("/transaction_history", transactionHistoryRoutes);
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Captain, server is running on port ${port}`);
 });

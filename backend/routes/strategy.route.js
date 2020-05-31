@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express';
 const strategyRoutes = express.Router();
-const Strategy = require("../model/strategy.model");
+import StrategySchema from '../model/strategy.model';
 
 strategyRoutes.route("/").get((req, res) => {
-  Strategy.find((err, strats) => {
+  StrategySchema.find((err, strats) => {
     if (err) {
       console.log(err);
     }
@@ -12,7 +12,7 @@ strategyRoutes.route("/").get((req, res) => {
 });
 
 strategyRoutes.route("/add").post((req, res) => {
-  const strat = new Strategy(req.body);
+  const strat = new StrategySchema(req.body);
   console.log(JSON.stringify(strat))
   strat.save();
 

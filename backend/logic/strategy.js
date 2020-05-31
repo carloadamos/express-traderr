@@ -12,10 +12,6 @@ export default class Strategy {
   static buy(stock, strategy, fund) {
     const numberOfShares = Math.floor(fund / stock.close);
 
-    console.log(``);
-    console.log(
-      `BOUGHT ${numberOfShares} ${stock.code} shares at ${stock.close} STRATEGY: ${strategy}`,
-    );
     return {
       action: 'BUY',
       stock,
@@ -30,11 +26,7 @@ export default class Strategy {
    * @param {number} boughtShares Total bought shares.
    */
   static sell(stock, strategy, boughtShares) {
-    console.log(``);
-    console.log(
-      `SOLD   ${boughtShares} ${stock.code} shares at ${stock.close} STRATEGY: ${strategy}.`,
-    );
-    console.log(``);
+
     return {
       action: 'SELL',
       stock,

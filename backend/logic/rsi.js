@@ -49,16 +49,12 @@ export default class RelativeStrengthIndex {
           avgU /= this.length;
           avgD /= this.length;
         }
-        console.log('AVG', avgU, avgD);
+
         return {
           ...stock,
           avgU,
           avgD,
         };
-      });
-
-      this.stockList.forEach(stock => {
-        console.log('new implem', stock);
       });
     }
 
@@ -70,17 +66,12 @@ export default class RelativeStrengthIndex {
         const rs = stock.avgU / stock.avgD;
 
         rsi = 100 - 100 / (1 + rs);
-        console.log(`item no: ${currentIndex + 1} rs : ${rs} rsi: ${rsi} `);
       }
 
       return {
         ...stock,
         rsi,
       };
-    });
-
-    this.stockList.forEach(stock => {
-      console.log(stock);
     });
 
     return this.stockList;

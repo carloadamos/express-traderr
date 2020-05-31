@@ -1,0 +1,48 @@
+
+.stockSearch {
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+}
+
+#slSearchBtn {
+  padding: 0.7rem 1.5rem;
+  margin-left: 1rem;
+  background-color: #46B04A;
+  border-color: #46B04A;
+  border-radius: 5px;
+}
+
+#slResetBtn {
+  padding: 0.7rem 1.5rem;
+  background-color: #F4F6F3;
+  margin-left: 1rem;
+  border-color: #F4F6F3;
+  color: #6D6D6D;
+}
+
+#uploadBtn {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+#uploadBtn:hover span, #uploadBtn:hover svg{
+  color: #46B04A;
+}
+
+#uploadBtn span{
+  margin-left: 0.5rem;
+}
+
+.table-responsive {
+  width: auto;
+}
+
+.table-responsive thead {
+  background-color: #46B04A;
+  color: white
+}
+
+.stock-list {
+  margin-top: 1rem;
+}

@@ -1,35 +1,35 @@
-const mongoose = require('mongoose');
+import mongoose, { model } from 'mongoose';
 
 const { Schema } = mongoose;
 
-const Stock = new Schema({
-  stock_code: {
+const StockSchema = new Schema({
+  code: {
     type: String,
   },
 
-  stock_trade_date: {
+  trade_date: {
     type: Date,
   },
 
-  stock_open: {
+  open: {
     type: Number,
   },
 
-  stock_high: {
+  high: {
     type: Number,
   },
 
-  stock_low: {
+  low: {
     type: Number,
   },
 
-  stock_close: {
+  close: {
     type: Number,
   },
 
-  stock_volume: {
+  volume: {
     type: Number,
   },
 });
 
-module.exports = mongoose.model('Stock', Stock);
+export default model('Stock', StockSchema);

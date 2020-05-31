@@ -21,6 +21,9 @@ export default class Strategy extends Component {
   renderRouteArea() {
     return (
       <div id="strategy">
+        <div className="header">
+          <p>STRATEGY</p>
+        </div>
         <Breadcrumb>
           {items.map(({ to, label }) => (
             <Link key={to} to={to}>

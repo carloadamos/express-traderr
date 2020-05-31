@@ -1,0 +1,46 @@
+
+/**
+ *
+ *  BACKTEST
+ *
+ */
+
+#btStratDd, #btStockDd{
+  width: 200px;
+  margin-left: 1rem;
+  display: inline-block;
+  color: #6D6D6D;
+}
+
+#btStratDd .dropdown-toggle, #btStockDd .dropdown-toggle{
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #F4F6F3;
+  color: #6D6D6D;
+  border: 0;
+}
+
+#backtestForm {
+  width: max-content;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+#btSearchBtn {
+  padding: 0.7rem 1.5rem;
+  margin-left: 1rem;
+  background-color: #46B04A;
+  border-color: #46B04A;
+  border-radius: 5px;
+}
+
+#btResetBtn {
+  padding: 0.7rem 1.5rem;
+  margin: 0 1rem;
+  background-color: #F4F6F3;
+  border-color: #F4F6F3;
+  color: #6D6D6D;
+}
+

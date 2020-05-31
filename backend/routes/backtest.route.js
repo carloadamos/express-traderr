@@ -1,10 +1,10 @@
-const express = require('express');
-const backTestRoutes = express.Router();
-const BackTestModel = require('../model/backtest.model');
-const BackTest = require('../logic/backtest');
+import { Router } from 'express';
+const backTestRoutes = Router();
+import BacktestSchema from '../model/backtest.model';
+import BackTest from '../logic/backtest';
 
-backTestRoutes.route("/").get((req, res) => {
-  BackTestModel.find((err, strats) => {
+backTestRoutes.route('/').get((req, res) => {
+  BacktestSchema.find((err, strats) => {
     if (err) {
       console.log(err);
     }
@@ -12,12 +12,12 @@ backTestRoutes.route("/").get((req, res) => {
   });
 });
 
-backTestRoutes.route("/test").post((req, res) => {
-  const { stockList, buyStrategy, sellStrategy } = req.body;
-  const backTest = new BackTest(stockList, 'long', [buyStrategy, sellStrategy], 1000);
+backTestRoutes.route('/test').post((req, res) => {
+  const { stockList, buyStrategy, sellStrategy, dateRange } = req.body;
+  const backTest = new BackTest(stockList, 'long', { buy: buyStrategy, sell: sellStrategy }, 1000, dateRange);
 
   const history = backTest.start();
-  console.log(history)
+  res.json(history);
 });
 
-module.exports = backTestRoutes;
+export default backTestRoutes;

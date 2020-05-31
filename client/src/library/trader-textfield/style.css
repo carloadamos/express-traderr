@@ -1,0 +1,17 @@
+
+#trader-textfield {
+  display: inline-block;
+  width: min-content;
+  margin: 0 0.5rem;
+}
+
+#trader-textfield input[type=text]{
+  border: none;
+  background-color: #F4F6F3;
+  padding: 0.7rem 1rem;
+  margin: 0;
+}
+
+#trader-textfield input[type=text]:focus {
+  outline: none;
+}
