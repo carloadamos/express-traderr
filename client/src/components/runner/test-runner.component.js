@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import '../../style/testrunner.style.css'
+import './style.css'
 import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component';
 import TraderTextField from '../../library/trader-textfield/trader-textfield.component';
 import 'react-day-picker/lib/style.css';
@@ -11,10 +11,7 @@ export default class TestRunner extends Component {
 
     this.state = {
       stockList: ['ALI', 'NOW', 'BDO'],
-      datePickerOpen: false,
     };
-
-    this.datePickerRef = React.createRef();
   }
 
   render() {
@@ -40,8 +37,8 @@ export default class TestRunner extends Component {
         </div>
       </div>
     );
-
   }
+
   _renderSelectStock() {
     return (
       <div id="tsStockDd">

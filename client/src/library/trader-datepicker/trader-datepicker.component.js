@@ -29,8 +29,10 @@ export default class TraderDatePicker extends Component {
   }
 
   _showDatePicker() {
-    const { datePickerOpen } = this.state;
-    this.setState({ datePickerOpen: !this.state.datePickerOpen });
-    datePickerOpen ? this.datePickerRef.current.showDayPicker() : this.datePickerRef.current.hideDayPicker();
+    this.setState({ datePickerOpen: !this.state.datePickerOpen }, () => {
+      this.state.datePickerOpen
+        ? this.datePickerRef.current.showDayPicker()
+        : this.datePickerRef.current.hideDayPicker();
+    });
   }
 }

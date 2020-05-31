@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Dashboard from "./components/dashboard.component";
 import Strategy from "./components/strategy/strategy.component";
-import StockList from "./components/stockslist.component";
+import StockList from "./components/stocklist/stockslist.component";
 import Backtest from "./components/backtest.component";
 import TestRunner from "./components/runner/test-runner.component";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,31 +41,31 @@ export default class App extends React.Component {
           </div>
           <ul>
             <li>
-              <Link to="/runner" className="nav-link star" id="newBacktest">
+              <Link to="/runner" className="nav-link star" id="newBacktest" onClick={this.resetActiveElements}>
                 <span className="title">New Backtest</span>
                 <i className="fas fa-plus fa-fw"></i>
               </Link>
             </li>
             <li>
-              <Link to="/" className="nav-link" id="dashBoard">
+              <Link to="/" className="nav-link" id="dashBoard" onClick={this.setToActive}>
                 <i className="fas fa-chart-pie fa-fw"></i>
                 <span className="title">Dashboard</span>
               </Link>
             </li>
             <li>
-              <Link to="/stocklist" className="nav-link" id="stockList">
+              <Link to="/stocklist" className="nav-link" id="stockList" onClick={this.setToActive}>
                 <i className="fas fa-chart-line fa-fw"></i>
                 <span className="title">Stocks</span>
               </Link>
             </li>
             <li>
-              <Link to="/strategy" className="nav-link" id="strategy">
+              <Link to="/strategy" className="nav-link" id="strategy" onClick={this.setToActive}>
                 <i className="fas fa-lightbulb fa-fw"></i>
                 <span className="title">Strategy</span>
               </Link>
             </li>
             <li>
-              <Link to="/backtest" className="nav-link" id="backTest">
+              <Link to="/backtest" className="nav-link" id="backTest" onClick={this.setToActive}>
                 <i className="fas fa-vials fa-fw"></i>
                 <span className="title">Backtests</span>
               </Link>
@@ -74,6 +74,18 @@ export default class App extends React.Component {
         </nav>
       </div>
     );
+  }
+
+  setToActive(event) {
+    const activeElements = document.getElementsByClassName('active');
+    if (activeElements.length >= 1) {
+      document.getElementsByClassName('active')[0].classList.remove('active');
+    }
+    event.currentTarget.classList.add('active');
+  }
+
+  resetActiveElements() {
+    document.getElementsByClassName('active')[0].classList.remove('active');
   }
 
   renderContentArea() {

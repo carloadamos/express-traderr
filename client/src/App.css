@@ -144,6 +144,12 @@ nav ul li {
   box-shadow: 0 0 15px #ECF0EA;
 }
 
+.nav-link.active {
+  color: #456038;
+  background-color: var(--white);
+  box-shadow: 0 0 15px #ECF0EA;
+}
+
 .nav-link.star:hover {
   color: var(--white);
   background-color: var(--green);
@@ -233,11 +239,6 @@ nav ul li {
   color: var(--white);
 }
 
-thead {
-  background-color: var(--nav-background);
-  color: var(--white);
-}
-
 #btnSaveStrat {
   margin-right: 0.5rem;
 }
@@ -313,12 +314,6 @@ thead {
 
 .upload-btn {
   padding: 0.5rem 1rem 0.5rem 1rem;
-}
-
-/* Stock List */
-
-.table-responsive {
-  width: auto;
 }
 
 @media screen and (max-width: 900px) {
