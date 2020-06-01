@@ -1,5 +1,8 @@
-.DayPickerInput input{
-  display: none;
+.DayPickerInput input {
+  outline: none;
+  border: none;
+  background-color: #F4F6F3;
+  width: 7rem;
 }
 
 #trader-datepicker {

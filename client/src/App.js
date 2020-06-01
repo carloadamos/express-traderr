@@ -78,6 +78,7 @@ export default class App extends React.Component {
 
   setToActive(event) {
     const activeElements = document.getElementsByClassName('active');
+    
     if (activeElements.length >= 1) {
       document.getElementsByClassName('active')[0].classList.remove('active');
     }
@@ -85,7 +86,11 @@ export default class App extends React.Component {
   }
 
   resetActiveElements() {
-    document.getElementsByClassName('active')[0].classList.remove('active');
+    const activeElements = document.getElementsByClassName('active');
+
+    if (activeElements.length > 0) {
+      document.getElementsByClassName('active')[0].classList.remove('active');
+    }
   }
 
   renderContentArea() {
