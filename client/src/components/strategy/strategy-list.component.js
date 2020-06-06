@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { baseAPI } from "../constant";
 import axios from "axios";
+import { baseAPI } from "../../constant"
 
 const StratList = props => (
   <tr onClick={() => console.log(`${props.key} is clicked`)}>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { baseAPI } from "./constant";
+import { baseAPI } from "../constant";
 import 'react-day-picker/lib/style.css';
 import Button from "react-bootstrap/Button";
 import '../style/backtest.style.css'

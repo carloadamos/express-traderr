@@ -9,30 +9,25 @@ export default class TraderDatePicker extends Component {
 
     this.state = {
       datePickerOpen: false,
-      selectedDate: undefined,
+      selectedDay: undefined,
     };
-
-    this.datePickerRef = React.createRef();
   }
 
   render() {
     return (
-      <div id="trader-datepicker" onClick={() => this._showDatePicker()}>
+      <div id="trader-datepicker">
         <span>{this.props.label}</span>
         <div id="trader-datepicker-wrapper">
-          <DayPickerInput ref={this.datePickerRef} />
-          <span>{this.state.selectedDate || 'MM-DD-YYYY'}</span>
+          <DayPickerInput
+            onDayChange={this.props.onDayChange}
+            dayPickerProps={{
+              showWeekNumbers: true,
+              todayButton: 'Today',
+            }}
+          />
           <i className="fa fa-calendar fa-fw"></i>
         </div>
       </div>
     );
-  }
-
-  _showDatePicker() {
-    this.setState({ datePickerOpen: !this.state.datePickerOpen }, () => {
-      this.state.datePickerOpen
-        ? this.datePickerRef.current.showDayPicker()
-        : this.datePickerRef.current.hideDayPicker();
-    });
   }
 }

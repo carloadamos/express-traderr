@@ -46,3 +46,9 @@
 .stock-list {
   margin-top: 1rem;
 }
+
+.upload-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end; 
+}

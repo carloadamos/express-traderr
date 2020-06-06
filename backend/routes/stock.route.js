@@ -1,6 +1,7 @@
 import { Router } from 'express';
 const stockRoutes = Router();
 import StockSchema from "../model/stock.model";
+import moment from "moment";
 
 stockRoutes.route('/').get((req, res) => {
   StockSchema.find((err, stocks) => {
@@ -38,6 +39,8 @@ stockRoutes.route('/add').post((req, res) => {
   const stocklist = req.body;
 
   stocklist.forEach(item => {
+    item.trade_date = moment(item.trade_date, 'DD/MM/YYYY').add('days', 1).format('MM/DD/YYYY');
+    console.log(item.trade_date)
     const stock = new StockSchema(item);
     stock.save();
   });

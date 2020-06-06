@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import FileUpload from "../fileupload.component";
-import { baseAPI } from "../constant";
 import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component'
 import Button from "react-bootstrap/Button";
 import './style.css'
+import { baseAPI } from "../../constant"
+import { Link } from "react-router-dom";
 
 export default class StocksList extends Component {
   constructor(props) {
@@ -38,8 +38,10 @@ export default class StocksList extends Component {
         </div>
         <div className="stockSearch">
           <div id="uploadBtn">
-            <i className="fa fa-cloud" aria-hidden="true"></i>
-            <span>Upload</span>
+            <Link to="/stocks/upload" className="nav-normal">
+              <i className="fa fa-cloud" aria-hidden="true"></i>
+              <span>Upload</span>
+            </Link>
           </div>
           <div className="card">
             <div className="testRunnerFields">
@@ -51,17 +53,6 @@ export default class StocksList extends Component {
             </div>
           </div>
         </div>
-        {/* <div className="upload-card card">
-          <FileUpload
-            actionLabel="Upload File"
-            onActionTriggered={this.onSaveHandler}
-            onFileChange={this.onFileChangeHandler}
-          />
-          {this.state.uploadSuccessful && (
-            <p className="success">Upload successful!</p>
-          )}
-          {this.state.uploadFailed && <p className="fail">Upload failed!</p>}
-        </div> */}
         {this.state.stocks.length === 0 ? (
           <h1>No data</h1>
         ) : (

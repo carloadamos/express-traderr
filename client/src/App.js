@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Dashboard from "./components/dashboard.component";
 import Strategy from "./components/strategy/strategy.component";
-import StockList from "./components/stocklist/stockslist.component";
+import Stocks from "./components/stocklist/stocks.component";
 import Backtest from "./components/backtest.component";
 import TestRunner from "./components/runner/test-runner.component";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -53,7 +53,7 @@ export default class App extends React.Component {
               </Link>
             </li>
             <li>
-              <Link to="/stocklist" className="nav-link" id="stockList" onClick={this.setToActive}>
+              <Link to="/stocks" className="nav-link" id="stockList" onClick={this.setToActive}>
                 <i className="fas fa-chart-line fa-fw"></i>
                 <span className="title">Stocks</span>
               </Link>
@@ -78,6 +78,7 @@ export default class App extends React.Component {
 
   setToActive(event) {
     const activeElements = document.getElementsByClassName('active');
+    
     if (activeElements.length >= 1) {
       document.getElementsByClassName('active')[0].classList.remove('active');
     }
@@ -85,7 +86,11 @@ export default class App extends React.Component {
   }
 
   resetActiveElements() {
-    document.getElementsByClassName('active')[0].classList.remove('active');
+    const activeElements = document.getElementsByClassName('active');
+
+    if (activeElements.length > 0) {
+      document.getElementsByClassName('active')[0].classList.remove('active');
+    }
   }
 
   renderContentArea() {
@@ -95,7 +100,7 @@ export default class App extends React.Component {
         <div id="body" className="container-fluid">
           <Route path="/" exact component={Dashboard} />
           <Route path="/strategy" exact component={Strategy} />
-          <Route path="/stocklist" exact component={StockList} />
+          <Route path="/stocks" exact component={Stocks} />
           <Route path="/backtest" exact component={Backtest} />
           <Route path="/runner" exact component={TestRunner} />
         </div>

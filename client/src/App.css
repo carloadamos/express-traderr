@@ -114,6 +114,14 @@ nav ul li {
   border-radius: 25px;
 }
 
+.nav-normal {
+  color: #456038;
+}
+
+.nav-normal:hover {
+  text-decoration: none;
+}
+
 .nav-link.star{
   margin: 0 25px;
   padding: 10px 0;
@@ -200,10 +208,10 @@ nav ul li {
 }
 
 #fileUploadLabel {
-  width: 100%;
+  width: 20rem;
   display: inline-block;
   margin-left: 1rem;
-  padding: 0.5rem;
+  padding: 0.75rem 0.5rem;
   color: var(--black);
   cursor: pointer;
 }

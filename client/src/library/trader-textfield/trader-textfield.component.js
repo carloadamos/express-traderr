@@ -6,7 +6,7 @@ export default class TraderTextField extends Component {
     return (
       <div id="trader-textfield">
         <span>{this.props.label}</span>
-        <input type="text"></input>
+        <input type="text" onChange={this.props.onChange}></input>
       </div>
     );
   }
