@@ -7,26 +7,20 @@ export default class TraderDatePicker extends Component {
   constructor(props) {
     super(props);
 
-    this.handleDayChange = this.handleDayChange.bind(this);
-
     this.state = {
       datePickerOpen: false,
       selectedDay: undefined,
     };
-
   }
 
   render() {
-    const { selectedDay } = this.state;
     return (
       <div id="trader-datepicker">
         <span>{this.props.label}</span>
-
         <div id="trader-datepicker-wrapper">
           <DayPickerInput
-            onDayChange={this.handleDayChange}
+            onDayChange={this.props.onDayChange}
             dayPickerProps={{
-              month: new Date(2018, 10),
               showWeekNumbers: true,
               todayButton: 'Today',
             }}
@@ -35,9 +29,5 @@ export default class TraderDatePicker extends Component {
         </div>
       </div>
     );
-  }
-
-  handleDayChange(day) {
-    this.setState({ selectedDay: day });
   }
 }

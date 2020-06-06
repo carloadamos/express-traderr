@@ -24,13 +24,15 @@ export default class BackTest {
    * @param {String} strategy Long or short. Default to `long`.
    * @param {Object} signals Composed of buy and sell signal.
    * @param {number} fund Amount of money to invest.
+   * @param {number} stopLoss Stoploss value.
    */
-  constructor(stockList, strategy, signals, fund) {
+  constructor(stockList, strategy, signals, fund, stopLoss) {
     this.fund = fund;
-    this.stockList = stockList;
-    this.strategy = strategy;
-    this.signals = signals;
     this.history = [];
+    this.signals = signals;
+    this.stockList = stockList;
+    this.stopLoss = stopLoss;
+    this.strategy = strategy;
     this._initialize();
   }
 
@@ -178,39 +180,48 @@ export default class BackTest {
         sellSignal.forEach(signal => {
           const currentIndex = this.stockList.indexOf(stock);
 
-          /* istanbul ignore else */
-          if (!unIdentifiedSellSignalEncountered) {
-            switch (signal.code) {
-              case SIGNALS.MACD_CROSSUNDER: {
-                /* istanbul ignore else */
-                sellScore = this.crossUnder(currentIndex, stock, signal, sellScore);
-                break;
-              }
-              case SIGNALS.MACD_BELOW_SIGNAL: {
-                sellScore = this.macdBelowSignal(stock, currentIndex, signal, sellScore);
+          const boughtPrice = this.history[this.history.length - 1].stock.close;
+          const currentPrice = stock.close;
+          const percentage = this.computePercentage(boughtPrice, currentPrice);
 
-                break;
-              }
-              case SIGNALS.DOWNTREND: {
-                sellScore = this.downTrend(stock, currentIndex, signal, sellScore);
-
-                break;
-              }
-              case SIGNALS.PRICE_BELOW_EMA: {
-                sellScore = ExponentialMovingAverage.priceBelow(stock, signal.periods[0], 'close')
-                  ? (sellScore += 1)
-                  : sellScore;
-                break;
-              }
-              case SIGNALS.PRICE_BELOW_SMA: {
-                sellScore = SimpleMovingAverage.priceBelow(stock, signal.periods[0], 'close')
-                  ? (sellScore += 1)
-                  : sellScore;
-                break;
-              }
-              default: {
-                console.error(`SELL SIGNAL: [${signal.code}] is not implemented!`);
-                unIdentifiedSellSignalEncountered = true;
+          /**
+           * Change to stoploss value
+           * set 5% for now
+           */
+          if (percentage >= this.stopLoss) {
+            sellScore = sellPerfectScore;
+          } else {
+            /* istanbul ignore else */
+            if (!unIdentifiedSellSignalEncountered) {
+              switch (signal.code) {
+                case SIGNALS.MACD_CROSSUNDER: {
+                  sellScore = this.crossUnder(currentIndex, stock, signal, sellScore);
+                  break;
+                }
+                case SIGNALS.MACD_BELOW_SIGNAL: {
+                  sellScore = this.macdBelowSignal(stock, currentIndex, signal, sellScore);
+                  break;
+                }
+                case SIGNALS.DOWNTREND: {
+                  sellScore = this.downTrend(stock, currentIndex, signal, sellScore);
+                  break;
+                }
+                case SIGNALS.PRICE_BELOW_EMA: {
+                  sellScore = ExponentialMovingAverage.priceBelow(stock, signal.periods[0], 'close')
+                    ? (sellScore += 1)
+                    : sellScore;
+                  break;
+                }
+                case SIGNALS.PRICE_BELOW_SMA: {
+                  sellScore = SimpleMovingAverage.priceBelow(stock, signal.periods[0], 'close')
+                    ? (sellScore += 1)
+                    : sellScore;
+                  break;
+                }
+                default: {
+                  console.error(`SELL SIGNAL: [${signal.code}] is not implemented!`);
+                  unIdentifiedSellSignalEncountered = true;
+                }
               }
             }
           }
@@ -395,5 +406,14 @@ export default class BackTest {
     if (this.history.length === 0) return 'Nothing';
 
     return this.history[this.history.length - 1].action === 'BUY' ? 'SELL' : 'BUY';
+  }
+
+  /**
+   * Compute for P/L. 
+   * @param {Number} boughtPrice initial price
+   * @param {Number} soldPrice Last price
+   */
+  computePercentage(boughtPrice, soldPrice) {
+    return (((soldPrice - boughtPrice) / boughtPrice) * 100).toFixed(2);
   }
 }

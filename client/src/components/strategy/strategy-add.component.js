@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import FileUpload from '../fileupload.component';
+import TraderUploader from '../../library/trader-uploader/trader-uploader.component';
 import Button from 'react-bootstrap/Button';
 import JSONPretty from 'react-json-pretty';
 import 'react-json-pretty/themes/monikai.css';
@@ -49,8 +49,9 @@ export default class StrategyAdd extends Component {
     return (
       <section className="card upload-card">
         <h5>Buy</h5>
-        <FileUpload
+        <TraderUploader
           onFileChange={this.onBuyFileChange}
+          label="Choose buy strategy file"
         />
       </section>
     )
@@ -63,8 +64,9 @@ export default class StrategyAdd extends Component {
     return (
       <section className="card upload-card">
         <h5>Sell</h5>
-        <FileUpload
+        <TraderUploader
           onFileChange={this.onSellFileChange}
+          label="Choose sell strategy file"
         />
       </section>
     )

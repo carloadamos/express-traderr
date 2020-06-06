@@ -2,16 +2,16 @@ import React, { Component } from "react";
 
 let fileReader;
 /**
- * @class FileUpload
+ * @class TraderUploader
  * @prop {Method} onFileChange method that will process when file is selected.
  * @prop {Method} onAction method that will fire when `Upload File` button is clicked.
  */
-export default class Fileupload extends Component {
+export default class TraderUploader extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      fileName: 'Please select a file',
+      fileName: undefined,
     };
 
     this.inputFileRef = React.createRef();
@@ -29,7 +29,7 @@ export default class Fileupload extends Component {
             accept=".json"
           />
           <span id="fileUploadLabel" onClick={() => this.openInputFile()}>
-            {this.state.fileName}
+            {this.state.fileName || this.props.label}
           </span>
           {this.props.actionLabel &&
             <button

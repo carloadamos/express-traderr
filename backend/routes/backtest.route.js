@@ -13,8 +13,8 @@ backTestRoutes.route('/').get((req, res) => {
 });
 
 backTestRoutes.route('/test').post((req, res) => {
-  const { stockList, buyStrategy, sellStrategy, dateRange } = req.body;
-  const backTest = new BackTest(stockList, 'long', { buy: buyStrategy, sell: sellStrategy }, 1000, dateRange);
+  const { stockList, buyStrategy, sellStrategy, stopLoss } = req.body;
+  const backTest = new BackTest(stockList, 'long', { buy: buyStrategy, sell: sellStrategy }, 1000, stopLoss);
 
   const history = backTest.start();
   res.json(history);
