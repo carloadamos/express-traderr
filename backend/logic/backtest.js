@@ -188,7 +188,7 @@ export default class BackTest {
            * Change to stoploss value
            * set 5% for now
            */
-          if (percentage >= this.stopLoss) {
+          if (percentage <= -(this.stopLoss)) {
             sellScore = sellPerfectScore;
           } else {
             /* istanbul ignore else */

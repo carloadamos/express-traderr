@@ -2,7 +2,7 @@
  * Libraries
  */
 import express from "express";
-import { json } from "body-parser";
+import bodyParser, { json } from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -24,6 +24,7 @@ const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 mongoose.connect(connectionUrl, {
   useNewUrlParser: true,

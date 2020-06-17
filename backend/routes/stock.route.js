@@ -9,7 +9,7 @@ stockRoutes.route('/').get((req, res) => {
       console.log(err);
     }
     res.json(stocks);
-  });
+  }).limit(5000);
 });
 
 stockRoutes.route('/:id').get((req, res) => {
@@ -20,27 +20,35 @@ stockRoutes.route('/:id').get((req, res) => {
   });
 });
 
-stockRoutes.route('/range').post((req, res) => {
-  const { dateFrom, dateTo } = req.body;
+stockRoutes.route('/distinct').post((req, res) => {
+  StockSchema.collection.distinct('code', function (err, result) {
+    res.json(result);
+  });
+});
 
-  StockSchema.find(
-    {
+stockRoutes.route('/range').post((req, res) => {
+  let { dateFrom, dateTo, code } = req.body;
+
+  if (code) {
+    StockSchema.find({
       trade_date: {
-        $gte: new Date(dateFrom),
-        $lte: new Date(dateTo),
-      }
-    }
-    , (err, stock) => {
-      res.json(stock);
-    });
+        $gte: moment(dateFrom, 'YYYY/MM/DD').format('M/DD/YYYY'),
+        $lte: moment(dateTo, 'YYYY/MM/DD').add(1, 'days').format('MM/DD/YYYY') },
+      code: code,
+    }, (err, stock) => { res.json(stock); });
+  }
+  else {
+    StockSchema.find({
+      trade_date: { $gte: new Date(dateFrom), $lte: new Date(dateTo) }
+    }, (err, stock) => { res.json(stock); });
+  }
 });
 
 stockRoutes.route('/add').post((req, res) => {
   const stocklist = req.body;
 
   stocklist.forEach(item => {
-    item.trade_date = moment(item.trade_date, 'DD/MM/YYYY').add('days', 1).format('MM/DD/YYYY');
-    console.log(item.trade_date)
+    item.trade_date = moment(item.trade_date, 'DD/MM/YYYY').add(1, 'days').format('MM/DD/YYYY');
     const stock = new StockSchema(item);
     stock.save();
   });

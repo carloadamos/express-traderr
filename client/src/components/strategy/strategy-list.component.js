@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { baseAPI } from "../../constant"
+import JSONPretty from 'react-json-pretty';
 
 const StratList = props => (
   <tr onClick={() => console.log(`${props.key} is clicked`)}>
     <td> {props.item.strategy_name} </td>
-    <td> {JSON.stringify(props.item.strategy_buy)} </td>
-    <td> {JSON.stringify(props.item.strategy_sell)} </td>
+    <td> <JSONPretty data={props.item.strategy_buy} />} </td>
+    <td> <JSONPretty data={props.item.strategy_sell} />} </td>
   </tr>
 );
 
