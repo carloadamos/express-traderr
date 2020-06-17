@@ -19,7 +19,7 @@ transactionHistoryRoutes.route('/add').post((req, res) => {
     transaction.save();
   });
 
-  if (transactionList.length === 0) return req.status(400).json({ message: 'Error Saving' });
+  if (transactionList.length === 0) return res.json({ message: 'No Result' });
   res.status(200).json({ message: 'Transaction successfully added' });
 });
 

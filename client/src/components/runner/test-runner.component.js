@@ -1,12 +1,25 @@
+// React 
 import React, { Component } from "react";
-import './style.css';
 import axios from "axios";
+
+// Elements
 import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component';
 import TraderTextField from '../../library/trader-textfield/trader-textfield.component';
-import 'react-day-picker/lib/style.css';
 import Button from "react-bootstrap/Button";
+
+// Styles
+import './style.css';
+
+// Constant
 import { baseAPI } from "../../constant"
 
+// Packages
+import moment from "moment";
+
+/**
+ * @class TestRunner
+ * @extends Component
+ */
 export default class TestRunner extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +28,8 @@ export default class TestRunner extends Component {
     this.state = {
       fromDay: undefined,
       result: [],
-      stockList: ['ALI', 'NOW', 'BDO'],
+      selectedStock: undefined,
+      stockList: [],
       strategies: [],
       stopLoss: 100,
       toDay: undefined,
@@ -24,6 +38,7 @@ export default class TestRunner extends Component {
 
   componentDidMount() {
     this.retrieveStrategyList();
+    this.retrieveStockList();
   }
 
   render() {
@@ -32,6 +47,17 @@ export default class TestRunner extends Component {
         <div className="header">
           <p>LABORATORY</p>
         </div>
+        <div id="tsBody">
+          {this._renderTestPanel()}
+          {this._renderResultPanel()}
+        </div>
+      </div>
+    );
+  }
+
+  _renderTestPanel() {
+    return (
+      <div id="testPanel">
         <div className="testRunnerControls">
           <div className="card">
             <div className="testRunnerFields">
@@ -50,8 +76,23 @@ export default class TestRunner extends Component {
         <div id="tsResults">
           {this._renderResultsTable()}
         </div>
+        {
+          this.state.result.length !== 0 &&
+          (<div id="tsFooter">
+            {this._renderPagination()}
+            {this._renderTestActions()}
+          </div>)
+        }
       </div>
     );
+  }
+
+  _renderResultPanel() {
+    return (
+      <div>
+        TEST RESULTS
+      </div>
+    )
   }
 
   _renderSelectStock() {
@@ -65,16 +106,20 @@ export default class TestRunner extends Component {
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-            ALL
+            {this.state.selectedStock ? this.state.selectedStock : "ALL"}
           </button>
           <div className="dropdown-menu" aria-labelledby="strategyDropDown">
             {this.state.stockList.map((stock, i) => {
-              return (<a key={i} className="dropdown-item" href="#!" onClick={() => console.log(`You clicked ${stock}`)}>{stock}</a>);
+              return (<a key={i} className="dropdown-item" href="#!" onClick={() => this._setSelectedStock(stock)}>{stock}</a>);
             })}
           </div>
         </div>
       </div>
     );
+  }
+
+  _setSelectedStock(stock) {
+    this.setState({ selectedStock: stock });
   }
 
   _renderSelectStrategy() {
@@ -142,6 +187,13 @@ export default class TestRunner extends Component {
       .catch(error => console.log(error));
   }
 
+  retrieveStockList() {
+    axios
+      .post(`${baseAPI}stocks/distinct/`)
+      .then(response => this.setState({ stockList: response.data }))
+      .catch(error => console.log(error));
+  }
+
   _setSelectedStrategy = (strat) => {
     this.setState({
       selectedStrategy: strat,
@@ -149,15 +201,16 @@ export default class TestRunner extends Component {
   }
 
   _processBacktest = () => {
+    const code = this.state.selectedStock;
     axios
       .post(`${baseAPI}stocks/range/`, {
         dateFrom: this.state.fromDay,
         dateTo: this.state.toDay,
+        code,
       })
       .then(response => {
-        if (!response.data) return;
+        if (response.data.length === 0) return;
 
-        console.log(response.data.length)
         this._runBacktest(response.data);
       })
       .catch(error => console.error(error));
@@ -169,10 +222,6 @@ export default class TestRunner extends Component {
    */
   _runBacktest(stockList) {
     const buyStrategy = this.state.selectedStrategy.strategy_buy;
-    const dateRange = {
-      from: this.state.dateFrom,
-      to: this.state.dateTo,
-    }
     const sellStrategy = this.state.selectedStrategy.strategy_sell;
     const stopLoss = this.state.stopLoss;
 
@@ -180,7 +229,6 @@ export default class TestRunner extends Component {
       stockList,
       buyStrategy,
       sellStrategy,
-      dateRange,
       stopLoss,
     })
       .then(response => {
@@ -206,44 +254,73 @@ export default class TestRunner extends Component {
 
   _renderResultsTable() {
     return (
-      this.state.result.length === 0 ?
-        (<h5>No Result</h5>)
-        :
-        (
-          <div className="table-responsive">
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th>Stock Code</th>
-                  <th>Bought Date</th>
-                  <th>Bought Price</th>
-                  <th>Sold Date</th>
-                  <th>Sold Price</th>
-                  <th>Units</th>
-                  <th>P/&L</th>
-                </tr>
-              </thead>
-              <tbody>{this.mapResultList()}</tbody>
-            </table>
-          </div>
-        )
+      this.state.result.length !== 0 &&
+      (
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Stock Code</th>
+                <th>Bought Date</th>
+                <th>Bought Price</th>
+                <th>Sold Date</th>
+                <th>Sold Price</th>
+                <th>Units</th>
+                <th>P/&L</th>
+                <th>Hold Days</th>
+              </tr>
+            </thead>
+            <tbody>{this.mapResultList()}</tbody>
+          </table>
+        </div>
+      )
     );
   }
 
   mapResultList() {
+    const start = 0;
+    const end = 999;
+    let count = 0;
     return this.state.result.map((res, i) => {
-      return (
-        <tr key={i}>
-          <td> {res.code} </td>
-          <td> {res.bought_date} </td>
-          <td> {res.bought_price} </td>
-          <td> {res.sold_date} </td>
-          <td> {res.sold_price} </td>
-          <td> {res.units} </td>
-          <td> {res.pnl} </td>
-        </tr>
-      );
+      count += 1;
+      while (count >= start && count <= end) {
+        const bought_date = moment(moment(res.bought_date).format('MMM DD, YYYY'));
+        const sold_date = moment(moment(res.sold_date).format('MMM DD, YYYY'));
+
+        return (
+          <tr key={i}>
+            <td> {res.code} </td>
+            <td> {bought_date._i} </td>
+            <td> {res.bought_price} </td>
+            <td> {sold_date._i} </td>
+            <td> {res.sold_price} </td>
+            <td> {res.units} </td>
+            <td> {res.pnl.toFixed(2)} </td>
+            <td> {sold_date.diff(bought_date, "days")} </td>
+          </tr>
+        );
+      }
     });
+  }
+
+  _renderPagination() {
+    return (
+      <ul className="pagination">
+        <li className="page-item"><a href="#" className="page-link">1</a></li>
+        <li className="page-item"><a href="#" className="page-link">2</a></li>
+        <li className="page-item"><a href="#" className="page-link">3</a></li>
+        <li className="page-item"><a href="#" className="page-link">4</a></li>
+        <li className="page-item"><a href="#" className="page-link">5</a></li>
+      </ul>
+    )
+  }
+
+  _renderTestActions() {
+    return (
+      <div>
+        <Button id="tsSave">Save</Button>
+      </div>
+    )
   }
 }
 

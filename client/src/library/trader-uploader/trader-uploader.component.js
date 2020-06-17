@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './style.css'
 
 let fileReader;
 /**
@@ -12,6 +13,7 @@ export default class TraderUploader extends Component {
 
     this.state = {
       fileName: undefined,
+      loading: false,
     };
 
     this.inputFileRef = React.createRef();
@@ -26,10 +28,11 @@ export default class TraderUploader extends Component {
             type="file"
             ref={this.inputFileRef}
             onChange={this.handleFileChange}
-            accept=".json"
+            accept={`.${this.props.parseType}`}
           />
           <span id="fileUploadLabel" onClick={() => this.openInputFile()}>
             {this.state.fileName || this.props.label}
+            {this.state.loading && this.renderSpinner()}
           </span>
           {this.props.actionLabel &&
             <button
@@ -45,23 +48,47 @@ export default class TraderUploader extends Component {
     );
   }
 
+  renderSpinner() {
+    return (
+      <div className="loader-wrapper">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
   handleFileChange = e => {
+    this.props.preProcess();
+    this.toggleLoading();
     const uploadedFile = e.target.files[0];
 
     if (uploadedFile) {
       this.setFileName(uploadedFile.name);
       fileReader = new FileReader();
-      fileReader.onloadend = this.handleFileRead;
       fileReader.readAsText(uploadedFile);
+      fileReader.onloadend = this.handleFileRead;
     }
   }
 
+  toggleLoading = () => {
+    this.setState({ loading: !this.state.loading });
+  }
+
   handleFileRead = e => {
-    const content = JSON.parse(fileReader.result);
+    let content = fileReader.result;
+
+    if (this.props.parseType === 'json') {
+      content = JSON.parse(fileReader.result);
+    }
+
+    if (this.props.parseType === 'csv') {
+      content = this.csvToJson(fileReader.result)
+    }
 
     if (this.props.onFileChange) {
       this.props.onFileChange(content);
     }
+
+    this.toggleLoading();
   }
 
   openInputFile() {
@@ -70,5 +97,26 @@ export default class TraderUploader extends Component {
 
   setFileName(fileName) {
     this.setState({ fileName: fileName });
+  }
+
+  csvToJson(csv) {
+    const lines = csv.split('\n');
+    const result = [];
+    const headers = ['code', 'trade_date', 'open', 'high', 'low', 'close', 'volume'];
+
+    lines.map(l => {
+      const obj = {};
+      const line = l.split(',');
+
+      headers.map((h, i) => {
+        obj[h] = line[i];
+      })
+
+      if (obj.code !== '') {
+        result.push(obj);
+      }
+    });
+
+    return result;
   }
 }

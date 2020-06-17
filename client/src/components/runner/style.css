@@ -43,7 +43,7 @@
   margin-top: 1rem;
 }
 
-#trSearchBtn {
+#trSearchBtn, #tsSave {
   padding: 0.7rem 1.5rem;
   margin-left: 1rem;
   background-color: #46B04A;
@@ -61,4 +61,15 @@
 
 #tsResults {
   padding-top: 1rem;
+}
+
+#tsFooter {
+  display: flex;
+  justify-content: space-between;
+}
+
+#tsBody {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }

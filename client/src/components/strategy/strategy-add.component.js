@@ -52,6 +52,7 @@ export default class StrategyAdd extends Component {
         <TraderUploader
           onFileChange={this.onBuyFileChange}
           label="Choose buy strategy file"
+          parseType="json"
         />
       </section>
     )
@@ -67,6 +68,7 @@ export default class StrategyAdd extends Component {
         <TraderUploader
           onFileChange={this.onSellFileChange}
           label="Choose sell strategy file"
+          parseType="json"
         />
       </section>
     )

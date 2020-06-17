@@ -1,17 +1,34 @@
+// React
 import React, { Component } from "react";
 import axios from "axios";
-import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component'
-import Button from "react-bootstrap/Button";
-import './style.css'
-import { baseAPI } from "../../constant"
 import { Link } from "react-router-dom";
 
+// Components
+import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component'
+import Button from "react-bootstrap/Button";
+
+// Constant
+import { baseAPI } from "../../constant"
+
+// Styles 
+import './style.css'
+
+// Packages
+import moment from 'moment';
+
+/**
+ * @class StockList 
+ * @extends Component
+ */
 export default class StocksList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      fromDay: undefined,
+      toDay: undefined,
       error: "",
+      selectedStock: undefined,
       stocks: [],
       stockList: [],
       uploadSuccessful: false,
@@ -20,14 +37,14 @@ export default class StocksList extends Component {
   }
 
   componentDidMount() {
-    this.retrieveStockList();
+    this.retrieveStocks();
   }
 
-  retrieveStockList() {
+  retrieveStocks() {
     axios
-      .get(`${baseAPI}stocks/`)
-      .then(response => this.setState({ stocks: response.data }))
-      .catch(error => this.setState({ error: error }));
+      .post(`${baseAPI}stocks/distinct/`)
+      .then(response => this.setState({ stockList: response.data }))
+      .catch(error => console.error(error));
   }
 
   render() {
@@ -48,7 +65,7 @@ export default class StocksList extends Component {
               {this._renderSelectStock()}
               {this._renderFromDatePicker()}
               {this._renderToDatePicker()}
-              <Button id="slSearchBtn">Search</Button>
+              <Button id="slSearchBtn" onClick={() => this.searchStocks()}>Search</Button>
               <Button id="slResetBtn">Reset</Button>
             </div>
           </div>
@@ -77,6 +94,25 @@ export default class StocksList extends Component {
     );
   }
 
+  searchStocks = () => {
+    const code = this.state.selectedStock;
+    this.setState({ stocks: [] }, () => {
+      axios
+        .post("http://localhost:4000/stocks/range", {
+          dateFrom: this.state.fromDay,
+          dateTo: this.state.toDay,
+          code
+        })
+        .then((response) => {
+          this.setState({ stocks: response.data });
+
+          this.mapStockList();
+        })
+        .catch(() => this.setState({ uploadFailed: true }));
+
+    });
+  }
+
   onFileChangeHandler = (content) => {
     this.setState({ stockList: content });
   };
@@ -87,7 +123,6 @@ export default class StocksList extends Component {
       .then(() => {
         this.setState({ uploadSuccessful: true, stocks: [] });
 
-        this.retrieveStockList();
         this.mapStockList();
       })
       .catch(() => this.setState({ uploadFailed: true }));
@@ -98,7 +133,7 @@ export default class StocksList extends Component {
       return (
         <tr key={i}>
           <td> {currentStock.code} </td>
-          <td> {currentStock.trade_date} </td>
+          <td> {moment(currentStock.trade_date).format('MMM DD, YYYY')} </td>
           <td> {currentStock.open} </td>
           <td> {currentStock.high} </td>
           <td> {currentStock.low} </td>
@@ -120,11 +155,11 @@ export default class StocksList extends Component {
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-            ALL
+            {this.state.selectedStock ? this.state.selectedStock : "ALL"}
           </button>
           <div className="dropdown-menu" aria-labelledby="strategyDropDown">
             {this.state.stockList.map((stock, i) => {
-              return (<a key={i} className="dropdown-item" href="#!" onClick={() => console.log(`You clicked ${stock}`)}>{stock}</a>);
+              return (<a key={i} className="dropdown-item" onClick={() => this._setSelectedStock(stock)}>{stock}</a>);
             })}
           </div>
         </div>
@@ -132,15 +167,30 @@ export default class StocksList extends Component {
     );
   }
 
+  _setSelectedStock(stock) {
+    this.setState({ selectedStock: stock });
+  }
+
   _renderFromDatePicker() {
     return (
-      <TraderDatepicker label="Date From" />
+      <TraderDatepicker label="Date From" onDayChange={this.handleFromDayChange} />
     );
+  }
+
+  handleFromDayChange = (day) => {
+    if (day) {
+      console.log('fromday', new Date(day).toISOString())
+      this.setState({ fromDay: day });
+    }
   }
 
   _renderToDatePicker() {
     return (
-      <TraderDatepicker label="Date To" />
+      <TraderDatepicker label="Date To" onDayChange={this.handleToDayChange} />
     );
+  }
+
+  handleToDayChange = (day) => {
+    this.setState({ toDay: day });
   }
 }
