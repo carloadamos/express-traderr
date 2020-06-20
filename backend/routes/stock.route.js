@@ -29,18 +29,42 @@ stockRoutes.route('/distinct').post((req, res) => {
 stockRoutes.route('/range').post((req, res) => {
   let { dateFrom, dateTo, code } = req.body;
 
-  if (code) {
+
+  if (!dateFrom && !dateTo && !code) {
+    res.status(400).send({ message: "This type of operation is not advisable." });
+  }
+  else if (!dateFrom && !dateTo) {
+    StockSchema.find({
+      code: code,
+    }, (err, stock) => { res.json(stock); });
+  }
+  else if (!dateFrom && dateTo) {
+    StockSchema.find({
+      trade_date: {
+        $lte: moment(dateTo, 'YYYY/MM/DD').add(1, 'days').format('MM/DD/YYYY')
+      },
+      code: code,
+    }, (err, stock) => { res.json(stock); });
+  }
+  else if (dateFrom && !dateTo) {
     StockSchema.find({
       trade_date: {
         $gte: moment(dateFrom, 'YYYY/MM/DD').format('M/DD/YYYY'),
-        $lte: moment(dateTo, 'YYYY/MM/DD').add(1, 'days').format('MM/DD/YYYY') },
+      },
+      code: code,
+    }, (err, stock) => { res.json(stock); });
+  }
+  else if (code) {
+    StockSchema.find({
+      trade_date: {
+        $gte: moment(dateFrom, 'YYYY/MM/DD').format('M/DD/YYYY'),
+        $lte: moment(dateTo, 'YYYY/MM/DD').add(1, 'days').format('MM/DD/YYYY')
+      },
       code: code,
     }, (err, stock) => { res.json(stock); });
   }
   else {
-    StockSchema.find({
-      trade_date: { $gte: new Date(dateFrom), $lte: new Date(dateTo) }
-    }, (err, stock) => { res.json(stock); });
+    res.json({ message: "Add this scenario." });
   }
 });
 
@@ -48,7 +72,7 @@ stockRoutes.route('/add').post((req, res) => {
   const stocklist = req.body;
 
   stocklist.forEach(item => {
-    item.trade_date = moment(item.trade_date, 'DD/MM/YYYY').add(1, 'days').format('MM/DD/YYYY');
+    item.trade_date = moment(item.trade_date, 'YYYYMMDD').add(1, 'days').format('MM/DD/YYYY');
     const stock = new StockSchema(item);
     stock.save();
   });

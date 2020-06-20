@@ -70,26 +70,24 @@ export default class StocksList extends Component {
             </div>
           </div>
         </div>
-        {this.state.stocks.length === 0 ? (
-          <h1>No data</h1>
-        ) : (
-            <div className="table-responsive stock-list">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Stock Code</th>
-                    <th>Date</th>
-                    <th>Open</th>
-                    <th>High</th>
-                    <th>Low</th>
-                    <th>Close</th>
-                    <th>Volume</th>
-                  </tr>
-                </thead>
-                <tbody>{this.mapStockList()}</tbody>
-              </table>
-            </div>
-          )}
+        {this.state.stocks.length !== 0 && (
+          <div className="table-responsive stock-list">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Stock Code</th>
+                  <th>Date</th>
+                  <th>Open</th>
+                  <th>High</th>
+                  <th>Low</th>
+                  <th>Close</th>
+                  <th>Volume</th>
+                </tr>
+              </thead>
+              <tbody>{this.mapStockList()}</tbody>
+            </table>
+          </div>
+        )}
       </div>
     );
   }
