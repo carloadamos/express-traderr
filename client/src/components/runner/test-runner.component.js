@@ -26,6 +26,8 @@ export default class TestRunner extends Component {
     super(props);
 
     this.stopLossChange = this.stopLossChange.bind(this);
+    this.handleStockChange = this.handleStockChange.bind(this);
+    this.handleStrategyChange = this.handleStrategyChange.bind(this);
     this.state = {
       fromDay: undefined,
       result: [],
@@ -97,18 +99,28 @@ export default class TestRunner extends Component {
   }
 
   _renderSelectStock() {
+    const { selectedStock } = this.state;
+
     return (
       <div id="tsStockDd">
         <span>Stock</span>
         <div className="dropdown">
-          <WindowedSelect options={this.state.stockList} />
+          <WindowedSelect
+            onChange={this.handleStockChange}
+            options={this.state.stockList}
+            value={selectedStock}
+          />
         </div>
       </div>
     );
   }
 
-  _setSelectedStock(stock) {
-    this.setState({ selectedStock: stock });
+  handleStockChange(selectedOption) {
+    this.setState({ selectedStock: selectedOption })
+  }
+
+  handleStrategyChange(selectedOption) {
+    this.setState({ selectedStrategy: selectedOption })
   }
 
   _renderSelectStrategy() {
@@ -186,15 +198,6 @@ export default class TestRunner extends Component {
         })
       }))
       .catch(error => console.log(error));
-  }
-
-  /**
-   * Set selected strategy to state.
-   */
-  _setSelectedStrategy = (strat) => {
-    this.setState({
-      selectedStrategy: strat,
-    });
   }
 
   _processBacktest = () => {

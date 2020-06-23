@@ -54,7 +54,6 @@ export default class StocksUpload extends Component {
           {this.state.stocks.length !== 0 && (
             <div className="table-responsive stock-list">
               {LABELS.TOTAL_COUNT} {this.state.stocks.length}
-              {JSON.stringify(this.state.stocks[1447])}
               <table className="table table-striped">
                 <thead>
                   <tr>
