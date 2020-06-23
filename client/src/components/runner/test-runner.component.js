@@ -3,9 +3,10 @@ import React, { Component } from "react";
 import axios from "axios";
 
 // Elements
+import Button from "react-bootstrap/Button";
 import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component';
 import TraderTextField from '../../library/trader-textfield/trader-textfield.component';
-import Button from "react-bootstrap/Button";
+import WindowedSelect from "react-windowed-select";
 
 // Styles
 import './style.css';
@@ -100,19 +101,7 @@ export default class TestRunner extends Component {
       <div id="tsStockDd">
         <span>Stock</span>
         <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-            {this.state.selectedStock ? this.state.selectedStock : "ALL"}
-          </button>
-          <div className="dropdown-menu" aria-labelledby="strategyDropDown">
-            {this.state.stockList.map((stock, i) => {
-              return (<a key={i} className="dropdown-item" href="#!" onClick={() => this._setSelectedStock(stock)}>{stock}</a>);
-            })}
-          </div>
+          <WindowedSelect options={this.state.stockList} />
         </div>
       </div>
     );
@@ -127,20 +116,7 @@ export default class TestRunner extends Component {
       <div id="tsStratDd">
         <span>Strategy</span>
         <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="strategyDropDown"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-            {this.state.selectedStrategy ? this.state.selectedStrategy.strategy_name : "ALL"}
-          </button>
-          <div className="dropdown-menu" aria-labelledby="strategyDropDown">
-            {this.state.strategies.map((strat, i) => {
-              return (<a key={i} className="dropdown-item" href="#!" onClick={() => this._setSelectedStrategy(strat)}>{strat.strategy_name}</a>);
-            })}
-          </div>
+          <WindowedSelect options={this.state.strategies} />
         </div>
       </div>
     );
@@ -183,17 +159,38 @@ export default class TestRunner extends Component {
   retrieveStrategyList() {
     axios
       .get(`${baseAPI}strategy/`)
-      .then(response => this.setState({ strategies: response.data }))
+      .then(response => this.setState({
+        strategies: response.data.map((value) => {
+          console.log(value)
+          return {
+            label: value.strategy_name,
+            value: value._id,
+          };
+        })
+      }))
       .catch(error => console.log(error));
   }
 
+  /**
+   * Retrieve and map distinct stock code.
+   */
   retrieveStockList() {
     axios
       .post(`${baseAPI}stocks/distinct/`)
-      .then(response => this.setState({ stockList: response.data }))
+      .then(response => this.setState({
+        stockList: response.data.map((value) => {
+          return {
+            label: value,
+            value,
+          };
+        })
+      }))
       .catch(error => console.log(error));
   }
 
+  /**
+   * Set selected strategy to state.
+   */
   _setSelectedStrategy = (strat) => {
     this.setState({
       selectedStrategy: strat,
@@ -295,7 +292,7 @@ export default class TestRunner extends Component {
             <td> {sold_date._i} </td>
             <td> {res.sold_price} </td>
             <td> {res.units} </td>
-            <td> {res.pnl.toFixed(2)} </td>
+            <td> {res.pnl && res.pnl.toFixed(2)} </td>
             <td> {sold_date.diff(bought_date, "days")} </td>
           </tr>
         );
