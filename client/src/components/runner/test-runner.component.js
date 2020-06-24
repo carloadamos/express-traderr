@@ -28,6 +28,7 @@ export default class TestRunner extends Component {
     this.stopLossChange = this.stopLossChange.bind(this);
     this.handleStockChange = this.handleStockChange.bind(this);
     this.handleStrategyChange = this.handleStrategyChange.bind(this);
+    
     this.state = {
       fromDay: undefined,
       result: [],
@@ -124,11 +125,17 @@ export default class TestRunner extends Component {
   }
 
   _renderSelectStrategy() {
+    const { selectedStrategy } = this.state;
+
     return (
       <div id="tsStratDd">
         <span>Strategy</span>
         <div className="dropdown">
-          <WindowedSelect options={this.state.strategies} />
+          <WindowedSelect
+            onChange={this.handleStrategyChange}
+            options={this.state.strategies}
+            value={selectedStrategy}
+          />
         </div>
       </div>
     );
@@ -176,7 +183,7 @@ export default class TestRunner extends Component {
           console.log(value)
           return {
             label: value.strategy_name,
-            value: value._id,
+            value: value,
           };
         })
       }))
@@ -201,7 +208,8 @@ export default class TestRunner extends Component {
   }
 
   _processBacktest = () => {
-    const code = this.state.selectedStock;
+    const { selectedStock: { value: code } } = this.state;
+
     axios
       .post(`${baseAPI}stocks/range/`, {
         dateFrom: this.state.fromDay,
@@ -221,9 +229,9 @@ export default class TestRunner extends Component {
    * @param {Array} stockList List of stock to be tested
    */
   _runBacktest(stockList) {
-    const buyStrategy = this.state.selectedStrategy.strategy_buy;
-    const sellStrategy = this.state.selectedStrategy.strategy_sell;
-    const stopLoss = this.state.stopLoss;
+    const { selectedStrategy: { value: { strategy_buy: buyStrategy } } } = this.state;
+    const { selectedStrategy: { value: { strategy_sell: sellStrategy } } } = this.state;
+    const { stopLoss } = this.state;
 
     axios.post(`${baseAPI}back_test/test/`, {
       stockList,
