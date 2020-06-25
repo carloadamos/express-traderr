@@ -102,15 +102,16 @@ export default class TraderUploader extends Component {
   csvToJson(csv) {
     const lines = csv.split('\n');
     const result = [];
-    const headers = ['code', 'trade_date', 'open', 'high', 'low', 'close', 'volume'];
+    const headers = ['trade_date', 'open', 'high', 'low', 'close', 'volume'];
 
     lines.map(l => {
       const obj = {};
       const line = l.split(',');
 
+      obj['code'] = this.state.fileName.split('.')[0];
       headers.map((h, i) => {
         obj[h] = line[i];
-      })
+      });
 
       if (obj.code !== '') {
         result.push(obj);

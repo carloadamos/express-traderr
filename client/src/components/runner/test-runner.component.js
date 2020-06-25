@@ -180,7 +180,6 @@ export default class TestRunner extends Component {
       .get(`${baseAPI}strategy/`)
       .then(response => this.setState({
         strategies: response.data.map((value) => {
-          console.log(value)
           return {
             label: value.strategy_name,
             value: value,

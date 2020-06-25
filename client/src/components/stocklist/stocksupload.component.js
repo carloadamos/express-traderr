@@ -105,7 +105,14 @@ export default class StocksUpload extends Component {
 
   onFileChangeHandler = (content) => {
     this.setState({ stocks: [] }, () => {
-      this.setState({ stocks: content });
+      this.setState({
+        stocks: content.map(item => {
+          return {
+            ...item,
+            volume: parseFloat(item.volume),
+          }
+        })
+      });
     });
   };
 
