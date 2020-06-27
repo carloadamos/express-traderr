@@ -4,8 +4,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 // Components
-import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component'
 import Button from "react-bootstrap/Button";
+import TraderDatepicker from '../../library/trader-datepicker/trader-datepicker.component'
+import WindowedSelect from "react-windowed-select";
 
 // Constant
 import { baseAPI } from "../../constant"
@@ -24,6 +25,7 @@ export default class StocksList extends Component {
   constructor(props) {
     super(props);
 
+    this.handleStockChange = this.handleStockChange.bind(this);
     this.state = {
       fromDay: undefined,
       toDay: undefined,
@@ -43,7 +45,14 @@ export default class StocksList extends Component {
   retrieveStocks() {
     axios
       .post(`${baseAPI}stocks/distinct/`)
-      .then(response => this.setState({ stockList: response.data }))
+      .then(response => this.setState({
+        stockList: response.data.map((value) => {
+          return {
+            label: value,
+            value,
+          };
+        })
+      }))
       .catch(error => console.error(error));
   }
 
@@ -70,26 +79,24 @@ export default class StocksList extends Component {
             </div>
           </div>
         </div>
-        {this.state.stocks.length === 0 ? (
-          <h1>No data</h1>
-        ) : (
-            <div className="table-responsive stock-list">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Stock Code</th>
-                    <th>Date</th>
-                    <th>Open</th>
-                    <th>High</th>
-                    <th>Low</th>
-                    <th>Close</th>
-                    <th>Volume</th>
-                  </tr>
-                </thead>
-                <tbody>{this.mapStockList()}</tbody>
-              </table>
-            </div>
-          )}
+        {this.state.stocks.length !== 0 && (
+          <div className="table-responsive stock-list">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Stock Code</th>
+                  <th>Date</th>
+                  <th>Open</th>
+                  <th>High</th>
+                  <th>Low</th>
+                  <th>Close</th>
+                  <th>Volume</th>
+                </tr>
+              </thead>
+              <tbody>{this.mapStockList()}</tbody>
+            </table>
+          </div>
+        )}
       </div>
     );
   }
@@ -145,30 +152,24 @@ export default class StocksList extends Component {
   }
 
   _renderSelectStock() {
+    const { selectedStock } = this.state;
+
     return (
       <div id="tsStockDd">
         <span>Stock</span>
         <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-            {this.state.selectedStock ? this.state.selectedStock : "ALL"}
-          </button>
-          <div className="dropdown-menu" aria-labelledby="strategyDropDown">
-            {this.state.stockList.map((stock, i) => {
-              return (<a key={i} className="dropdown-item" onClick={() => this._setSelectedStock(stock)}>{stock}</a>);
-            })}
-          </div>
+          <WindowedSelect
+            onChange={this.handleStockChange}
+            options={this.state.stockList}
+            value={selectedStock}
+          />
         </div>
       </div>
     );
   }
 
-  _setSelectedStock(stock) {
-    this.setState({ selectedStock: stock });
+  handleStockChange(selectedOption) {
+    this.setState({ selectedStock: selectedOption })
   }
 
   _renderFromDatePicker() {

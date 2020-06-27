@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import './style.css'
 
-let fileReader;
 /**
  * @class TraderUploader
  * @prop {Method} onFileChange method that will process when file is selected.
@@ -12,6 +11,7 @@ export default class TraderUploader extends Component {
     super(props);
 
     this.state = {
+      content: [],
       fileName: undefined,
       loading: false,
     };
@@ -29,6 +29,7 @@ export default class TraderUploader extends Component {
             ref={this.inputFileRef}
             onChange={this.handleFileChange}
             accept={`.${this.props.parseType}`}
+            multiple
           />
           <span id="fileUploadLabel" onClick={() => this.openInputFile()}>
             {this.state.fileName || this.props.label}
@@ -56,40 +57,72 @@ export default class TraderUploader extends Component {
     );
   }
 
-  handleFileChange = e => {
+  handleFileChange = async e => {
+    const uploadedFiles = e.target.files;
+
     this.props.preProcess();
     this.toggleLoading();
-    const uploadedFile = e.target.files[0];
+    this.readMultipleFiles(uploadedFiles);
 
-    if (uploadedFile) {
-      this.setFileName(uploadedFile.name);
-      fileReader = new FileReader();
-      fileReader.readAsText(uploadedFile);
-      fileReader.onloadend = this.handleFileRead;
+    uploadedFiles.length > 1 ? this.setFileName('Multiple CSV Files') : this.setFileName(uploadedFiles[0].name)
+  }
+
+  async readMultipleFiles(files) {
+    let tempFiles = [];
+    const self = this;
+
+    async function readFile(index) {
+      if (index >= files.length) return;
+
+      let fileReader = new FileReader();
+      const file = files[index];
+      fileReader.onload = function (e) {
+        const bin = e.target.result;
+        let cache = convertCsvToJson(bin, file.name.split('.')[0]);
+        cache.then((val) => {
+          tempFiles = [
+            ...tempFiles,
+            ...val,
+          ];
+
+          if (index >= files.length) {
+            self.props.onFileChange(tempFiles);
+            self.toggleLoading();
+          }
+        });
+        readFile(index += 1);
+      }
+      fileReader.readAsText(file)
     }
+
+    async function convertCsvToJson(csv, name) {
+      const lines = csv.split('\n');
+      const result = [];
+      const headers = ['trade_date', 'open', 'high', 'low', 'close', 'volume'];
+
+      lines.map(l => {
+        const obj = {};
+        const line = l.split(',');
+
+        obj['code'] = name;
+        headers.map((h, i) => {
+          obj[h] = line[i];
+        });
+
+        if (obj.code !== '' && obj.trade_date !== '') {
+          result.push(obj);
+        }
+      });
+      return result;
+    }
+
+    readFile(0);
   }
 
   toggleLoading = () => {
     this.setState({ loading: !this.state.loading });
   }
 
-  handleFileRead = e => {
-    let content = fileReader.result;
-
-    if (this.props.parseType === 'json') {
-      content = JSON.parse(fileReader.result);
-    }
-
-    if (this.props.parseType === 'csv') {
-      content = this.csvToJson(fileReader.result)
-    }
-
-    if (this.props.onFileChange) {
-      this.props.onFileChange(content);
-    }
-
-    this.toggleLoading();
-  }
 
   openInputFile() {
     this.inputFileRef.current.click();
@@ -97,26 +130,5 @@ export default class TraderUploader extends Component {
 
   setFileName(fileName) {
     this.setState({ fileName: fileName });
-  }
-
-  csvToJson(csv) {
-    const lines = csv.split('\n');
-    const result = [];
-    const headers = ['code', 'trade_date', 'open', 'high', 'low', 'close', 'volume'];
-
-    lines.map(l => {
-      const obj = {};
-      const line = l.split(',');
-
-      headers.map((h, i) => {
-        obj[h] = line[i];
-      })
-
-      if (obj.code !== '') {
-        result.push(obj);
-      }
-    });
-
-    return result;
   }
 }

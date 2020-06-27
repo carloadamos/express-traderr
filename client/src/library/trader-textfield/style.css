@@ -13,5 +13,5 @@
 }
 
 #trader-textfield input[type=text]:focus {
-  outline: none;
+  outline-color: #46B04A;
 }

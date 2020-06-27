@@ -73,3 +73,10 @@
   display: flex;
   flex-direction: row;
 }
+
+.dropdown div[class*="-control"] {
+  height: 3rem;
+  border: none;
+  background-color: #F4F6F3;
+  
+}
