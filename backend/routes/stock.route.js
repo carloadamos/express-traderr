@@ -29,7 +29,6 @@ stockRoutes.route('/distinct').post((req, res) => {
 stockRoutes.route('/range').post((req, res) => {
   let { dateFrom, dateTo, code } = req.body;
 
-
   if (!dateFrom && !dateTo && !code) {
     res.status(400).send({ message: "This type of operation is not advisable." });
   }

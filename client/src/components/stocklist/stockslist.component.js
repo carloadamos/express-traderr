@@ -102,7 +102,8 @@ export default class StocksList extends Component {
   }
 
   searchStocks = () => {
-    const code = this.state.selectedStock;
+    const { value: code } = this.state.selectedStock;
+
     this.setState({ stocks: [] }, () => {
       axios
         .post("http://localhost:4000/stocks/range", {
